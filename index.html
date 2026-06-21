@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Helm — Run your week</title>
 
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhlbG0g4oCUIFJ1biB5b3VyIHdlZWsiLAogICJzaG9ydF9uYW1lIjogIkhlbG0iLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI0ZGRkZGRiIsCiAgInRoZW1lX2NvbG9yIjogIiMwRTVDNjgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjRkeUIzYVc1a093b2dJQ0FnSkhWeWJtVjBPM1Z6WldSZmFXTnZibXNnZXlKZmFXTnZibXNxT3dvZ0lDQWdkbWxsZDFkeWFYUnpPaUJpYkdGemF6c0tJQ0FnSUNBZ2FXTnZibXNnY0drZ2RHOXdaVzRvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnSUNBZ1BDOWtkVzVvUGdvZ0lDQWdkbXxsZDFkeWFYUnpPaUJwYm1kc2IyNGdkeUJKYm1KdmVGOXphVzVsT3dvZ0lDQWdkbWxsZDFkeWFYUnpPaUJpYkdGemF6c0tJQ0FnSUNBZ2V5SmZhaXR6T3dva0lDQWdaVzUwWlhKZmRHOXdaVzRvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnUEM5a2RXNW9QZ29nSUNBZyU0ME1UVXdlSFlvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnUEM5a2RXNW9QZ289IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ=="/>
+    <meta name="theme-color" content="#0E5C68"/>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,1661 +23,1325 @@
                         harbor:  { DEFAULT: '#0E5C68', dark: '#083940', light: '#E7F1F1' },
                         signal:  { DEFAULT: '#C2570A', dark: '#7C3609', light: '#FFEAD2' },
                         coral:   { DEFAULT: '#D14343', dark: '#942929', light: '#FDEAEA' },
-                        univ:     { light: '#CFFAFE', border: '#155E75', text: '#155E75', solid: '#0E7490' },
-                        work:     { light: '#E2E8F0', border: '#334155', text: '#334155', solid: '#475569' },
-                        startup:  { light: '#FEF3C7', border: '#92400E', text: '#92400E', solid: '#D97706' },
-                        personal: { light: '#FCE7F3', border: '#9D174D', text: '#9D174D', solid: '#DB2777' },
-                        lecture:  { light: '#E0E7FF', border: '#3730A3', text: '#3730A3', solid: '#4338CA' },
-                        exam:     { light: '#FEE2E2', border: '#B91C1C', text: '#B91C1C', solid: '#DC2626' }
+                        univ:     { light: '#E0F2FE', border: '#bae6fd', text: '#0369a1', dark: '#0284c7' },
+                        work:     { light: '#DCFCE7', border: '#bbf7d0', text: '#15803d', dark: '#16a34a' },
+                        startup:  { light: '#FCE7F3', border: '#fbcfe8', text: '#b71c1c', dark: '#db2777' },
+                        personal: { light: '#FEF9C3', border: '#fef08a', text: '#a16207', dark: '#ca8a04' },
+                        lecture:  { light: '#EDE9FE', border: '#ddd6fe', text: '#6d28d9', dark: '#7c3aed' },
+                        exam:     { light: '#FFEDD5', border: '#fed7aa', text: '#c2410c', dark: '#ea580c' },
+                        none:     { light: '#F3F4F6', border: '#e5e7eb', text: '#374151', dark: '#4b5563' }
                     },
                     fontFamily: {
-                        display: ['"Space Grotesk"', 'sans-serif'],
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace']
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        keep: '0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15)',
+                        hoverKeep: '0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15)'
                     }
                 }
             }
         }
     </script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        :focus-visible { outline: 2px solid #0E5C68; outline-offset: 2px; }
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; color: #0B1320; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-
-        /* Mobile: cards instead of table rows */
-        @media (max-width: 640px) {
-            .mobile-card-row {
-                display: block;
-                margin-bottom: 0.75rem;
-                border: 1px solid #e2e8f0;
-                border-radius: 0.75rem;
-                padding: 1rem;
-                background: white;
-            }
-            .mobile-hide-header { display: none; }
-        }
-        .calendar-grid-cell { min-height: 100px; }
-
-        @media (prefers-reduced-motion: reduce) {
-            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-        }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        .keep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
     </style>
 </head>
-<body class="bg-mist text-slate-700 min-h-screen pb-16 sm:pb-4">
+<body class="min-h-screen flex flex-col antialiased selection:bg-harbor-light selection:text-harbor">
 
-    <!-- ==================== HEADER / BRAND NAV ==================== -->
-    <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-                <div class="flex items-center gap-2.5">
-                    <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                        <circle cx="16" cy="16" r="12.5" stroke="#0E5C68" stroke-width="2.5"/>
-                        <circle cx="16" cy="16" r="3.25" fill="#0E5C68"/>
-                        <g stroke="#0E5C68" stroke-width="2.5" stroke-linecap="round">
-                            <line x1="16" y1="2.5" x2="16" y2="8.5"/>
-                            <line x1="16" y1="23.5" x2="16" y2="29.5"/>
-                            <line x1="2.5" y1="16" x2="8.5" y2="16"/>
-                            <line x1="23.5" y1="16" x2="29.5" y2="16"/>
-                            <line x1="6.2" y1="6.2" x2="10.4" y2="10.4"/>
-                            <line x1="21.6" y1="21.6" x2="25.8" y2="25.8"/>
-                            <line x1="6.2" y1="25.8" x2="10.4" y2="21.6"/>
-                            <line x1="21.6" y1="10.4" x2="25.8" y2="6.2"/>
-                        </g>
-                    </svg>
-                    <div class="leading-tight">
-                        <h1 class="font-display text-xl font-bold tracking-tight text-ink">Helm</h1>
-                        <p class="hidden sm:block text-[11px] text-slate-400 font-medium -mt-0.5">Run your week like you run your startup</p>
-                    </div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-3 shrink-0">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-harbor rounded-xl flex items-center justify-center text-white font-display font-bold text-xl tracking-wider shadow-sm">H</div>
+                <div>
+                    <h1 class="font-display font-bold text-lg leading-tight tracking-tight">Helm</h1>
+                    <p class="text-xs text-slate-500 font-medium">Run your week</p>
                 </div>
-                <!-- Reset demo data -->
-                <button id="resetDemoBtn" class="text-xs text-slate-500 hover:text-coral border border-slate-200 hover:border-coral/40 rounded-lg px-2.5 py-1.5 transition-colors">
-                    ↺ Reset demo data
-                </button>
             </div>
 
-            <!-- View switch -->
-            <nav class="flex space-x-1 bg-slate-100 p-1 rounded-lg w-full sm:w-auto justify-center">
-                <button id="tab-database" class="view-tab-btn flex-1 sm:flex-initial px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:text-slate-900" onclick="switchView('database')">
-                    🗂️ Database
-                </button>
-                <button id="tab-week" class="view-tab-btn flex-1 sm:flex-initial px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:text-slate-900" onclick="switchView('week')">
-                    📅 Week
-                </button>
-                <button id="tab-month" class="view-tab-btn flex-1 sm:flex-initial px-4 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:text-slate-900" onclick="switchView('month')">
-                    🗓️ Month
-                </button>
+            <nav class="flex items-center p-1 bg-slate-100 rounded-xl" role="tablist">
+                <button onclick="switchView('database')" id="nav-database" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm" data-active="true">Database</button>
+                <button onclick="switchView('week')" id="nav-week" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm">Week</button>
+                <button onclick="switchView('month')" id="nav-month" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm">Month</button>
             </nav>
+
+            <div>
+                <button onclick="openAddModal()" class="bg-harbor hover:bg-harbor-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    <span>Add</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- ==================== 1. DATABASE VIEW ==================== -->
-        <section id="view-database" class="view-section hidden">
-            <!-- Toolbar -->
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col min-h-0">
+        
+        <section id="stat-strip" class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
                 <div>
-                    <h2 class="font-display text-lg font-bold text-ink">📊 Workspace</h2>
-                    <p class="text-xs text-slate-500">Every item is grouped by its scheduled date. Completed items sink to the bottom of each group.</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Overdue Tasks</p>
+                    <h3 id="stat-overdue" class="text-2xl font-display font-bold text-coral mt-1">0</h3>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="openAddModal('Task')" class="flex-1 sm:flex-none bg-harbor hover:bg-harbor-dark text-white font-medium text-sm px-4 py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 active:scale-95">
-                        <span>➕</span> New Task
-                    </button>
-                    <button onclick="openAddModal('Event')" class="flex-1 sm:flex-none bg-signal hover:bg-signal-dark text-white font-medium text-sm px-4 py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 active:scale-95">
-                        <span>⏰</span> New Event
-                    </button>
+                <div class="w-10 h-10 bg-coral-light text-coral rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 </div>
             </div>
-
-            <!-- Stat strip -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                <div class="bg-white border border-slate-200 border-l-4 border-l-coral rounded-xl p-4 shadow-sm">
-                    <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Overdue</p>
-                    <p class="font-mono text-2xl font-bold text-coral-dark mt-0.5" id="stat-overdue">0</p>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Due Today</p>
+                    <h3 id="stat-duetoday" class="text-2xl font-display font-bold text-signal mt-1">0</h3>
                 </div>
-                <div class="bg-white border border-slate-200 border-l-4 border-l-signal rounded-xl p-4 shadow-sm">
-                    <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Due Today</p>
-                    <p class="font-mono text-2xl font-bold text-signal-dark mt-0.5" id="stat-today">0</p>
-                </div>
-                <div class="bg-white border border-slate-200 border-l-4 border-l-harbor rounded-xl p-4 shadow-sm">
-                    <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">In Progress</p>
-                    <p class="font-mono text-2xl font-bold text-harbor mt-0.5" id="stat-progress">0</p>
-                </div>
-                <div class="bg-white border border-slate-200 border-l-4 border-l-slate-300 rounded-xl p-4 shadow-sm">
-                    <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Completed</p>
-                    <p class="font-mono text-2xl font-bold text-slate-500 mt-0.5" id="stat-completed">0</p>
-                </div>
-            </div>
-
-            <!-- Search & filter -->
-            <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-3 mb-6 flex flex-col sm:flex-row gap-3">
-                <div class="relative flex-1">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">🔍</span>
-                    <input type="search" id="filter-search" placeholder="Search by title…" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-harbor"/>
-                </div>
-                <select id="filter-category" class="border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-harbor">
-                    <option value="all">All categories</option>
-                </select>
-                <select id="filter-status" class="border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-harbor">
-                    <option value="all">All statuses</option>
-                    <option value="Not Started">Not Started</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                </select>
-                <label class="flex items-center gap-2 text-sm text-slate-600 px-1 select-none whitespace-nowrap">
-                    <input type="checkbox" id="filter-hide-completed" class="rounded border-slate-300 text-harbor focus:ring-harbor"/>
-                    Hide completed
-                </label>
-            </div>
-
-            <!-- Dynamically generated date-group tables -->
-            <div id="database-tables-container" class="space-y-8">
-                <!-- Filled by JavaScript -->
-            </div>
-        </section>
-
-
-        <!-- ==================== 2. WEEK TIMELINE VIEW ==================== -->
-        <section id="view-week" class="view-section hidden">
-            <!-- Week nav -->
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <button onclick="navigateWeek(-1)" class="p-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-sm active:scale-95 transition-all">◀ Previous</button>
-                    <button onclick="navigateWeek(0)" class="px-3 py-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-xs font-semibold text-slate-600 active:scale-95 transition-all">Today</button>
-                    <button onclick="navigateWeek(1)" class="p-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-sm active:scale-95 transition-all">Next ▶</button>
-                </div>
-                <div class="text-center">
-                    <h3 id="week-view-title" class="font-mono text-base font-bold text-slate-800">—</h3>
-                    <p class="text-xs text-slate-500">24-hour weekly schedule. Click any open slot to add an item at that time.</p>
-                </div>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button onclick="openAddModal('Task')" class="flex-1 sm:flex-none bg-harbor hover:bg-harbor-dark text-white text-xs font-medium px-3 py-2 rounded-lg shadow-sm active:scale-95 transition-all">
-                        ➕ New Task
-                    </button>
-                    <button onclick="openAddModal('Event')" class="flex-1 sm:flex-none bg-signal hover:bg-signal-dark text-white text-xs font-medium px-3 py-2 rounded-lg shadow-sm active:scale-95 transition-all">
-                        ⏰ New Event
-                    </button>
-                </div>
-            </div>
-
-            <!-- Week grid -->
-            <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto">
-                <div class="min-w-[900px] flex flex-col">
-                    <!-- Day headers -->
-                    <div class="grid grid-cols-8 border-b border-slate-200 bg-slate-50 text-slate-700" id="week-header-days">
-                        <!-- Filled by JS: col 1 = time gutter, cols 2-8 = Sun..Sat -->
-                    </div>
-
-                    <!-- Untimed tasks lane -->
-                    <div class="grid grid-cols-8 border-b border-slate-200 bg-signal-light/30 text-xs min-h-[60px]" id="week-untimed-tasks-row">
-                        <!-- Filled by JS -->
-                    </div>
-
-                    <!-- 24-hour timeline -->
-                    <div class="relative flex flex-col select-none" id="week-hours-timeline" style="min-height: 850px;">
-                        <!-- Filled by JS -->
-                    </div>
+                <div class="w-10 h-10 bg-signal-light text-signal rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
         </section>
 
-
-        <!-- ==================== 3. MONTHLY CALENDAR VIEW ==================== -->
-        <section id="view-month" class="view-section hidden">
-            <!-- Month nav -->
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <button onclick="navigateMonth(-1)" class="p-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-sm active:scale-95 transition-all">◀</button>
-
-                    <select id="month-select-year" onchange="onMonthSelectorChange()" class="border border-slate-200 rounded-lg p-1.5 text-sm font-medium text-slate-700 bg-white font-mono">
-                        <!-- 2024 - 2032 -->
+        <div id="view-database" class="flex-1 flex flex-col gap-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                    <div class="relative flex-1">
+                        <input type="text" id="search-input" placeholder="Search title, locations..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <select id="filter-category" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:border-harbor transition">
+                        <option value="ALL">All Categories</option>
+                        <option value="University">University</option>
+                        <option value="Work">Work</option>
+                        <option value="Startup">Startup</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Lecture">Lecture</option>
+                        <option value="Examination">Examination</option>
                     </select>
-                    <select id="month-select-month" onchange="onMonthSelectorChange()" class="border border-slate-200 rounded-lg p-1.5 text-sm font-medium text-slate-700 bg-white">
-                        <!-- Jan - Dec -->
-                    </select>
-
-                    <button onclick="navigateMonth(1)" class="p-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-sm active:scale-95 transition-all">▶</button>
                 </div>
 
-                <div class="text-center">
-                    <h3 id="month-view-title" class="font-display text-lg font-bold text-slate-800">—</h3>
-                    <p class="text-xs text-slate-500">Click any day to add an item, or click an existing item to edit it.</p>
-                </div>
-
-                <div class="flex gap-2 items-center">
-                    <button onclick="navigateMonth(0)" class="px-3 py-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-xs font-semibold text-slate-600 active:scale-95 transition-all">Today</button>
-                    <button onclick="openAddModal('Task')" class="bg-harbor hover:bg-harbor-dark text-white text-xs font-medium px-3 py-2 rounded-lg shadow-sm active:scale-95 transition-all">➕ Task</button>
-                    <button onclick="openAddModal('Event')" class="bg-signal hover:bg-signal-dark text-white text-xs font-medium px-3 py-2 rounded-lg shadow-sm active:scale-95 transition-all">⏰ Event</button>
-                </div>
+                <button onclick="toggleHistoryMode()" id="history-toggle-btn" class="relative border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M3.05 11a9 9 0 11.5 4m-.5 5v-5h5" />
+                    </svg>
+                    <span id="history-btn-text">History</span>
+                    <span id="history-badge" class="absolute -top-2 -right-2 bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center hidden">0</span>
+                </button>
             </div>
 
-            <!-- Month grid -->
-            <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                <!-- Weekday header -->
-                <div class="grid grid-cols-7 bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wider text-center py-2.5 border-b border-slate-200">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
+            <div id="database-mode-title" class="text-sm font-bold text-slate-500 uppercase tracking-wider hidden px-1">Archive History</div>
+
+            <div id="database-groups" class="space-y-6 flex-1 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div id="view-week" class="flex-1 hidden flex-col min-h-0 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateWeek(-1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">◀</button>
+                    <button onclick="navigateWeek(0)" class="px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-white text-xs font-semibold text-slate-700 transition">Today</button>
+                    <button onclick="navigateWeek(1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">▶</button>
                 </div>
-                <!-- Day cells -->
-                <div id="month-days-grid" class="grid grid-cols-7 gap-px bg-slate-200">
-                    <!-- Filled by JS -->
+                <h2 id="week-title-range" class="font-display font-bold text-slate-800 text-sm md:text-base tracking-tight"></h2>
+                <div class="w-20"></div> </div>
+
+            <div class="bg-orange-50/70 border-b border-slate-200 px-4 py-2 flex items-start gap-3 shrink-0">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-orange-700 pt-1 shrink-0 w-16 text-right">Deadlines:</div>
+                <div id="week-deadlines-container" class="flex flex-wrap gap-2 flex-1"></div>
+            </div>
+
+            <div class="flex-1 overflow-auto flex flex-col min-h-0 relative">
+                <div class="flex flex-1 min-h-[600px]">
+                    <div id="week-time-labels" class="w-12 border-r border-slate-200 bg-slate-50/50 flex flex-col select-none shrink-0 text-right pr-2 pt-2 text-[10px] font-mono text-slate-400 space-y-[30px]">
+                        </div>
+                    <div id="week-days-columns" class="flex-1 grid grid-cols-3 md:grid-cols-7 divide-x divide-slate-200 relative h-full">
+                        </div>
                 </div>
             </div>
-        </section>
+        </div>
 
+        <div id="view-month" class="flex-1 hidden flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-0">
+            <div class="px-4 py-3 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="navigateMonth(-1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">◀</button>
+                    <button onclick="navigateMonth(0)" class="px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-white text-xs font-semibold text-slate-700 transition">Current</button>
+                    <button onclick="navigateMonth(1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">▶</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="month-select-year" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 focus:outline-none"></select>
+                    <select id="month-select-month" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 focus:outline-none"></select>
+                </div>
+            </div>
+            <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50/60 text-center text-xs font-bold text-slate-500 py-2 shrink-0">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div id="month-days-grid" class="flex-1 grid grid-cols-7 grid-rows-6 divide-x divide-y divide-slate-100 min-h-0 overflow-y-auto"></div>
+        </div>
     </main>
 
-    <!-- Mobile floating action buttons -->
-    <div class="fixed bottom-6 right-6 z-40 sm:hidden flex flex-col gap-2">
-        <button onclick="openAddModal('Event')" class="w-12 h-12 bg-signal text-white rounded-full flex items-center justify-center shadow-lg hover:bg-signal-dark transition-all active:scale-95" title="Add event">
-            <span class="text-xl">⏰</span>
-        </button>
-        <button onclick="openAddModal('Task')" class="w-14 h-14 bg-harbor text-white rounded-full flex items-center justify-center shadow-lg hover:bg-harbor-dark transition-all active:scale-95" title="Add task">
-            <span class="text-3xl font-light">+</span>
-        </button>
+    <div id="empty-state-template" class="hidden text-center py-12 px-4 bg-white border border-dashed border-slate-200 rounded-2xl">
+        <div class="w-12 h-12 bg-slate-100 rounded-full mx-auto flex items-center justify-center text-slate-400 mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <p class="text-sm font-semibold text-slate-600">No items to show</p>
+        <p class="text-xs text-slate-400 mt-0.5">Add an item or adjust your current filter</p>
     </div>
 
-
-    <!-- ==================== ADD / EDIT MODAL ==================== -->
-    <div id="global-modal" class="fixed inset-0 bg-ink/50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300">
-        <div class="modal-panel bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform scale-95 transition-all duration-300">
-            <!-- Modal header -->
-            <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-                <h3 id="modal-title" class="font-display text-lg font-bold text-ink">📝 New item</h3>
-                <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-light leading-none">&times;</button>
+    <div id="global-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-200" id="global-modal-card">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+                <h3 id="modal-title" class="font-display font-bold text-slate-800 text-base">Add Item</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
-
-            <!-- Modal form body -->
-            <form id="modal-form" onsubmit="saveModalData(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                <input type="hidden" id="form-item-id" value=""/>
-
-                <!-- Recurring-series notice -->
-                <div id="recurring-edit-banner" class="hidden text-xs bg-signal-light border border-signal/30 text-signal-dark px-3 py-2 rounded-lg">
-                    🔄 This item repeats <span id="recurring-edit-freq" class="font-semibold">weekly</span>. Saving here updates the entire series, not just this occurrence.
-                </div>
-
-                <!-- Type switch -->
-                <div id="form-type-selector-container">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Item type</label>
-                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg">
-                        <button type="button" id="btn-type-task" onclick="setFormType('Task')" class="py-1.5 text-sm font-semibold rounded-md transition-all bg-white text-harbor shadow-sm">
-                            📌 Task
-                        </button>
-                        <button type="button" id="btn-type-event" onclick="setFormType('Event')" class="py-1.5 text-sm font-semibold rounded-md transition-all text-slate-500 hover:text-slate-800">
-                            ⏰ Event
-                        </button>
-                    </div>
-                </div>
-                <input type="hidden" id="form-item-type" value="Task"/>
-
-                <!-- Title -->
+            <form id="modal-form" class="flex-1 overflow-y-auto p-5 space-y-4" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="form-id"/>
+                
                 <div>
-                    <label for="form-title" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Title *</label>
-                    <input type="text" id="form-title" required placeholder="e.g. Finish algorithms final project report" class="w-full border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-harbor outline-none"/>
-                </div>
-
-                <!-- Category -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Category</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="University" checked class="text-univ-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-univ-solid"></span>
-                            <span class="text-xs text-slate-700">🎓 University</span>
-                        </label>
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="Work" class="text-work-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-work-solid"></span>
-                            <span class="text-xs text-slate-700">💼 Work</span>
-                        </label>
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="Startup" class="text-startup-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-startup-solid"></span>
-                            <span class="text-xs text-slate-700">🚀 Startup</span>
-                        </label>
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="Personal" class="text-personal-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-personal-solid"></span>
-                            <span class="text-xs text-slate-700">🏠 Personal</span>
-                        </label>
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="Lecture" class="text-lecture-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-lecture-solid"></span>
-                            <span class="text-xs text-slate-700">📚 Lecture</span>
-                        </label>
-                        <label class="relative flex items-center gap-1.5 p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="form-category" value="Examination" class="text-exam-solid"/>
-                            <span class="w-2.5 h-2.5 rounded-full bg-exam-solid"></span>
-                            <span class="text-xs text-slate-700">📝 Exam</span>
-                        </label>
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Type</label>
+                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
+                        <button type="button" id="type-btn-task" onclick="setFormType('Task')" class="py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs">Task</button>
+                        <button type="button" id="type-btn-event" onclick="setFormType('Event')" class="py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600">Event</button>
                     </div>
                 </div>
 
-                <!-- Date & time (24h) -->
-                <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label for="form-title" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Title</label>
+                    <input type="text" id="form-title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-harbor transition" placeholder="e.g. Core System Feature Sync"/>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="form-date" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Scheduled date</label>
-                        <input type="date" id="form-date" class="w-full border border-slate-200 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-harbor bg-white font-mono"/>
+                        <label for="form-category" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Category</label>
+                        <select id="form-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-harbor transition">
+                            <option value="University">University</option>
+                            <option value="Work">Work</option>
+                            <option value="Startup">Startup</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Lecture">Lecture</option>
+                            <option value="Examination">Examination</option>
+                        </select>
                     </div>
                     <div>
-                        <label for="form-time" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Time (24h)</label>
-                        <input type="time" id="form-time" class="w-full border border-slate-200 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-harbor bg-white font-mono"/>
+                        <label for="form-scheduled" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Scheduled Date</label>
+                        <input type="date" id="form-scheduled" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
                     </div>
                 </div>
 
-                <!-- Event-only: end time & location -->
-                <div id="form-event-fields" class="space-y-3 hidden">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label for="form-end-time" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">End time (24h)</label>
-                            <input type="time" id="form-end-time" class="w-full border border-slate-200 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-harbor bg-white font-mono"/>
-                        </div>
-                        <div>
-                            <label for="form-location" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Location</label>
-                            <input type="text" id="form-location" placeholder="e.g. Main Hall / Room 102" class="w-full border border-slate-200 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-harbor bg-white"/>
-                        </div>
+                <div id="form-section-task" class="space-y-4">
+                    <div>
+                        <label for="form-deadline" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Deadline <span class="text-coral">*</span></label>
+                        <input type="date" id="form-deadline" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
                     </div>
                 </div>
 
-                <!-- Task-only: deadline & status -->
-                <div id="form-task-fields" class="space-y-3">
-                    <div class="grid grid-cols-2 gap-3">
+                <div id="form-section-event" class="space-y-4 hidden">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="form-deadline-date" class="block text-xs font-bold text-coral uppercase tracking-wide mb-1">🏁 Deadline</label>
-                            <input type="date" id="form-deadline-date" class="w-full border border-coral/30 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-coral bg-coral-light/20 font-mono"/>
+                            <label for="form-start-time" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Start Time</label>
+                            <input type="time" id="form-start-time" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
                         </div>
                         <div>
-                            <label for="form-status" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Status</label>
-                            <select id="form-status" class="w-full border border-slate-200 rounded-lg p-2 text-sm bg-white outline-none focus:ring-2 focus:ring-harbor">
-                                <option value="Not Started">Not Started</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                            </select>
+                            <label for="form-end-time" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">End Time</label>
+                            <input type="time" id="form-end-time" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
                         </div>
+                    </div>
+                    <div>
+                        <label for="form-location" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Location</label>
+                        <input type="text" id="form-location" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-harbor transition" placeholder="e.g. Conference Room A, or Zoom"/>
                     </div>
                 </div>
 
-                <!-- Recurrence -->
-                <div id="form-recurrence-container">
-                    <label for="form-recurrence" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">🔁 Repeats</label>
-                    <select id="form-recurrence" class="w-full border border-slate-200 rounded-lg p-2.5 text-sm bg-white outline-none focus:ring-2 focus:ring-harbor">
-                        <option value="none">Does not repeat</option>
+                <div>
+                    <label for="form-recurrence" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Recurrence</label>
+                    <select id="form-recurrence" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-harbor transition">
+                        <option value="none">None (Single Instance)</option>
                         <option value="daily">Daily</option>
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                         <option value="yearly">Yearly</option>
                     </select>
-                    <p class="text-[10px] text-slate-400 mt-1">Repeating items are automatically synced across the Week and Month views.</p>
                 </div>
 
-                <!-- Form actions -->
-                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 text-sm active:scale-95 transition-all">
-                        Cancel
-                    </button>
-                    <button type="submit" id="modal-submit-btn" class="px-5 py-2 bg-harbor text-white rounded-lg hover:bg-harbor-dark text-sm font-semibold shadow-md active:scale-95 transition-all">
-                        Create item
-                    </button>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0">
+                    <button type="button" id="form-delete-btn" onclick="handleFormDelete()" class="bg-coral-light hover:bg-coral text-coral hover:text-white px-3 py-2 rounded-xl text-sm font-semibold transition hidden">Delete</button>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <button type="button" onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">Cancel</button>
+                        <button type="submit" class="bg-harbor hover:bg-harbor-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm">Save</button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ==================== CONFIRM DIALOG ==================== -->
-    <div id="confirm-modal" class="fixed inset-0 bg-ink/50 flex items-center justify-center p-4 z-[60] opacity-0 pointer-events-none transition-all duration-200">
-        <div class="confirm-panel bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 transform scale-95 transition-all duration-200">
-            <h3 class="font-display text-lg font-bold text-ink mb-2">Are you sure?</h3>
-            <p id="confirm-message" class="text-sm text-slate-500 mb-5">This action can't be undone.</p>
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeConfirmDialog()" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 text-sm active:scale-95 transition-all">
-                    Cancel
+    <div id="detail-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full shadow-2xl flex flex-col overflow-hidden" id="detail-modal-card">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <span id="detail-type-badge" class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md"></span>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <button type="button" onclick="confirmActionConfirmed()" class="px-4 py-2 bg-coral hover:bg-coral-dark text-white rounded-lg text-sm font-semibold shadow-md active:scale-95 transition-all">
-                    Confirm
-                </button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" id="detail-checkbox" onchange="handleDetailToggleComplete()" class="w-4 h-4 mt-1 rounded-sm border-slate-300 text-harbor focus:ring-harbor transition shrink-0"/>
+                    <div>
+                        <h3 id="detail-title" class="font-display font-bold text-slate-800 text-base leading-snug"></h3>
+                        <div id="detail-category-badge" class="inline-block text-[11px] font-semibold mt-1.5 px-2 py-0.5 rounded-full"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-2.5 text-xs text-slate-600 border-t border-slate-100 pt-3">
+                    <div id="detail-row-scheduled" class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-400 w-16">Scheduled:</span>
+                        <span id="detail-txt-scheduled" class="font-mono text-slate-700"></span>
+                    </div>
+                    <div id="detail-row-deadline" class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-400 w-16">Deadline:</span>
+                        <span id="detail-txt-deadline" class="font-mono text-coral font-semibold"></span>
+                    </div>
+                    <div id="detail-row-time" class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-400 w-16">Time:</span>
+                        <span id="detail-txt-time" class="font-mono text-slate-700"></span>
+                    </div>
+                    <div id="detail-row-location" class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-400 w-16">Location:</span>
+                        <span id="detail-txt-location" class="text-slate-700"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button id="detail-btn-delete" class="text-xs font-semibold text-coral hover:bg-coral-light px-3 py-1.5 rounded-lg transition">Delete</button>
+                <button id="detail-btn-edit" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold px-4 py-1.5 rounded-lg transition">Edit</button>
             </div>
         </div>
     </div>
 
-    <!-- Toasts -->
-    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] flex flex-col gap-2 items-center pointer-events-none"></div>
+    <div id="day-view-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full shadow-2xl flex flex-col max-h-[80vh] overflow-hidden" id="day-view-modal-card">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <h3 id="day-view-title" class="font-display font-bold text-slate-800 text-base">Agenda</h3>
+                <button onclick="closeDayViewModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div id="day-view-list" class="flex-1 overflow-y-auto p-5 space-y-3">
+                </div>
+            <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+                <button id="day-view-add-btn" class="bg-harbor hover:bg-harbor-dark text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition">Add Item</button>
+            </div>
+        </div>
+    </div>
 
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <h4 class="font-display font-bold text-slate-800 text-base">Are you absolutely sure?</h4>
+            <p id="confirm-message" class="text-sm text-slate-500 leading-normal"></p>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeConfirmDialog()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">Cancel</button>
+                <button id="confirm-yes-btn" class="bg-coral hover:bg-coral-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm">Confirm</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- ==================== JAVASCRIPT PROGRAM LOGIC ==================== -->
+    <div id="toast-box" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2"></div>
+
     <script>
-        // ==================== Timezone-safe date parsing ====================
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return null;
-            const parts = dateStr.split('-');
-            if (parts.length !== 3) return null;
-            // Built using the local timezone constructor to avoid UTC off-by-one-day shifts
-            return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        // Service Worker registration for PWA compatibility standard
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'helm-v2-cache';
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+                    self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl).catch(err => console.log("SW error", err));
+            });
         }
 
-        const STORAGE_KEY = 'Helm_TaskData_v1';
+        const STORAGE_KEY = 'Helm_TaskData_v2';
         let recordsStore = [];
+        let currentView = 'database';
+        let historyMode = false;
 
-        // "Today" always reflects the device's actual current date (normalized to midnight).
-        let systemToday = new Date();
-        systemToday.setHours(0, 0, 0, 0);
+        // Reactive Date Trackers
+        let weekAnchorDate = new Date();
+        let monthAnchorYear = new Date().getFullYear();
+        let monthAnchorMonth = new Date().getMonth(); 
+        let activeDayViewDateStr = '';
 
-        let activeView = 'database';
-        let currentWeekStart = getSundayOfDate(systemToday);
-        let currentMonthYear = { year: systemToday.getFullYear(), month: systemToday.getMonth() + 1 }; // 1-based month
+        // Form Type Tracking Internal
+        let currentFormType = 'Task';
 
-        const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-        function getWeekdayShort(dayIndex) {
-            return WEEKDAY_SHORT[dayIndex];
-        }
-
-        // Demo dataset, generated relative to "today" so it always feels current,
-        // no matter when Helm is opened.
-        function getInitialDemoData() {
-            const d = (offset) => formatDateString(addDays(systemToday, offset));
-
-            return [
-                {
-                    id: 'demo-1',
-                    type: 'Task',
-                    title: 'Finish Algorithms final project report [HW3]',
-                    category: 'University',
-                    date: d(0),
-                    time: '14:00',
-                    deadline: d(3),
-                    status: 'In Progress',
-                    location: '',
-                    recurrence: 'none'
-                },
-                {
-                    id: 'demo-2',
-                    type: 'Event',
-                    title: 'Weekly thesis advisor sync',
-                    category: 'Lecture',
-                    date: d(2),
-                    time: '10:00',
-                    endTime: '12:00',
-                    deadline: '',
-                    status: 'Not Started',
-                    location: 'Research Building, Room 401',
-                    recurrence: 'weekly'
-                },
-                {
-                    id: 'demo-3',
-                    type: 'Task',
-                    title: 'Submit startup pitch deck (Draft v2)',
-                    category: 'Startup',
-                    date: d(1),
-                    time: '18:00',
-                    deadline: d(2),
-                    status: 'Not Started',
-                    location: '',
-                    recurrence: 'none'
-                },
-                {
-                    id: 'demo-4',
-                    type: 'Event',
-                    title: 'Algorithms & Data Structures final exam',
-                    category: 'Examination',
-                    date: d(4),
-                    time: '09:00',
-                    endTime: '11:30',
-                    deadline: '',
-                    status: 'Not Started',
-                    location: 'CS Building, Room 101',
-                    recurrence: 'none'
-                },
-                {
-                    id: 'demo-5',
-                    type: 'Task',
-                    title: 'Internship weekly progress report',
-                    category: 'Work',
-                    date: d(2),
-                    time: '09:30',
-                    deadline: d(2),
-                    status: 'Not Started',
-                    location: '',
-                    recurrence: 'weekly'
-                },
-                {
-                    id: 'demo-6',
-                    type: 'Task',
-                    title: 'Gym: squats & core workout',
-                    category: 'Personal',
-                    date: d(0),
-                    time: '20:30',
-                    deadline: '',
-                    status: 'Not Started',
-                    location: '',
-                    recurrence: 'daily'
-                },
-                {
-                    id: 'demo-7',
-                    type: 'Task',
-                    title: 'Read Chapter 7 — Database Indexing',
-                    category: 'University',
-                    date: d(-3),
-                    time: '',
-                    deadline: d(-1),
-                    status: 'Not Started',
-                    location: '',
-                    recurrence: 'none'
-                },
-                {
-                    id: 'demo-8',
-                    type: 'Task',
-                    title: 'Backlog: sort loose ideas & notes',
-                    category: 'Personal',
-                    date: '',
-                    time: '',
-                    deadline: '',
-                    status: 'Not Started',
-                    location: '',
-                    recurrence: 'none'
-                }
-            ];
-        }
-
-        // Category styling & labels
-        const categoryConfig = {
-            'University':  { bg: 'bg-univ-light',     border: 'border-univ-border',     text: 'text-univ-text',     bullet: 'bg-univ-solid',     label: '🎓 University' },
-            'Work':        { bg: 'bg-work-light',     border: 'border-work-border',     text: 'text-work-text',     bullet: 'bg-work-solid',     label: '💼 Work' },
-            'Startup':     { bg: 'bg-startup-light',  border: 'border-startup-border',  text: 'text-startup-text',  bullet: 'bg-startup-solid',  label: '🚀 Startup' },
-            'Personal':    { bg: 'bg-personal-light', border: 'border-personal-border', text: 'text-personal-text', bullet: 'bg-personal-solid', label: '🏠 Personal' },
-            'Lecture':     { bg: 'bg-lecture-light',  border: 'border-lecture-border',  text: 'text-lecture-text',  bullet: 'bg-lecture-solid',  label: '📚 Lecture' },
-            'Examination': { bg: 'bg-exam-light',     border: 'border-exam-border',     text: 'text-exam-text',     bullet: 'bg-exam-solid',     label: '📝 Exam' }
+        // Styling Configurations Domain Palette
+        const categoryClasses = {
+            'University':  { bg: 'bg-univ-light', border: 'border-univ-border', text: 'text-univ-text', badge: 'bg-univ-dark text-white' },
+            'Work':        { bg: 'bg-work-light', border: 'border-work-border', text: 'text-work-text', badge: 'bg-work-dark text-white' },
+            'Startup':     { bg: 'bg-startup-light', border: 'border-startup-border', text: 'text-startup-text', badge: 'bg-startup-dark text-white' },
+            'Personal':    { bg: 'bg-personal-light', border: 'border-personal-border', text: 'text-personal-text', badge: 'bg-personal-dark text-white' },
+            'Lecture':     { bg: 'bg-lecture-light', border: 'border-lecture-border', text: 'text-lecture-text', badge: 'bg-lecture-dark text-white' },
+            'Examination': { bg: 'bg-exam-light', border: 'border-exam-border', text: 'text-exam-text', badge: 'bg-exam-dark text-white' }
         };
 
-        const recurrenceLabels = {
-            'none': '',
-            'daily': '🔄 Daily',
-            'weekly': '🔄 Weekly',
-            'monthly': '🔄 Monthly',
-            'yearly': '🔄 Yearly'
-        };
+        function getStyleForCategory(cat) {
+            return categoryClasses[cat] || { bg: 'bg-none-light', border: 'border-none-border', text: 'text-none-text', badge: 'bg-none-dark text-white' };
+        }
 
+        // Parse local ISO standard date string cleanly safely
+        function parseLocalDate(dateStr) {
+            if(!dateStr) return null;
+            const parts = dateStr.split('-');
+            return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
+        function formatLocalDate(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getTodayDateStr() {
+            return formatLocalDate(new Date());
+        }
+
+        // Local Storage Sync Utilities
         function loadData() {
             const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-                try {
-                    recordsStore = JSON.parse(raw);
-                } catch (e) {
-                    recordsStore = getInitialDemoData();
-                }
+            if(raw) {
+                try { recordsStore = JSON.parse(raw); } catch(e) { recordsStore = []; }
             } else {
-                recordsStore = getInitialDemoData();
-                saveData();
+                recordsStore = []; // No demo data initialization - crisp empty baseline slate
             }
         }
 
         function saveData() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(recordsStore));
+            updateGlobalCounters();
         }
 
-        // ==================== Recurrence expansion engine ====================
-        // Expands recurring items into virtual instances for a given date.
-        function getExpandedRecordsForDate(dateStr) {
-            let instances = [];
-            let targetDate = parseLocalDate(dateStr);
-            if (!targetDate) return [];
+        // Global Statistics calculation recalculation logic engine
+        function updateGlobalCounters() {
+            const todayStr = getTodayDateStr();
+            let overdueCount = 0;
+            let dueTodayCount = 0;
+            let completedCount = 0;
 
-            recordsStore.forEach(item => {
-                // Items with no base date only ever appear in the "Unscheduled" bucket.
-                if (!item.date) {
-                    if (dateStr === '') {
-                        instances.push({ ...item });
-                    }
-                    return;
-                }
-
-                // 1. Exact match on the original date
-                if (item.date === dateStr) {
-                    instances.push({ ...item });
-                    return;
-                }
-
-                // 2. Recurrence match (instances only ever occur after the original date)
-                if (item.recurrence && item.recurrence !== 'none' && dateStr > item.date) {
-                    let origDate = parseLocalDate(item.date);
-                    if (!origDate) return;
-                    let isMatch = false;
-
-                    if (item.recurrence === 'daily') {
-                        isMatch = true;
-                    } else if (item.recurrence === 'weekly') {
-                        isMatch = (origDate.getDay() === targetDate.getDay());
-                    } else if (item.recurrence === 'monthly') {
-                        isMatch = (origDate.getDate() === targetDate.getDate());
-                    } else if (item.recurrence === 'yearly') {
-                        isMatch = (origDate.getMonth() === targetDate.getMonth() && origDate.getDate() === targetDate.getDate());
-                    }
-
-                    if (isMatch) {
-                        instances.push({
-                            ...item,
-                            date: dateStr,
-                            isRecurringInstance: true
-                        });
-                    }
+            recordsStore.forEach(r => {
+                if (r.completed) {
+                    completedCount++;
+                } else if (r.type === 'Task' && r.deadline) {
+                    if (r.deadline < todayStr) overdueCount++;
+                    if (r.deadline === todayStr) dueTodayCount++;
                 }
             });
-            return instances;
-        }
 
-        // Rolls forward any non-recurring Task whose scheduled date has passed without being completed.
-        function processAutoPostpone() {
-            let updated = false;
-            const todayStr = formatDateString(systemToday);
+            document.getElementById('stat-overdue').innerText = overdueCount;
+            document.getElementById('stat-duetoday').innerText = dueTodayCount;
 
-            recordsStore = recordsStore.map(item => {
-                if (item.type === 'Task' && item.status !== 'Completed' && item.date && item.date < todayStr) {
-                    if (!item.recurrence || item.recurrence === 'none') {
-                        item.date = todayStr;
-                        if (!item.title.startsWith('[DELAYED]')) {
-                            item.title = `[DELAYED] ${item.title}`;
-                        }
-                        updated = true;
-                    }
-                }
-                return item;
-            });
-
-            if (updated) saveData();
-        }
-
-        // ==================== View switch routing ====================
-        function switchView(viewName) {
-            activeView = viewName;
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
-            document.querySelectorAll('.view-tab-btn').forEach(btn => {
-                btn.classList.remove('bg-white', 'text-harbor', 'shadow-sm');
-                btn.classList.add('text-slate-600');
-            });
-
-            const currentTab = document.getElementById(`tab-${viewName}`);
-            if (currentTab) {
-                currentTab.classList.remove('text-slate-600');
-                currentTab.classList.add('bg-white', 'text-harbor', 'shadow-sm');
+            // Update history badge total counters
+            const badge = document.getElementById('history-badge');
+            if (completedCount > 0) {
+                badge.innerText = completedCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
             }
+        }
 
-            document.getElementById(`view-${viewName}`).classList.remove('hidden');
-
+        // View Management Layer switcher Routing
+        function switchView(target) {
+            currentView = target;
+            ['database', 'week', 'month'].forEach(v => {
+                document.getElementById(`view-${v}`).classList.add('hidden');
+                document.getElementById(`nav-${v}`).removeAttribute('data-active');
+            });
+            document.getElementById(`view-${target}`).classList.remove('hidden');
+            document.getElementById(`nav-${target}`).setAttribute('data-active', 'true');
+            
             refreshCurrentView();
         }
 
         function refreshCurrentView() {
-            if (activeView === 'database') {
-                renderDatabaseView();
-            } else if (activeView === 'week') {
-                renderWeekView();
-            } else if (activeView === 'month') {
-                renderMonthView();
+            updateGlobalCounters();
+            if(currentView === 'database') renderDatabaseView();
+            else if(currentView === 'week') renderWeekView();
+            else if(currentView === 'month') renderMonthView();
+        }
+
+        function toggleHistoryMode() {
+            historyMode = !historyMode;
+            const btnText = document.getElementById('history-btn-text');
+            const modeTitle = document.getElementById('database-mode-title');
+            const btn = document.getElementById('history-toggle-btn');
+            
+            if(historyMode) {
+                btnText.innerText = "Exit History";
+                modeTitle.classList.remove('hidden');
+                btn.classList.add('bg-slate-800', 'text-white', 'hover:bg-slate-700');
+            } else {
+                btnText.innerText = "History";
+                modeTitle.classList.add('hidden');
+                btn.classList.remove('bg-slate-800', 'text-white', 'hover:bg-slate-700');
             }
-        }
-
-        // ==================== Utility helpers ====================
-        function formatDateString(date) {
-            let y = date.getFullYear();
-            let m = String(date.getMonth() + 1).padStart(2, '0');
-            let d = String(date.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        function getSundayOfDate(d) {
-            let day = d.getDay();
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate() - day);
-        }
-
-        function addDays(date, days) {
-            let result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
-
-        function openMapLocation(loc) {
-            if (!loc) return;
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank');
-        }
-
-        // HTML-escape for safe display inside markup / double-quoted attributes
-        function escapeHTML(str) {
-            if (str === null || str === undefined) return '';
-            return String(str).replace(/[&<>'"]/g,
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
-        // Escape for safe embedding inside a single-quoted inline JS string (onclick="fn('...')")
-        function escapeAttr(str) {
-            if (str === null || str === undefined) return '';
-            return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        }
-
-
-        // ==================== 1. DATABASE VIEW rendering ====================
-        function getFilteredRecords() {
-            const searchInput = document.getElementById('filter-search');
-            const catInput = document.getElementById('filter-category');
-            const statusInput = document.getElementById('filter-status');
-            const hideCompletedInput = document.getElementById('filter-hide-completed');
-
-            const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
-            const cat = catInput ? catInput.value : 'all';
-            const stat = statusInput ? statusInput.value : 'all';
-            const hideCompleted = hideCompletedInput ? hideCompletedInput.checked : false;
-
-            return recordsStore.filter(item => {
-                if (q && !item.title.toLowerCase().includes(q)) return false;
-                if (cat !== 'all' && item.category !== cat) return false;
-                if (stat !== 'all' && item.status !== stat) return false;
-                if (hideCompleted && item.status === 'Completed') return false;
-                return true;
-            });
-        }
-
-        function renderStats() {
-            const todayStr = formatDateString(systemToday);
-            let overdue = 0, dueToday = 0, inProgress = 0, completed = 0;
-
-            recordsStore.forEach(item => {
-                if (item.status === 'In Progress') inProgress++;
-                if (item.status === 'Completed') completed++;
-                if (item.type === 'Task' && item.status !== 'Completed' && item.date && item.date < todayStr) overdue++;
-                if (item.date === todayStr) dueToday++;
-            });
-
-            document.getElementById('stat-overdue').textContent = overdue;
-            document.getElementById('stat-today').textContent = dueToday;
-            document.getElementById('stat-progress').textContent = inProgress;
-            document.getElementById('stat-completed').textContent = completed;
-        }
-
-        function clearFilters() {
-            document.getElementById('filter-search').value = '';
-            document.getElementById('filter-category').value = 'all';
-            document.getElementById('filter-status').value = 'all';
-            document.getElementById('filter-hide-completed').checked = false;
             renderDatabaseView();
         }
 
-        function renderDatabaseView() {
-            renderStats();
+        // Auto Postpone Engine Mechanics matching rules
+        function processAutoPostpone() {
+            const todayStr = getTodayDateStr();
+            let changed = false;
+            recordsStore.forEach(r => {
+                if(r.type === 'Task' && !r.completed && r.scheduled && r.scheduled < todayStr && !r.recurrence) {
+                    r.scheduled = todayStr;
+                    if(!r.title.startsWith('[DELAYED]')) {
+                        r.title = `[DELAYED] ${r.title}`;
+                    }
+                    changed = true;
+                }
+            });
+            if(changed) saveData();
+        }
 
-            const container = document.getElementById('database-tables-container');
+        // Expansion generation for Recurrences instances dynamically over boundaries
+        function getExpandedRecordsForDateRange(startStr, endStr) {
+            let list = [];
+            const dStart = parseLocalDate(startStr);
+            const dEnd = parseLocalDate(endStr);
+
+            recordsStore.forEach(r => {
+                // If single instance or matching completed state constraints directly bound
+                if (!r.recurrence || r.recurrence === 'none') {
+                    list.push(r);
+                    return;
+                }
+
+                // Expand recurrences for display matching ranges setup
+                let rDate = parseLocalDate(r.scheduled || r.deadline);
+                if(!rDate) return; 
+
+                // Guard boundary limit looping checks safety caps
+                let current = new Date(rDate.getTime());
+                let iterations = 0;
+                while (current <= dEnd && iterations < 400) {
+                    iterations++;
+                    const curStr = formatLocalDate(current);
+                    if (curStr >= startStr && curStr <= endStr) {
+                        list.push({
+                            ...r,
+                            id: `${r.id}-${curStr}`,
+                            _originalId: r.id,
+                            scheduled: r.scheduled ? curStr : null,
+                            deadline: r.deadline ? curStr : null,
+                            isExpandedInstance: true
+                        });
+                    }
+                    
+                    if (r.recurrence === 'daily') current.setDate(current.getDate() + 1);
+                    else if (r.recurrence === 'weekly') current.setDate(current.getDate() + 7);
+                    else if (r.recurrence === 'monthly') current.setMonth(current.getMonth() + 1);
+                    else if (r.recurrence === 'yearly') current.setFullYear(current.getFullYear() + 1);
+                }
+            });
+            return list;
+        }
+
+        // ==================== VIEW RENDERING: DATABASE ====================
+        function renderDatabaseView() {
+            const container = document.getElementById('database-groups');
             container.innerHTML = '';
 
-            const filtered = getFilteredRecords();
+            const searchKeyword = document.getElementById('search-input').value.toLowerCase().trim();
+            const catFilter = document.getElementById('filter-category').value;
 
-            let unscheduledGroup = [];
-            let scheduledGroups = {};
+            // Base filtering step configuration criteria mapping
+            let filtered = recordsStore.filter(r => {
+                if (historyMode && !r.completed) return false;
+                if (!historyMode && r.completed) return false;
 
-            filtered.forEach(item => {
-                if (!item.date) {
-                    unscheduledGroup.push(item);
-                } else {
-                    if (!scheduledGroups[item.date]) {
-                        scheduledGroups[item.date] = [];
-                    }
-                    scheduledGroups[item.date].push(item);
+                if (catFilter !== 'ALL' && r.category !== catFilter) return false;
+                if (searchKeyword) {
+                    const matchTitle = r.title.toLowerCase().includes(searchKeyword);
+                    const matchLoc = r.location && r.location.toLowerCase().includes(searchKeyword);
+                    if (!matchTitle && !matchLoc) return false;
                 }
+                return true;
             });
 
-            function sortCompletedLast(a, b) {
-                if (a.status === 'Completed' && b.status !== 'Completed') return 1;
-                if (a.status !== 'Completed' && b.status === 'Completed') return -1;
-                return (a.time || '23:59').localeCompare(b.time || '23:59');
+            if (filtered.length === 0) {
+                const node = document.getElementById('empty-state-template').cloneNode(true);
+                node.classList.remove('hidden');
+                container.appendChild(node);
+                return;
             }
 
-            unscheduledGroup.sort(sortCompletedLast);
-            let sortedDates = Object.keys(scheduledGroups).sort();
-
-            if (unscheduledGroup.length > 0) {
-                container.appendChild(createTableSection('📥 Unscheduled — drafts without a planned date', unscheduledGroup, ''));
-            }
-
-            sortedDates.forEach(dateStr => {
-                let list = scheduledGroups[dateStr];
-                list.sort(sortCompletedLast);
-
-                let labelSuffix = '';
-                const sysTodayStr = formatDateString(systemToday);
-                const sysTomorrowStr = formatDateString(addDays(systemToday, 1));
-
-                if (dateStr === sysTodayStr) {
-                    labelSuffix = ' <span class="ml-2 text-xs bg-harbor-light text-harbor-dark px-2 py-0.5 rounded-full font-medium">Today</span>';
-                } else if (dateStr === sysTomorrowStr) {
-                    labelSuffix = ' <span class="ml-2 text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-medium">Tomorrow</span>';
-                }
-
-                const dateTitle = `${dateStr} <span class="text-slate-400 font-normal">· ${getWeekdayShort(parseLocalDate(dateStr).getDay())}</span>`;
-                container.appendChild(createTableSection(dateTitle + labelSuffix, list, dateStr));
+            // Grouping array bucket sets map construction logic
+            let groups = {};
+            filtered.forEach(r => {
+                let key = r.scheduled || "Unscheduled";
+                if(!groups[key]) groups[key] = [];
+                groups[key].push(r);
             });
 
-            if (unscheduledGroup.length === 0 && sortedDates.length === 0) {
-                if (recordsStore.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-16 bg-white border border-slate-200 rounded-xl shadow-sm">
-                            <span class="text-4xl">🧭</span>
-                            <h4 class="mt-4 font-display font-bold text-slate-700">Nothing scheduled yet</h4>
-                            <p class="text-sm text-slate-400 mt-1">Add your first task or event to get moving.</p>
-                            <button onclick="openAddModal('Task')" class="mt-4 bg-harbor hover:bg-harbor-dark text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm active:scale-95 transition-all">+ Add your first task</button>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = `
-                        <div class="text-center py-16 bg-white border border-slate-200 rounded-xl shadow-sm">
-                            <span class="text-4xl">🔍</span>
-                            <h4 class="mt-4 font-display font-bold text-slate-700">No items match your filters</h4>
-                            <p class="text-sm text-slate-400 mt-1">Try a different search term or clear your filters.</p>
-                            <button onclick="clearFilters()" class="mt-4 border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-medium px-4 py-2 rounded-lg active:scale-95 transition-all">Clear filters</button>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // Builds a single date-group table
-        function createTableSection(titleText, items, groupDate) {
-            const section = document.createElement('div');
-            section.className = 'bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden';
-
-            const header = document.createElement('div');
-            header.className = 'px-5 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center flex-wrap gap-2';
-            header.innerHTML = `
-                <h3 class="font-display font-bold text-slate-800 flex items-center">${titleText}</h3>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-400 font-semibold">${items.length} item${items.length === 1 ? '' : 's'}</span>
-                    <button onclick="openAddModalWithPrefills('${groupDate}', '', 'Task', true)" class="text-xs bg-white text-harbor hover:bg-harbor-light border border-harbor/30 px-2.5 py-1 rounded-md transition-all active:scale-95">
-                        ➕ Task
-                    </button>
-                    <button onclick="openAddModalWithPrefills('${groupDate}', '', 'Event', true)" class="text-xs bg-white text-signal hover:bg-signal-light border border-signal/30 px-2.5 py-1 rounded-md transition-all active:scale-95">
-                        ⏰ Event
-                    </button>
-                </div>
-            `;
-            section.appendChild(header);
-
-            const tableContainer = document.createElement('div');
-            tableContainer.className = 'overflow-x-auto';
-
-            let tableHTML = `
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-slate-50/50 text-slate-400 text-[11px] font-bold uppercase tracking-wider border-b border-slate-100 mobile-hide-header">
-                        <tr>
-                            <th class="py-3 px-5 w-36">Type / Status</th>
-                            <th class="py-3 px-3">Title</th>
-                            <th class="py-3 px-3 w-36">Category</th>
-                            <th class="py-3 px-3 w-32">Time</th>
-                            <th class="py-3 px-3 w-48">Deadline / Location</th>
-                            <th class="py-3 px-5 text-right w-24">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-            `;
-
-            items.forEach(item => {
-                const conf = categoryConfig[item.category] || categoryConfig['Personal'];
-                const isCompleted = item.status === 'Completed';
-
-                const rowClass = isCompleted ? 'bg-slate-50/40 text-slate-400 opacity-60' : '';
-                const titleStyle = isCompleted ? 'line-through text-slate-400' : 'text-slate-800 font-semibold';
-
-                const recurText = recurrenceLabels[item.recurrence || 'none'];
-                const recurBadge = recurText ? `<span class="inline-block bg-lecture-light text-lecture-text text-[10px] px-1.5 py-0.5 rounded border border-lecture-border/30 ml-1.5 font-bold">${recurText}</span>` : '';
-
-                let deadlineBadge = '';
-                if (item.type === 'Task' && item.deadline) {
-                    const dlDate = parseLocalDate(item.deadline);
-                    const diffTime = dlDate - systemToday;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    let dlColorClass = 'bg-coral-light border-coral/30 text-coral-dark';
-                    let dlText = `🏁 Due ${item.deadline}`;
-                    if (isCompleted) {
-                        dlColorClass = 'bg-slate-100 border-slate-200 text-slate-400';
-                    } else if (diffDays < 0) {
-                        dlText = `⚠️ Overdue (${item.deadline})`;
-                        dlColorClass = 'bg-coral/10 border-coral text-coral-dark font-extrabold animate-pulse';
-                    } else if (diffDays === 0) {
-                        dlText = `⏰ Due today!`;
-                        dlColorClass = 'bg-signal-light border-signal/40 text-signal-dark font-bold';
-                    } else if (diffDays <= 2) {
-                        dlText = `⌛ ${diffDays} day${diffDays === 1 ? '' : 's'} left (${item.deadline})`;
-                    }
-
-                    deadlineBadge = `<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded border ${dlColorClass}">${dlText}</span>`;
-                }
-
-                const statusSelectHTML = `
-                    <select onchange="updateRecordStatus('${item.id}', this.value)" class="text-xs border border-slate-200 rounded p-1 bg-white outline-none focus:ring-1 focus:ring-harbor font-medium">
-                        <option value="Not Started" ${item.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                        <option value="In Progress" ${item.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                        <option value="Completed" ${isCompleted ? 'selected' : ''}>Completed</option>
-                    </select>
-                `;
-
-                const catPill = `
-                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${conf.bg} ${conf.border} ${conf.text}">
-                        <span class="w-1.5 h-1.5 rounded-full ${conf.bullet}"></span>
-                        ${conf.label}
-                    </span>
-                `;
-
-                let locHTML = '';
-                if (item.type === 'Event' && item.location) {
-                    locHTML = `
-                        <button onclick="openMapLocation('${escapeAttr(item.location)}')" class="text-xs text-harbor hover:underline flex items-center gap-1 text-left font-medium">
-                            📍 ${escapeHTML(item.location)} ↗
-                        </button>
-                    `;
-                }
-
-                tableHTML += `
-                    <tr class="mobile-card-row hover:bg-slate-50/50 transition-colors ${rowClass}">
-                        <!-- Type / Status -->
-                        <td class="py-3 px-5 sm:align-middle">
-                            <div class="flex items-center gap-2 sm:flex-col sm:items-start lg:flex-row lg:items-center">
-                                <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${item.type === 'Task' ? 'bg-harbor-light text-harbor-dark border border-harbor/20' : 'bg-signal-light text-signal-dark border border-signal/20'}">
-                                    ${item.type === 'Task' ? '📌 Task' : '⏰ Event'}
-                                </span>
-                                ${statusSelectHTML}
-                            </div>
-                        </td>
-
-                        <!-- Title -->
-                        <td class="py-3 px-3 sm:align-middle">
-                            <div class="flex flex-col gap-1">
-                                <div class="flex items-center flex-wrap">
-                                    <span class="text-sm ${titleStyle}">${escapeHTML(item.title)}</span>
-                                    ${recurBadge}
-                                </div>
-                                <div class="sm:hidden mt-2 space-y-1.5">
-                                    <div class="flex items-center gap-2">${catPill}</div>
-                                    ${item.time ? `<div class="text-xs text-slate-500 font-mono">⏰ ${item.time} ${item.endTime ? `– ${item.endTime}` : ''}</div>` : ''}
-                                    ${deadlineBadge ? `<div>${deadlineBadge}</div>` : ''}
-                                    ${locHTML ? `<div class="mt-1">${locHTML}</div>` : ''}
-                                </div>
-                            </div>
-                        </td>
-
-                        <!-- Category (hidden on mobile) -->
-                        <td class="py-3 px-3 sm:align-middle mobile-hide-header">
-                            ${catPill}
-                        </td>
-
-                        <!-- Time (hidden on mobile) -->
-                        <td class="py-3 px-3 sm:align-middle mobile-hide-header">
-                            <span class="text-xs font-semibold text-slate-600 font-mono">
-                                ${item.time ? `${item.time} ${item.endTime ? `– ${item.endTime}` : ''}` : '<span class="text-slate-300 font-sans">No time set</span>'}
-                            </span>
-                        </td>
-
-                        <!-- Deadline / Location (hidden on mobile) -->
-                        <td class="py-3 px-3 sm:align-middle mobile-hide-header">
-                            <div class="flex flex-col gap-1.5">
-                                ${deadlineBadge}
-                                ${locHTML}
-                            </div>
-                        </td>
-
-                        <!-- Actions -->
-                        <td class="py-3 px-5 sm:align-middle text-right">
-                            <div class="flex justify-end gap-1">
-                                <button onclick="openEditRecord('${item.id}')" class="p-1 text-slate-400 hover:text-harbor rounded text-sm transition-colors" title="Edit">
-                                    ✏️
-                                </button>
-                                <button onclick="deleteRecord('${item.id}')" class="p-1 text-slate-400 hover:text-coral rounded text-sm transition-colors" title="Delete">
-                                    🗑️
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            // Sort dates naturally ascending arrays track out
+            let sortedKeys = Object.keys(groups).sort((a,b) => {
+                if(a === "Unscheduled") return 1;
+                if(b === "Unscheduled") return -1;
+                return a.localeCompare(b);
             });
 
-            tableHTML += `</tbody></table>`;
-            tableContainer.innerHTML = tableHTML;
-            section.appendChild(tableContainer);
-            return section;
-        }
+            sortedKeys.forEach(dateKey => {
+                const groupWrapper = document.createElement('div');
+                groupWrapper.className = "space-y-2.5";
 
+                // Group header display title setup block text
+                let displayTitle = dateKey;
+                if (dateKey !== "Unscheduled") {
+                    const d = parseLocalDate(dateKey);
+                    displayTitle = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+                }
 
-        // ==================== 2. WEEK TIMELINE VIEW rendering ====================
-        function renderWeekView() {
-            const weekEnd = addDays(currentWeekStart, 6);
-            document.getElementById('week-view-title').textContent = `${formatDateString(currentWeekStart)}  →  ${formatDateString(weekEnd)}`;
+                const heading = document.createElement('h4');
+                heading.className = "text-xs font-bold text-slate-400 uppercase tracking-wider px-1";
+                heading.innerText = displayTitle;
+                groupWrapper.appendChild(heading);
 
-            // 1. Day headers
-            const headerRow = document.getElementById('week-header-days');
-            headerRow.innerHTML = `<div class="py-3 text-center text-xs font-bold text-slate-400 border-r border-slate-200 font-mono">24H</div>`;
+                // Grid Container layout implementation match Keep style specifications
+                const grid = document.createElement('div');
+                grid.className = "keep-grid";
 
-            const daysData = [];
-            for (let i = 0; i < 7; i++) {
-                let d = addDays(currentWeekStart, i);
-                daysData.push(d);
-                let dateStr = formatDateString(d);
-                let isToday = dateStr === formatDateString(systemToday);
-                let todayClass = isToday ? 'bg-harbor-light border-harbor/30 border-b-2 text-harbor-dark' : '';
-
-                headerRow.innerHTML += `
-                    <div class="py-2 text-center border-r border-slate-200 last:border-r-0 ${todayClass}">
-                        <div class="text-[11px] font-semibold opacity-70">${getWeekdayShort(d.getDay())}</div>
-                        <div class="text-sm font-extrabold font-mono">${d.getDate()}</div>
-                    </div>
-                `;
-            }
-
-            // 2. Untimed tasks lane — defaults new items to Task (matches the lane's purpose) and is unlocked
-            const untimedRow = document.getElementById('week-untimed-tasks-row');
-            untimedRow.innerHTML = `<div class="py-2.5 px-3 border-r border-slate-200 text-right font-bold text-[10px] text-signal-dark bg-signal-light/40">Untimed<br/>Tasks</div>`;
-
-            for (let i = 0; i < 7; i++) {
-                let d = daysData[i];
-                let dateStr = formatDateString(d);
-
-                let dayRecords = getExpandedRecordsForDate(dateStr).filter(item => item.type === 'Task' && !item.time);
-
-                let cellsContent = '';
-                dayRecords.forEach(task => {
-                    const conf = categoryConfig[task.category] || categoryConfig['Personal'];
-                    const isCompleted = task.status === 'Completed';
-                    const compStyle = isCompleted ? 'opacity-50 line-through' : '';
-                    cellsContent += `
-                        <div onclick="openEditRecord('${task.id}'); event.stopPropagation();" class="p-1 mb-1 rounded border text-[10px] cursor-pointer hover:shadow-sm transition-all truncate ${conf.bg} ${conf.border} ${conf.text} ${compStyle}" title="${escapeHTML(task.title)}">
-                            📌 ${escapeHTML(task.title)}
-                        </div>
-                    `;
-                });
-
-                untimedRow.innerHTML += `
-                    <div class="p-1.5 border-r border-slate-200 last:border-r-0 h-full min-h-[60px] hover:bg-slate-50/50 transition-colors" onclick="openAddModalWithPrefills('${dateStr}', '', 'Task', false)">
-                        ${cellsContent || '<span class="text-slate-300 text-[10px] block text-center py-4">+ Add task</span>'}
-                    </div>
-                `;
-            }
-
-            // 3. 24-hour background grid — clicking an empty slot defaults to Event, but the type can still be switched
-            const timelineContainer = document.getElementById('week-hours-timeline');
-            timelineContainer.innerHTML = '';
-
-            const START_HOUR = 7;
-            const END_HOUR = 23;
-            let timelineHTML = '';
-
-            for (let h = START_HOUR; h <= END_HOUR; h++) {
-                let hStr = String(h).padStart(2, '0') + ':00';
-
-                timelineHTML += `
-                    <div class="grid grid-cols-8 border-b border-slate-100 min-h-[50px] relative">
-                        <div class="border-r border-slate-200 bg-slate-50 text-[11px] text-slate-400 font-bold text-right pr-3 pt-1 select-none font-mono">
-                            ${hStr}
-                        </div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[0])}', '${hStr}', 'Event', false)"></div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[1])}', '${hStr}', 'Event', false)"></div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[2])}', '${hStr}', 'Event', false)"></div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[3])}', '${hStr}', 'Event', false)"></div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[4])}', '${hStr}', 'Event', false)"></div>
-                        <div class="border-r border-slate-100 hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[5])}', '${hStr}', 'Event', false)"></div>
-                        <div class="hover:bg-slate-50/30 cursor-pointer" onclick="openAddModalWithPrefills('${formatDateString(daysData[6])}', '${hStr}', 'Event', false)"></div>
-                    </div>
-                `;
-            }
-            timelineContainer.innerHTML = timelineHTML;
-
-            // 4. Absolutely-positioned cards for timed items, with overlap avoidance
-            for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-                let targetDateStr = formatDateString(daysData[dayOffset]);
-
-                let dayRecords = getExpandedRecordsForDate(targetDateStr).filter(item => {
-                    if (!item.time) return false;
-                    let h = parseInt(item.time.split(':')[0], 10);
-                    return h >= START_HOUR && h <= END_HOUR;
-                });
-
-                let parsedItems = dayRecords.map(item => {
-                    let startMin = timeToMinutes(item.time);
-                    let endMin = startMin + 60;
-                    if (item.type === 'Event' && item.endTime) {
-                        endMin = timeToMinutes(item.endTime);
-                        if (endMin <= startMin) endMin = startMin + 60;
-                    }
-                    return {
-                        original: item,
-                        startMin: startMin,
-                        endMin: endMin,
-                        duration: endMin - startMin
-                    };
-                });
-
-                parsedItems.sort((a, b) => a.startMin - b.startMin);
-                let columns = [];
-
-                parsedItems.forEach(node => {
-                    let placed = false;
-                    for (let c = 0; c < columns.length; c++) {
-                        let lastNode = columns[c][columns[c].length - 1];
-                        if (node.startMin >= lastNode.endMin) {
-                            columns[c].push(node);
-                            node.colIndex = c;
-                            placed = true;
-                            break;
-                        }
-                    }
-                    if (!placed) {
-                        columns.push([node]);
-                        node.colIndex = columns.length - 1;
-                    }
-                });
-
-                let totalCols = columns.length;
-
-                parsedItems.forEach(node => {
-                    let item = node.original;
-                    const conf = categoryConfig[item.category] || categoryConfig['Personal'];
-
-                    let baseMin = START_HOUR * 60;
-                    let topMinDiff = node.startMin - baseMin;
-
-                    let topPx = (topMinDiff * 50) / 60;
-                    let heightPx = (node.duration * 50) / 60;
-
-                    let colWidthPercent = 12.5;
-                    let dayLeftPercent = colWidthPercent + (colWidthPercent * dayOffset);
-
-                    let innerWidthPercent = colWidthPercent / totalCols;
-                    let finalLeftPercent = dayLeftPercent + (innerWidthPercent * node.colIndex);
-
+                groups[dateKey].forEach(item => {
+                    const style = getStyleForCategory(item.category);
                     const card = document.createElement('div');
-                    card.className = `absolute z-10 p-1.5 border rounded-lg shadow-sm text-[10px] cursor-pointer hover:shadow-md transition-all truncate flex flex-col justify-between ${conf.bg} ${conf.border} ${conf.text}`;
-                    card.style.top = `${topPx}px`;
-                    card.style.height = `${heightPx}px`;
-                    card.style.left = `${finalLeftPercent}%`;
-                    card.style.width = `${innerWidthPercent - 0.2}%`;
-
-                    const isCompleted = item.status === 'Completed';
-                    const compStyle = isCompleted ? 'line-through opacity-50' : '';
-                    const repeatIcon = item.recurrence && item.recurrence !== 'none' ? '🔄' : '';
-
-                    card.innerHTML = `
-                        <div>
-                            <div class="font-bold flex items-center gap-0.5 ${compStyle}" title="${escapeHTML(item.title)}">
-                                <span>${item.type === 'Task' ? '📌' : '⏰'}</span>
-                                <span class="truncate">${escapeHTML(item.title)}</span>
-                                <span class="text-[9px]">${repeatIcon}</span>
-                            </div>
-                            <div class="opacity-80 mt-0.5 font-medium font-mono">${item.time}${item.endTime ? ` – ${item.endTime}` : ''}</div>
-                        </div>
-                        ${item.type === 'Event' && item.location ? `
-                            <div class="text-[9px] opacity-90 truncate hover:underline" onclick="openMapLocation('${escapeAttr(item.location)}'); event.stopPropagation();">
-                                📍 ${escapeHTML(item.location)}
-                            </div>
-                        ` : ''}
-                    `;
-
+                    card.className = `${style.bg} ${style.border} border rounded-xl p-3.5 relative flex flex-col justify-between transition duration-200 cursor-pointer shadow-sm hover:shadow-md select-none group`;
+                    
+                    // Click mapping for edit action trigger direct interface
                     card.onclick = (e) => {
-                        e.stopPropagation();
-                        openEditRecord(item.id);
+                        if(e.target.closest('.keep-checkbox')) return; // ignore bounding click elements routing bubble
+                        openEditModal(item.id);
                     };
 
-                    timelineContainer.appendChild(card);
+                    // Header content container matching items configuration structures
+                    const topRow = document.createElement('div');
+                    topRow.className = "flex items-start justify-between gap-2 mb-2";
+
+                    const titleEl = document.createElement('h5');
+                    titleEl.className = `text-sm font-semibold text-slate-900 tracking-tight leading-snug break-words pr-4 ${item.completed ? 'line-through opacity-40' : ''}`;
+                    titleEl.innerText = item.title;
+                    topRow.appendChild(titleEl);
+
+                    // Top-right directly interactive action checkbox bounding item definitions
+                    const checkWrapper = document.createElement('div');
+                    checkWrapper.className = "absolute top-3 right-3 keep-checkbox";
+
+                    const cb = document.createElement('input');
+                    cb.type = "checkbox";
+                    cb.checked = item.completed;
+                    cb.className = "w-4 h-4 rounded-sm border-slate-300 text-harbor focus:ring-harbor transition cursor-pointer";
+                    cb.onchange = () => {
+                        toggleCompleteRecord(item.id);
+                    };
+                    checkWrapper.appendChild(cb);
+                    topRow.appendChild(checkWrapper);
+                    card.appendChild(topRow);
+
+                    // Metadata footer layer stack layouts details specs blocks
+                    const footerRow = document.createElement('div');
+                    footerRow.className = "mt-auto space-y-1 flex flex-col";
+
+                    // Colorful Categorical Indicator strip or dot tags structures
+                    const catTag = document.createElement('span');
+                    catTag.className = `text-[10px] font-bold uppercase tracking-wider ${style.text}`;
+                    catTag.innerText = item.category;
+                    footerRow.appendChild(catTag);
+
+                    if (item.type === 'Task' && item.deadline) {
+                        const dl = document.createElement('div');
+                        dl.className = "text-[11px] font-mono font-medium text-slate-500 flex items-center gap-1 mt-1";
+                        dl.innerHTML = `<span class="text-coral font-bold">DL:</span> ${item.deadline}`;
+                        footerRow.appendChild(dl);
+                    } else if (item.type === 'Event' && item.startTime) {
+                        const evTime = document.createElement('div');
+                        evTime.className = "text-[11px] font-mono text-slate-500 mt-1";
+                        evTime.innerText = item.endTime ? `${item.startTime} - ${item.endTime}` : item.startTime;
+                        footerRow.appendChild(evTime);
+                    }
+
+                    if (item.recurrence && item.recurrence !== 'none') {
+                        const recurTag = document.createElement('div');
+                        recurTag.className = "text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5";
+                        recurTag.innerText = `↺ ${item.recurrence}`;
+                        footerRow.appendChild(recurTag);
+                    }
+
+                    card.appendChild(footerRow);
+                    grid.appendChild(card);
                 });
+
+                groupWrapper.appendChild(grid);
+                container.appendChild(groupWrapper);
+            });
+        }
+
+        // ==================== VIEW RENDERING: WEEK ====================
+        function renderWeekView() {
+            // Setup dynamic background hours parameters columns mapping matrices 
+            const labelsBar = document.getElementById('week-time-labels');
+            labelsBar.innerHTML = '';
+            for(let i=0; i<24; i++) {
+                const hr = document.createElement('div');
+                hr.innerText = `${String(i).padStart(2,'0')}:00`;
+                labelsBar.appendChild(hr);
             }
+
+            // Calculate bounding week range arrays sets
+            const currentDayOfWeek = weekAnchorDate.getDay(); 
+            const dStart = new Date(weekAnchorDate.getTime());
+            dStart.setDate(weekAnchorDate.getDate() - currentDayOfWeek);
+            const dEnd = new Date(dStart.getTime());
+            dEnd.setDate(dStart.getDate() + 6);
+
+            const startStr = formatLocalDate(dStart);
+            const endStr = formatLocalDate(dEnd);
+
+            // Header labels calculation text display injection matching strings
+            document.getElementById('week-title-range').innerText = `${dStart.toLocaleDateString(undefined, {month:'short', day:'numeric'})} — ${dEnd.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'})}`;
+
+            // Fetch expanded recurrences dataset bounds
+            const expandedList = getExpandedRecordsForDateRange(startStr, endStr);
+
+            // Render Deadlines top display container space row lanes matching layout specs
+            const deadlineContainer = document.getElementById('week-deadlines-container');
+            deadlineContainer.innerHTML = '';
+
+            // Handle Mobile adaptive responsive column logic parameters constraints 
+            const isMobile = window.innerWidth < 768;
+            let displayDaysCount = isMobile ? 3 : 7;
+            
+            // Map array columns tracks rendering layout builders 
+            const colsGrid = document.getElementById('week-days-columns');
+            colsGrid.className = `flex-1 grid grid-cols-${displayDaysCount} divide-x divide-slate-200 relative h-full`;
+            colsGrid.innerHTML = '';
+
+            let daysToRender = [];
+            let baseDate = new Date(dStart.getTime());
+
+            if (isMobile) {
+                // Pin view alignment focus surrounding current selected offset anchors
+                baseDate = new Date(weekAnchorDate.getTime());
+                baseDate.setDate(baseDate.getDate() - 1); // center left anchor node offset bound block
+                for(let i=0; i<3; i++) {
+                    daysToRender.push(new Date(baseDate.getTime()));
+                    baseDate.setDate(baseDate.getDate() + 1);
+                }
+            } else {
+                for(let i=0; i<7; i++) {
+                    daysToRender.push(new Date(baseDate.getTime()));
+                    baseDate.setDate(baseDate.getDate() + 1);
+                }
+            }
+
+            // Generate Columns UI grids elements structures mapping matrixes configurations
+            daysToRender.forEach(dayObj => {
+                const curDayStr = formatLocalDate(dayObj);
+                const isToday = curDayStr === getTodayDateStr();
+
+                const col = document.createElement('div');
+                col.className = `flex flex-col h-full min-h-[600px] relative bg-amber-50/10 ${isToday ? 'bg-blue-50/20' : ''}`;
+
+                // Label Header Block cells components
+                const colHead = document.createElement('div');
+                colHead.className = `p-2 text-center border-b border-slate-200 select-none bg-slate-50/30 sticky top-0 z-10 ${isToday ? 'bg-blue-50/60' : ''}`;
+                
+                const weekdayLabel = document.createElement('p');
+                weekdayLabel.className = `text-[10px] font-bold uppercase tracking-wider ${isToday ? 'text-blue-600' : 'text-slate-400'}`;
+                weekdayLabel.innerText = dayObj.toLocaleDateString(undefined, { weekday: 'short' });
+                colHead.appendChild(weekdayLabel);
+
+                const dayNumLabel = document.createElement('p');
+                dayNumLabel.className = `text-sm font-display font-bold mt-0.5 ${isToday ? 'text-blue-600 bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mx-auto shadow-xs' : 'text-slate-700'}`;
+                dayNumLabel.innerText = dayObj.getDate();
+                colHead.appendChild(dayNumLabel);
+                col.appendChild(colHead);
+
+                // Base Empty Grid Blocks background interactive lines clicker
+                const timeSlotsWrapper = document.createElement('div');
+                timeSlotsWrapper.className = "flex-1 relative divide-y divide-slate-100/60";
+                
+                // Clicking an empty slot triggers standard modal quick select setup template configurations values injection
+                timeSlotsWrapper.onclick = (e) => {
+                    if (e.target === timeSlotsWrapper) {
+                        openAddModal(curDayStr);
+                    }
+                };
+
+                for(let h=0; h<24; h++) {
+                    const line = document.createElement('div');
+                    line.className = "h-[46px] relative cursor-pointer hover:bg-slate-50/50 transition";
+                    line.onclick = (e) => {
+                        if(e.target === line) {
+                            const hrStr = String(h).padStart(2,'0') + ':00';
+                            openAddModal(curDayStr, hrStr);
+                        }
+                    };
+                    timeSlotsWrapper.appendChild(line);
+                }
+
+                // Filter items intersecting current targets array column specs bound configurations logic layout rules engine 
+                const dayItems = expandedList.filter(item => item.scheduled === curDayStr);
+
+                dayItems.forEach(item => {
+                    if (item.type === 'Event' && item.startTime) {
+                        const card = document.createElement('div');
+                        const style = getStyleForCategory(item.category);
+                        
+                        card.className = `${style.bg} ${style.border} border text-left p-1.5 rounded-lg shadow-xs absolute left-1 right-1 cursor-pointer hover:shadow-md select-none transition overflow-hidden text-ellipsis z-20 group`;
+                        card.onclick = () => openDetailModal(item);
+
+                        const titleNode = document.createElement('p');
+                        titleNode.className = `text-xs font-bold tracking-tight text-slate-900 leading-tight ${item.completed ? 'line-through opacity-40' : ''}`;
+                        titleNode.innerText = item.title;
+                        card.appendChild(titleNode);
+
+                        // Position mapping rules coordinate calculations transformations layout anchors boxes
+                        const startParts = item.startTime.split(':');
+                        const startMin = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+                        let endMin = startMin + 60; // fallback standard default block sizes range duration block configuration values
+                        
+                        if (item.endTime) {
+                            const endParts = item.endTime.split(':');
+                            endMin = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+                        }
+                        if (endMin <= startMin) endMin = startMin + 30; // safety wrap guard check standard values configs layout matching structures
+
+                        const topPos = 42 + Math.floor((startMin / 1440) * 1104); // ratio maps translation coordinates height calculations boundaries box
+                        const blockHeight = Math.max(24, Math.floor(((endMin - startMin) / 1440) * 1104));
+
+                        card.style.top = `${topPos}px`;
+                        card.style.height = `${blockHeight}px`;
+
+                        timeSlotsWrapper.appendChild(card);
+                    }
+                });
+
+                // Compute deadlines tracking intersecting specific day target mappings elements inside top bar matrix row layer strip 
+                const dayDeadlines = expandedList.filter(item => item.type === 'Task' && item.deadline === curDayStr);
+                dayDeadlines.forEach(item => {
+                    const style = getStyleForCategory(item.category);
+                    const dlChip = document.createElement('div');
+                    dlChip.className = `${style.bg} ${style.border} border text-slate-800 text-[11px] font-semibold px-2 py-0.5 rounded-md cursor-pointer hover:shadow-xs select-none transition ${item.completed ? 'opacity-40 line-through' : ''}`;
+                    dlChip.innerText = item.title;
+                    dlChip.onclick = () => openDetailModal(item);
+
+                    deadlineContainer.appendChild(dlChip);
+                });
+
+                col.appendChild(timeSlotsWrapper);
+                colsGrid.appendChild(col);
+            });
         }
 
-        function timeToMinutes(timeStr) {
-            if (!timeStr) return 0;
-            let parts = timeStr.split(':');
-            return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        function navigateWeek(dir) {
+            if(dir === 0) weekAnchorDate = new Date();
+            else weekAnchorDate.setDate(weekAnchorDate.getDate() + dir * 7);
+            renderWeekView();
         }
 
-
-        // ==================== 3. MONTHLY CALENDAR VIEW rendering ====================
+        // ==================== VIEW RENDERING: MONTH ====================
         function renderMonthView() {
-            document.getElementById('month-view-title').textContent = `${MONTH_NAMES[currentMonthYear.month - 1]} ${currentMonthYear.year}`;
-
-            document.getElementById('month-select-year').value = currentMonthYear.year;
-            document.getElementById('month-select-month').value = currentMonthYear.month;
+            // Synchronize drop-down menu selectors trackers coordinates index configurations alignment values
+            document.getElementById('month-select-year').value = monthAnchorYear;
+            document.getElementById('month-select-month').value = monthAnchorMonth;
 
             const grid = document.getElementById('month-days-grid');
             grid.innerHTML = '';
 
-            let firstDay = new Date(currentMonthYear.year, currentMonthYear.month - 1, 1);
-            let startDayOfWeek = firstDay.getDay();
+            const firstDayOfMonth = new Date(monthAnchorYear, monthAnchorMonth, 1);
+            const startDayOfWeek = firstDayOfMonth.getDay(); 
 
-            let totalDays = new Date(currentMonthYear.year, currentMonthYear.month, 0).getDate();
-            let prevMonthTotalDays = new Date(currentMonthYear.year, currentMonthYear.month - 1, 0).getDate();
+            // Backfill previous buffer pad blocks cells items matrices definitions offsets tracks records sets boundary limit allocations ranges
+            const totalSlots = 42; 
+            const matrixStartDate = new Date(firstDayOfMonth.getTime());
+            matrixStartDate.setDate(matrixStartDate.getDate() - startDayOfWeek);
 
-            let cellsHTML = '';
-            let dateCounter = 1;
-            let nextMonthCounter = 1;
-            const sysTodayStr = formatDateString(systemToday);
+            const matrixEndDate = new Date(matrixStartDate.getTime());
+            matrixEndDate.setDate(matrixStartDate.getDate() + totalSlots - 1);
 
-            for (let i = 0; i < 42; i++) {
-                let cellYear = currentMonthYear.year;
-                let cellMonth = currentMonthYear.month;
-                let cellDayNum = 0;
-                let isCurrentMonth = true;
+            const expandedList = getExpandedRecordsForDateRange(formatLocalDate(matrixStartDate), formatLocalDate(matrixEndDate));
+            const todayStr = getTodayDateStr();
 
-                if (i < startDayOfWeek) {
-                    isCurrentMonth = false;
-                    cellDayNum = prevMonthTotalDays - startDayOfWeek + i + 1;
-                    if (currentMonthYear.month === 1) {
-                        cellYear = currentMonthYear.year - 1;
-                        cellMonth = 12;
+            let cursorDate = new Date(matrixStartDate.getTime());
+
+            for (let i = 0; i < totalSlots; i++) {
+                const currentStr = formatLocalDate(cursorDate);
+                const loopDayNum = cursorDate.getDate();
+                const isCurrentMonth = cursorDate.getMonth() === monthAnchorMonth;
+                const isToday = currentStr === todayStr;
+
+                const cell = document.createElement('div');
+                cell.className = `p-1.5 flex flex-col min-h-[70px] bg-white transition relative cursor-pointer hover:bg-slate-50/60 ${!isCurrentMonth ? 'bg-slate-50/40 text-slate-300' : 'text-slate-800'} ${isToday ? 'bg-blue-50/20' : ''}`;
+                
+                // Clicking a cell opens the new Day View Popup Modal
+                const dayStrCaptured = currentStr;
+                cell.onclick = (e) => {
+                    if (e.target.closest('.month-item-node')) return; // ignore tracking layer bubble elements selections routing boundaries
+                    openDayViewModal(dayStrCaptured);
+                };
+
+                const numLabel = document.createElement('span');
+                numLabel.className = `text-xs font-mono font-bold tracking-tight select-none self-start px-1 py-0.5 ${isToday ? 'bg-blue-600 text-white rounded-md shadow-xs' : isCurrentMonth ? 'text-slate-700' : 'text-slate-300'}`;
+                numLabel.innerText = loopDayNum;
+                cell.appendChild(numLabel);
+
+                // Render matching embedded text lists items entries bars labels layout items
+                const cellItemsContainer = document.createElement('div');
+                cellItemsContainer.className = "space-y-1 mt-1.5 overflow-hidden flex-1";
+
+                const itemsOnDay = expandedList.filter(item => item.scheduled === currentStr || (item.type === 'Task' && item.deadline === currentStr));
+
+                itemsOnDay.forEach(item => {
+                    const style = getStyleForCategory(item.category);
+                    const itemBar = document.createElement('div');
+                    itemBar.className = `month-item-node text-[10px] font-medium rounded px-1.5 py-0.5 truncate select-none leading-tight transition ${style.bg} ${style.border} border text-slate-800 ${item.completed ? 'opacity-30 line-through' : ''}`;
+                    
+                    // Prepend deadline specific micro elements layout markings visual signals flags
+                    if (item.type === 'Task' && item.deadline === currentStr) {
+                        itemBar.innerText = `⚠️ ${item.title}`;
                     } else {
-                        cellMonth = currentMonthYear.month - 1;
+                        itemBar.innerText = item.title;
                     }
-                } else if (dateCounter > totalDays) {
-                    isCurrentMonth = false;
-                    cellDayNum = nextMonthCounter++;
-                    if (currentMonthYear.month === 12) {
-                        cellYear = currentMonthYear.year + 1;
-                        cellMonth = 1;
-                    } else {
-                        cellMonth = currentMonthYear.month + 1;
-                    }
-                } else {
-                    cellDayNum = dateCounter++;
-                }
+                    
+                    itemBar.onclick = (e) => {
+                        e.stopPropagation();
+                        openDetailModal(item);
+                    };
 
-                let formatM = String(cellMonth).padStart(2, '0');
-                let formatD = String(cellDayNum).padStart(2, '0');
-                let cellDateStr = `${cellYear}-${formatM}-${formatD}`;
-
-                let cellBgClass = isCurrentMonth ? 'bg-white' : 'bg-slate-50 text-slate-400';
-                let isToday = cellDateStr === sysTodayStr;
-                let todayBorder = isToday ? 'bg-harbor-light/40 ring-2 ring-harbor ring-inset' : '';
-
-                let dayRecords = getExpandedRecordsForDate(cellDateStr);
-
-                let itemLabelsHTML = '';
-                dayRecords.slice(0, 4).forEach(item => {
-                    const conf = categoryConfig[item.category] || categoryConfig['Personal'];
-                    const isCompleted = item.status === 'Completed';
-                    const compStyle = isCompleted ? 'line-through opacity-40' : '';
-
-                    let prefixIcon = item.type === 'Task' ? '📌' : '⏰';
-                    let labelTime = item.time ? `<span class="opacity-90 font-medium font-mono text-[9px]">${item.time}</span> ` : '';
-
-                    itemLabelsHTML += `
-                        <div onclick="openEditRecord('${item.id}'); event.stopPropagation();" class="text-[10px] px-1.5 py-0.5 rounded border border-transparent truncate cursor-pointer transition-all hover:border-slate-300 font-semibold mb-0.5 ${conf.bg} ${conf.text} ${compStyle}" title="${escapeHTML(item.title)}">
-                            ${prefixIcon} ${labelTime}${escapeHTML(item.title)}
-                        </div>
-                    `;
+                    cellItemsContainer.appendChild(itemBar);
                 });
 
-                if (dayRecords.length > 4) {
-                    itemLabelsHTML += `
-                        <div class="text-[9px] text-slate-400 text-center font-bold">+${dayRecords.length - 4} more</div>
-                    `;
-                }
+                cell.appendChild(cellItemsContainer);
+                grid.appendChild(cell);
 
-                cellsHTML += `
-                    <div onclick="openAddModalWithPrefills('${cellDateStr}', '', 'Event', false)" class="calendar-grid-cell p-1.5 flex flex-col justify-between transition-all hover:bg-harbor-light/20 cursor-pointer ${cellBgClass} ${todayBorder}">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs font-bold font-mono ${isToday ? 'bg-harbor text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm' : ''}">${cellDayNum}</span>
-                            ${dayRecords.length > 0 ? `<span class="text-[10px] text-slate-400 font-bold font-mono">${dayRecords.length}</span>` : ''}
-                        </div>
-                        <div class="flex-grow space-y-0.5 overflow-hidden">
-                            ${itemLabelsHTML}
-                        </div>
-                    </div>
-                `;
+                cursorDate.setDate(cursorDate.getDate() + 1);
             }
-
-            grid.innerHTML = cellsHTML;
         }
 
-        // Month/year selectors
         function initMonthSelectors() {
-            const ySelect = document.getElementById('month-select-year');
-            const mSelect = document.getElementById('month-select-month');
+            const yearSel = document.getElementById('month-select-year');
+            const monthSel = document.getElementById('month-select-month');
 
-            const baseYear = systemToday.getFullYear();
-            ySelect.innerHTML = '';
-            for (let y = baseYear - 3; y <= baseYear + 4; y++) {
-                ySelect.innerHTML += `<option value="${y}">${y}</option>`;
+            yearSel.innerHTML = '';
+            for(let y=2024; y<=2032; y++) {
+                const op = document.createElement('option');
+                op.value = y; op.innerText = y; yearSel.appendChild(op);
             }
+            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            monthSel.innerHTML = '';
+            monthNames.forEach((m, idx) => {
+                const op = document.createElement('option');
+                op.value = idx; op.innerText = m; monthSel.appendChild(op);
+            });
 
-            mSelect.innerHTML = '';
-            for (let m = 1; m <= 12; m++) {
-                mSelect.innerHTML += `<option value="${m}">${MONTH_NAMES[m - 1]}</option>`;
-            }
+            yearSel.onchange = () => { monthAnchorYear = parseInt(yearSel.value); renderMonthView(); };
+            monthSel.onchange = () => { monthAnchorMonth = parseInt(monthSel.value); renderMonthView(); };
         }
 
-        function onMonthSelectorChange() {
-            currentMonthYear.year = parseInt(document.getElementById('month-select-year').value, 10);
-            currentMonthYear.month = parseInt(document.getElementById('month-select-month').value, 10);
+        function navigateMonth(dir) {
+            if (dir === 0) {
+                const now = new Date();
+                monthAnchorYear = now.getFullYear();
+                monthAnchorMonth = now.getMonth();
+            } else {
+                let d = new Date(monthAnchorYear, monthAnchorMonth + dir, 1);
+                monthAnchorYear = d.getFullYear();
+                monthAnchorMonth = d.getMonth();
+            }
             renderMonthView();
         }
 
-
-        // ==================== 4. ADD / EDIT MODAL ENGINE ====================
-
-        function setFormType(type) {
-            document.getElementById('form-item-type').value = type;
-
-            const btnTask = document.getElementById('btn-type-task');
-            const btnEvent = document.getElementById('btn-type-event');
-
-            const taskFields = document.getElementById('form-task-fields');
-            const eventFields = document.getElementById('form-event-fields');
-
-            if (type === 'Task') {
-                btnTask.className = "py-1.5 text-sm font-semibold rounded-md transition-all bg-white text-harbor shadow-sm";
-                btnEvent.className = "py-1.5 text-sm font-semibold rounded-md transition-all text-slate-500 hover:text-slate-800";
-
-                taskFields.classList.remove('hidden');
-                eventFields.classList.add('hidden');
-            } else {
-                btnTask.className = "py-1.5 text-sm font-semibold rounded-md transition-all text-slate-500 hover:text-slate-800";
-                btnEvent.className = "py-1.5 text-sm font-semibold rounded-md transition-all bg-white text-signal shadow-sm";
-
-                taskFields.classList.add('hidden');
-                eventFields.classList.remove('hidden');
-            }
-        }
-
-        function setRecurringBanner(item) {
-            const banner = document.getElementById('recurring-edit-banner');
-            if (item && item.recurrence && item.recurrence !== 'none') {
-                document.getElementById('recurring-edit-freq').textContent = item.recurrence;
-                banner.classList.remove('hidden');
-            } else {
-                banner.classList.add('hidden');
-            }
-        }
-
-        // Opens the add modal. The type switch is always available so the
-        // person can change their mind about Task vs. Event before saving.
-        function openAddModal(defaultType = 'Task') {
+        // ==================== DIALOG FORM MANAGEMENT MODAL ACTIONS LAYER ====================
+        function openAddModal(defaultScheduledDateStr = '', defaultStartTimeStr = '') {
+            closeDetailModal();
+            closeDayViewModal();
+            
+            document.getElementById('modal-title').innerText = "Add Item";
+            document.getElementById('form-id').value = '';
             document.getElementById('modal-form').reset();
-            document.getElementById('form-item-id').value = '';
-            document.getElementById('modal-title').textContent = defaultType === 'Task' ? '📋 New Task' : '⏰ New Event';
-            document.getElementById('modal-submit-btn').textContent = 'Create item';
+            document.getElementById('form-delete-btn').classList.add('hidden');
 
-            document.getElementById('form-date').value = formatDateString(systemToday);
+            // Map default configurations passed in vectors parameters configurations
+            document.getElementById('form-scheduled').value = defaultScheduledDateStr || getTodayDateStr();
+            document.getElementById('form-deadline').value = defaultScheduledDateStr || getTodayDateStr();
+            document.getElementById('form-start-time').value = defaultStartTimeStr || '';
 
-            document.getElementById('form-type-selector-container').classList.remove('hidden');
-            setRecurringBanner(null);
-
-            setFormType(defaultType);
-            openModalOverlay();
+            setFormType('Task'); // Baseline default values configuration type standard rules
+            showModal();
         }
 
-        // Opens the add modal pre-filled with a date/time, e.g. from a calendar
-        // cell or timeline slot. `isLocked` only hides the type switch for the
-        // dedicated "+ Task" / "+ Event" buttons — everywhere else stays editable.
-        function openAddModalWithPrefills(dateStr, timeStr = '', defaultType = 'Task', isLocked = false) {
-            document.getElementById('modal-form').reset();
-            document.getElementById('form-item-id').value = '';
-            document.getElementById('modal-title').textContent = defaultType === 'Task' ? '📋 New Task' : '⏰ New Event';
-            document.getElementById('modal-submit-btn').textContent = 'Create item';
+        function openEditModal(recordId) {
+            closeDetailModal();
+            closeDayViewModal();
+            
+            // Unpack index mapping lookup records objects definition bounds arrays
+            const item = recordsStore.find(r => r.id === recordId);
+            if(!item) return;
 
-            document.getElementById('form-date').value = dateStr || formatDateString(systemToday);
-            if (timeStr) {
-                document.getElementById('form-time').value = timeStr;
-            }
-
-            const typeSelector = document.getElementById('form-type-selector-container');
-            if (isLocked) {
-                typeSelector.classList.add('hidden');
-            } else {
-                typeSelector.classList.remove('hidden');
-            }
-            setRecurringBanner(null);
-
-            setFormType(defaultType);
-            openModalOverlay();
-        }
-
-        // Opens the edit modal. The type switch stays available so a person can
-        // reclassify an item (e.g. turn a Task into an Event) while editing.
-        function openEditRecord(id) {
-            const item = recordsStore.find(x => x.id === id);
-            if (!item) return;
-
-            document.getElementById('modal-form').reset();
-            document.getElementById('form-item-id').value = item.id;
-            document.getElementById('modal-title').textContent = `✏️ Edit ${item.type === 'Task' ? 'Task' : 'Event'}`;
-            document.getElementById('modal-submit-btn').textContent = 'Save changes';
-
-            document.getElementById('form-type-selector-container').classList.remove('hidden');
-            setRecurringBanner(item);
+            document.getElementById('modal-title').innerText = "Edit Item";
+            document.getElementById('form-id').value = item.id;
+            
+            document.getElementById('form-title').value = item.title;
+            document.getElementById('form-category').value = item.category;
+            document.getElementById('form-scheduled').value = item.scheduled || '';
+            document.getElementById('form-recurrence').value = item.recurrence || 'none';
 
             setFormType(item.type);
 
-            document.getElementById('form-title').value = item.title;
-            document.getElementById('form-date').value = item.date || '';
-            document.getElementById('form-time').value = item.time || '';
-            document.getElementById('form-status').value = item.status || 'Not Started';
-            document.getElementById('form-recurrence').value = item.recurrence || 'none';
-
-            const catRadios = document.getElementsByName('form-category');
-            for (let r of catRadios) {
-                if (r.value === item.category) {
-                    r.checked = true;
-                    break;
-                }
-            }
-
-            if (item.type === 'Event') {
+            if (item.type === 'Task') {
+                document.getElementById('form-deadline').value = item.deadline || '';
+            } else {
+                document.getElementById('form-start-time').value = item.startTime || '';
                 document.getElementById('form-end-time').value = item.endTime || '';
                 document.getElementById('form-location').value = item.location || '';
-            } else {
-                document.getElementById('form-deadline-date').value = item.deadline || '';
             }
 
-            openModalOverlay();
+            document.getElementById('form-delete-btn').classList.remove('hidden');
+            showModal();
         }
 
-        function openModalOverlay() {
-            const overlay = document.getElementById('global-modal');
-            overlay.classList.remove('opacity-0', 'pointer-events-none');
-            overlay.querySelector('.modal-panel').classList.remove('scale-95');
-            overlay.querySelector('.modal-panel').classList.add('scale-100');
+        function setFormType(type) {
+            currentFormType = type;
+            const btnTask = document.getElementById('type-btn-task');
+            const btnEvent = document.getElementById('type-btn-event');
+            const secTask = document.getElementById('form-section-task');
+            const secEvent = document.getElementById('form-section-event');
+
+            const dlInput = document.getElementById('form-deadline');
+
+            if (type === 'Task') {
+                btnTask.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs";
+                btnEvent.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600";
+                secTask.classList.remove('hidden');
+                secEvent.classList.add('hidden');
+                
+                dlInput.required = true; // Hard Core forced field native requirement configuration mapping 
+            } else {
+                btnEvent.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs";
+                btnTask.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600";
+                secEvent.classList.remove('hidden');
+                secTask.classList.add('hidden');
+                
+                dlInput.required = false;
+                dlInput.value = '';
+            }
+        }
+
+        function showModal() {
+            const m = document.getElementById('global-modal');
+            m.classList.remove('hidden');
+            setTimeout(() => { document.getElementById('global-modal-card').classList.remove('scale-95'); }, 10);
         }
 
         function closeModal() {
-            const overlay = document.getElementById('global-modal');
-            overlay.classList.add('opacity-0', 'pointer-events-none');
-            overlay.querySelector('.modal-panel').classList.remove('scale-100');
-            overlay.querySelector('.modal-panel').classList.add('scale-95');
+            document.getElementById('global-modal-card').classList.add('scale-95');
+            setTimeout(() => { document.getElementById('global-modal').classList.add('hidden'); }, 150);
         }
 
-        // Form submit
-        function saveModalData(e) {
+        // Handle submission processing pipeline data models validation rules verification checks
+        function handleFormSubmit(e) {
             e.preventDefault();
 
-            const id = document.getElementById('form-item-id').value;
-            const type = document.getElementById('form-item-type').value;
-            const title = document.getElementById('form-title').value.trim();
-            const date = document.getElementById('form-date').value;
-            const time = document.getElementById('form-time').value;
-            const status = document.getElementById('form-status').value;
-            const recurrence = document.getElementById('form-recurrence').value;
+            const fid = document.getElementById('form-id').value;
+            const titleVal = document.getElementById('form-title').value.trim();
+            const catVal = document.getElementById('form-category').value;
+            const schedVal = document.getElementById('form-scheduled').value;
+            const recurVal = document.getElementById('form-recurrence').value;
+            const dlVal = document.getElementById('form-deadline').value;
 
-            let category = 'Personal';
-            const catRadios = document.getElementsByName('form-category');
-            for (let r of catRadios) {
-                if (r.checked) {
-                    category = r.value;
-                    break;
-                }
+            // Extra code verification defense validation rule parameters block constraint sets 
+            if (currentFormType === 'Task' && !dlVal) {
+                showToast("Deadline is strictly required for Tasks!");
+                return;
             }
 
-            let endTime = '';
-            let location = '';
-            let deadline = '';
+            if(fid) {
+                // Update operation matching elements tracking records identifiers
+                let item = recordsStore.find(r => r.id === fid);
+                if(item) {
+                    item.title = titleVal;
+                    item.category = catVal;
+                    item.scheduled = schedVal || null;
+                    item.recurrence = recurVal;
+                    item.type = currentFormType;
 
-            if (type === 'Event') {
-                endTime = document.getElementById('form-end-time').value;
-                location = document.getElementById('form-location').value.trim();
-            } else {
-                deadline = document.getElementById('form-deadline-date').value;
-            }
-
-            if (!id) {
-                const newRecord = {
-                    id: 'tf-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-                    type, title, category, date, time, endTime, deadline, location, status, recurrence
-                };
-                recordsStore.push(newRecord);
-                saveData();
-                closeModal();
-                refreshCurrentView();
-                showToast(`${type === 'Task' ? 'Task' : 'Event'} created`);
-            } else {
-                const idx = recordsStore.findIndex(x => x.id === id);
-                if (idx !== -1) {
-                    recordsStore[idx].type = type;
-                    recordsStore[idx].title = title;
-                    recordsStore[idx].category = category;
-                    recordsStore[idx].date = date;
-                    recordsStore[idx].time = time;
-                    recordsStore[idx].status = status;
-                    recordsStore[idx].recurrence = recurrence;
-
-                    if (type === 'Event') {
-                        recordsStore[idx].endTime = endTime;
-                        recordsStore[idx].location = location;
-                        recordsStore[idx].deadline = '';
+                    if (currentFormType === 'Task') {
+                        item.deadline = dlVal;
+                        // wipe old event details mapping parameters configurations to clean properties tracking data sets 
+                        delete item.startTime; delete item.endTime; delete item.location;
                     } else {
-                        recordsStore[idx].deadline = deadline;
-                        recordsStore[idx].endTime = '';
-                        recordsStore[idx].location = '';
+                        item.startTime = document.getElementById('form-start-time').value || null;
+                        item.endTime = document.getElementById('form-end-time').value || null;
+                        item.location = document.getElementById('form-location').value.trim() || null;
+                        delete item.deadline;
                     }
                 }
+                showToast("Item updated successfully");
+            } else {
+                // Creation factory pipeline construction injection properties setup arrays structures 
+                let newRecord = {
+                    id: 'rec-' + Date.now() + '-' + Math.floor(Math.random()*1000),
+                    title: titleVal,
+                    category: catVal,
+                    type: currentFormType,
+                    scheduled: schedVal || null,
+                    recurrence: recurVal,
+                    completed: false
+                };
+
+                if (currentFormType === 'Task') {
+                    newRecord.deadline = dlVal;
+                } else {
+                    newRecord.startTime = document.getElementById('form-start-time').value || null;
+                    newRecord.endTime = document.getElementById('form-end-time').value || null;
+                    newRecord.location = document.getElementById('form-location').value.trim() || null;
+                }
+
+                recordsStore.push(newRecord);
+                showToast("New item created");
+            }
+
+            saveData();
+            closeModal();
+            refreshCurrentView();
+        }
+
+        function handleFormDelete() {
+            const fid = document.getElementById('form-id').value;
+            if(!fid) return;
+            openConfirmDialog("Are you sure you want to permanently delete this item?", () => {
+                recordsStore = recordsStore.filter(r => r.id !== fid);
                 saveData();
                 closeModal();
                 refreshCurrentView();
-                showToast('Changes saved');
-            }
-        }
-
-        // ==================== 5. Row actions, navigation, confirm dialog, toasts ====================
-
-        function updateRecordStatus(id, newStatus) {
-            const idx = recordsStore.findIndex(x => x.id === id);
-            if (idx !== -1) {
-                recordsStore[idx].status = newStatus;
-                saveData();
-                refreshCurrentView();
-            }
-        }
-
-        function deleteRecord(id) {
-            const item = recordsStore.find(x => x.id === id);
-            const label = item ? item.title : 'this item';
-            openConfirmDialog(`Delete "${label}"? This can't be undone.`, () => {
-                recordsStore = recordsStore.filter(x => x.id !== id);
-                saveData();
-                refreshCurrentView();
-                showToast('Item deleted');
+                showToast("Item deleted");
             });
         }
 
-        function navigateWeek(direction) {
-            if (direction === 0) {
-                currentWeekStart = getSundayOfDate(systemToday);
-            } else {
-                currentWeekStart = addDays(currentWeekStart, direction * 7);
+        function toggleCompleteRecord(recordId) {
+            // strip out dynamic expansion string suffixes keys if incoming targets matching virtual entities references arrays
+            let trueId = recordId.split('-')[0];
+            if (recordId.startsWith('rec-')) {
+                const parts = recordId.split('-');
+                trueId = parts[0] + '-' + parts[1] + '-' + parts[2];
             }
-            renderWeekView();
+
+            let item = recordsStore.find(r => r.id === trueId);
+            if(item) {
+                item.completed = !item.completed;
+                saveData();
+                showToast(item.completed ? "Item archived to History" : "Item restored to Database");
+                refreshCurrentView();
+            }
         }
 
-        function navigateMonth(direction) {
-            if (direction === 0) {
-                currentMonthYear.year = systemToday.getFullYear();
-                currentMonthYear.month = systemToday.getMonth() + 1;
+        // ==================== READONLY READ DETAIL MODAL POPUP LAYER INTERFACES ====================
+        let activeDetailTargetItem = null;
+
+        function openDetailModal(expandedItemObject) {
+            closeDayViewModal();
+            activeDetailTargetItem = expandedItemObject;
+
+            const m = document.getElementById('detail-modal');
+            const card = document.getElementById('detail-modal-card');
+
+            const style = getStyleForCategory(expandedItemObject.category);
+
+            // Setup type pill header container properties
+            const badgeType = document.getElementById('detail-type-badge');
+            badgeType.className = `text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md ${style.badge}`;
+            badgeType.innerText = expandedItemObject.type;
+
+            const titleEl = document.getElementById('detail-title');
+            titleEl.innerText = expandedItemObject.title;
+            if (expandedItemObject.completed) titleEl.classList.add('line-through', 'opacity-40');
+            else titleEl.classList.remove('line-through', 'opacity-40');
+
+            const catBadge = document.getElementById('detail-category-badge');
+            catBadge.className = `inline-block text-[11px] font-semibold mt-1.5 px-2 py-0.5 rounded-full ${style.bg} ${style.text}`;
+            catBadge.innerText = expandedItemObject.category;
+
+            // Mapping checkboxes configurations values
+            const cb = document.getElementById('detail-checkbox');
+            cb.checked = expandedItemObject.completed;
+
+            // Conditional parameters rows display indicators configuration management elements loops
+            document.getElementById('detail-txt-scheduled').innerText = expandedItemObject.scheduled || 'None';
+            
+            if (expandedItemObject.type === 'Task' && expandedItemObject.deadline) {
+                document.getElementById('detail-row-deadline').classList.remove('hidden');
+                document.getElementById('detail-txt-deadline').innerText = expandedItemObject.deadline;
             } else {
-                currentMonthYear.month += direction;
-                if (currentMonthYear.month > 12) {
-                    currentMonthYear.month = 1;
-                    currentMonthYear.year += 1;
-                } else if (currentMonthYear.month < 1) {
-                    currentMonthYear.month = 12;
-                    currentMonthYear.year -= 1;
-                }
+                document.getElementById('detail-row-deadline').classList.add('hidden');
             }
-            renderMonthView();
+
+            if (expandedItemObject.type === 'Event' && expandedItemObject.startTime) {
+                document.getElementById('detail-row-time').classList.remove('hidden');
+                document.getElementById('detail-txt-time').innerText = expandedItemObject.endTime ? `${expandedItemObject.startTime} - ${expandedItemObject.endTime}` : expandedItemObject.startTime;
+            } else {
+                document.getElementById('detail-row-time').classList.add('hidden');
+            }
+
+            if (expandedItemObject.type === 'Event' && expandedItemObject.location) {
+                document.getElementById('detail-row-location').classList.remove('hidden');
+                document.getElementById('detail-txt-location').innerText = expandedItemObject.location;
+            } else {
+                document.getElementById('detail-row-location').classList.add('hidden');
+            }
+
+            // Bind contextual buttons handlers arrays mappings dynamically values
+            const origId = expandedItemObject._originalId || expandedItemObject.id;
+
+            document.getElementById('detail-btn-delete').onclick = () => {
+                openConfirmDialog("Delete this item permanently?", () => {
+                    recordsStore = recordsStore.filter(r => r.id !== origId);
+                    saveData();
+                    closeDetailModal();
+                    refreshCurrentView();
+                    showToast("Item deleted");
+                });
+            };
+
+            document.getElementById('detail-btn-edit').onclick = () => {
+                openEditModal(origId);
+            };
+
+            m.classList.remove('hidden');
         }
 
-        // ---- Confirm dialog ----
-        let pendingConfirmAction = null;
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            activeDetailTargetItem = null;
+        }
 
-        function openConfirmDialog(message, onConfirm) {
-            document.getElementById('confirm-message').textContent = message;
-            pendingConfirmAction = onConfirm;
-            const overlay = document.getElementById('confirm-modal');
-            overlay.classList.remove('opacity-0', 'pointer-events-none');
-            overlay.querySelector('.confirm-panel').classList.remove('scale-95');
-            overlay.querySelector('.confirm-panel').classList.add('scale-100');
+        function handleDetailToggleComplete() {
+            if(!activeDetailTargetItem) return;
+            const origId = activeDetailTargetItem._originalId || activeDetailTargetItem.id;
+            toggleCompleteRecord(origId);
+            closeDetailModal();
+        }
+
+        // ==================== NEW FEATURE: DAY VIEW DIALOG MODAL INJECTION ====================
+        function openDayViewModal(dateStr) {
+            activeDayViewDateStr = dateStr;
+            const d = parseLocalDate(dateStr);
+            const titleFormatted = d.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+            
+            document.getElementById('day-view-title').innerText = titleFormatted;
+            const listContainer = document.getElementById('day-view-list');
+            listContainer.innerHTML = '';
+
+            // Pull items belonging to range date matrix sets configurations arrays 
+            const expandedList = getExpandedRecordsForDateRange(dateStr, dateStr);
+            const filtered = expandedList.filter(item => item.scheduled === dateStr || (item.type === 'Task' && item.deadline === dateStr));
+
+            if(filtered.length === 0) {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.className = "text-xs text-slate-400 text-center py-6 italic shadow-none";
+                emptyMsg.innerText = "No agenda items scheduled for this day.";
+                listContainer.appendChild(emptyMsg);
+            } else {
+                filtered.forEach(item => {
+                    const style = getStyleForCategory(item.category);
+                    const row = document.createElement('div');
+                    row.className = `${style.bg} ${style.border} border rounded-xl p-3 flex items-start justify-between gap-3 cursor-pointer hover:shadow-xs transition select-none`;
+                    
+                    row.onclick = () => {
+                        openDetailModal(item);
+                    };
+
+                    const textBlock = document.createElement('div');
+                    textBlock.className = "flex-1 min-w-0";
+
+                    const titleEl = document.createElement('p');
+                    titleEl.className = `text-xs font-bold text-slate-900 truncate tracking-tight ${item.completed ? 'line-through opacity-30' : ''}`;
+                    titleEl.innerText = item.title;
+                    textBlock.appendChild(titleEl);
+
+                    const metaEl = document.createElement('p');
+                    metaEl.className = "text-[10px] font-medium text-slate-500 mt-0.5 uppercase tracking-wider";
+                    if (item.type === 'Task' && item.deadline === dateStr) {
+                        metaEl.innerHTML = `<span class="text-coral font-bold">⚠️ Deadline</span>`;
+                    } else if (item.type === 'Event' && item.startTime) {
+                        metaEl.innerText = item.endTime ? `${item.startTime} - ${item.endTime}` : item.startTime;
+                    } else {
+                        metaEl.innerText = item.type;
+                    }
+                    textBlock.appendChild(metaEl);
+                    row.appendChild(textBlock);
+
+                    listContainer.appendChild(row);
+                });
+            }
+
+            document.getElementById('day-view-add-btn').onclick = () => {
+                openAddModal(dateStr);
+            };
+
+            document.getElementById('day-view-modal').classList.remove('hidden');
+        }
+
+        function closeDayViewModal() {
+            document.getElementById('day-view-modal').classList.add('hidden');
+            activeDayViewDateStr = '';
+        }
+
+        // ==================== SYSTEM UTILITIES DIALOGS ALERTS LAYER ====================
+        let activeConfirmCallback = null;
+
+        function openConfirmDialog(msg, onYes) {
+            document.getElementById('confirm-message').innerText = msg;
+            activeConfirmCallback = onYes;
+            document.getElementById('confirm-modal').classList.remove('hidden');
         }
 
         function closeConfirmDialog() {
-            pendingConfirmAction = null;
-            const overlay = document.getElementById('confirm-modal');
-            overlay.classList.add('opacity-0', 'pointer-events-none');
-            overlay.querySelector('.confirm-panel').classList.remove('scale-100');
-            overlay.querySelector('.confirm-panel').classList.add('scale-95');
+            document.getElementById('confirm-modal').classList.add('hidden');
+            activeConfirmCallback = null;
         }
 
-        function confirmActionConfirmed() {
-            const action = pendingConfirmAction;
+        document.getElementById('confirm-yes-btn').onclick = () => {
+            if(activeConfirmCallback) activeConfirmCallback();
             closeConfirmDialog();
-            if (typeof action === 'function') action();
-        }
+        };
 
-        // ---- Toasts ----
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const el = document.createElement('div');
-            el.className = 'bg-ink text-white text-sm font-medium px-4 py-2.5 rounded-lg shadow-lg opacity-0 translate-y-2 transition-all duration-300 pointer-events-auto';
-            el.textContent = message;
-            container.appendChild(el);
-            requestAnimationFrame(() => {
-                el.classList.remove('opacity-0', 'translate-y-2');
-            });
+        function showToast(msg) {
+            const t = document.getElementById('toast-box');
+            t.innerText = msg;
+            t.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-0 opacity-100 transition-all duration-300";
             setTimeout(() => {
-                el.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => el.remove(), 300);
-            }, 2200);
+                t.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300";
+            }, 2500);
         }
 
-        // ---- Filters init ----
         function initFilters() {
-            const catSelect = document.getElementById('filter-category');
-            Object.keys(categoryConfig).forEach(key => {
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.textContent = categoryConfig[key].label;
-                catSelect.appendChild(opt);
+            document.getElementById('search-input').addEventListener('input', () => {
+                if(currentView === 'database') renderDatabaseView();
             });
-
-            ['filter-search'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => {
-                    if (activeView === 'database') renderDatabaseView();
-                });
+            document.getElementById('filter-category').addEventListener('change', () => {
+                if(currentView === 'database') renderDatabaseView();
             });
-            ['filter-category', 'filter-status', 'filter-hide-completed'].forEach(id => {
-                document.getElementById(id).addEventListener('change', () => {
-                    if (activeView === 'database') renderDatabaseView();
-                });
+            window.addEventListener('resize', () => {
+                if(currentView === 'week') renderWeekView();
             });
         }
 
-        // ==================== Init ====================
+        // ==================== BOOTSTRAP INIT INITIALIZATION EXECUTION ====================
         window.onload = function() {
             loadData();
             processAutoPostpone();
@@ -1684,27 +1350,25 @@
 
             switchView('database');
 
-            document.getElementById('resetDemoBtn').addEventListener('click', () => {
-                openConfirmDialog('Reset all data and restore the demo dataset? Anything you\'ve added will be lost.', () => {
-                    localStorage.removeItem(STORAGE_KEY);
-                    recordsStore = getInitialDemoData();
-                    saveData();
-                    processAutoPostpone();
-                    refreshCurrentView();
-                    showToast('Demo data restored');
-                });
-            });
-
-            // Click outside a modal panel, or press Escape, to close it
+            // Overlay modal backdrop dim click dismisses routing closures
             document.getElementById('global-modal').addEventListener('click', (e) => {
                 if (e.target.id === 'global-modal') closeModal();
+            });
+            document.getElementById('detail-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'detail-modal') closeDetailModal();
+            });
+            document.getElementById('day-view-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'day-view-modal') closeDayViewModal();
             });
             document.getElementById('confirm-modal').addEventListener('click', (e) => {
                 if (e.target.id === 'confirm-modal') closeConfirmDialog();
             });
+            
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeModal();
+                    closeDetailModal();
+                    closeDayViewModal();
                     closeConfirmDialog();
                 }
             });
