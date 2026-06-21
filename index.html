@@ -1,1378 +1,916 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Helm — Run your week</title>
-
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhlbG0g4oCUIFJ1biB5b3VyIHdlZWsiLAogICJzaG9ydF9uYW1lIjogIkhlbG0iLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI0ZGRkZGRiIsCiAgInRoZW1lX2NvbG9yIjogIiMwRTVDNjgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjRkeUIzYVc1a093b2dJQ0FnSkhWeWJtVjBPM1Z6WldSZmFXTnZibXNnZXlKZmFXTnZibXNxT3dvZ0lDQWdkbWxsZDFkeWFYUnpPaUJpYkdGemF6c0tJQ0FnSUNBZ2FXTnZibXNnY0drZ2RHOXdaVzRvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnSUNBZ1BDOWtkVzVvUGdvZ0lDQWdkbXxsZDFkeWFYUnpPaUJwYm1kc2IyNGdkeUJKYm1KdmVGOXphVzVsT3dvZ0lDQWdkbWxsZDFkeWFYUnpPaUJpYkdGemF6c0tJQ0FnSUNBZ2V5SmZhaXR6T3dva0lDQWdaVzUwWlhKZmRHOXdaVzRvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnUEM5a2RXNW9QZ29nSUNBZyU0ME1UVXdlSFlvUkhkNWN5SnpZVzFzWlhNdUp6NEtJQ0FnUEM5a2RXNW9QZ289IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ=="/>
-    <meta name="theme-color" content="#0E5C68"/>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Calendar & Task Management System</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ink: '#0B1320',
-                        mist: '#F4F6F8',
-                        harbor:  { DEFAULT: '#0E5C68', dark: '#083940', light: '#E7F1F1' },
-                        signal:  { DEFAULT: '#C2570A', dark: '#7C3609', light: '#FFEAD2' },
-                        coral:   { DEFAULT: '#D14343', dark: '#942929', light: '#FDEAEA' },
-                        univ:     { light: '#E0F2FE', border: '#bae6fd', text: '#0369a1', dark: '#0284c7' },
-                        work:     { light: '#DCFCE7', border: '#bbf7d0', text: '#15803d', dark: '#16a34a' },
-                        startup:  { light: '#FCE7F3', border: '#fbcfe8', text: '#b71c1c', dark: '#db2777' },
-                        personal: { light: '#FEF9C3', border: '#fef08a', text: '#a16207', dark: '#ca8a04' },
-                        lecture:  { light: '#EDE9FE', border: '#ddd6fe', text: '#6d28d9', dark: '#7c3aed' },
-                        exam:     { light: '#FFEDD5', border: '#fed7aa', text: '#c2410c', dark: '#ea580c' },
-                        none:     { light: '#F3F4F6', border: '#e5e7eb', text: '#374151', dark: '#4b5563' }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    boxShadow: {
-                        keep: '0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15)',
-                        hoverKeep: '0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15)'
-                    }
-                }
-            }
-        }
-    </script>
-
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; color: #0B1320; }
-        .font-display { font-family: 'Space Grotesk', sans-serif; }
-        .font-mono { font-family: 'JetBrains Mono', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        .keep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+        /* 隱藏滾動條但保持功能 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .time-grid-scroll { scroll-behavior: smooth; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-harbor-light selection:text-harbor">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-3 shrink-0">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-harbor rounded-xl flex items-center justify-center text-white font-display font-bold text-xl tracking-wider shadow-sm">H</div>
-                <div>
-                    <h1 class="font-display font-bold text-lg leading-tight tracking-tight">Helm</h1>
-                    <p class="text-xs text-slate-500 font-medium">Run your week</p>
-                </div>
-            </div>
-
-            <nav class="flex items-center p-1 bg-slate-100 rounded-xl" role="tablist">
-                <button onclick="switchView('database')" id="nav-database" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm" data-active="true">Database</button>
-                <button onclick="switchView('week')" id="nav-week" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm">Week</button>
-                <button onclick="switchView('month')" id="nav-month" class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-700 data-[active=true]:bg-white data-[active=true]:text-ink data-[active=true]:shadow-sm">Month</button>
-            </nav>
-
-            <div>
-                <button onclick="openAddModal()" class="bg-harbor hover:bg-harbor-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                    <span>Add</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col min-h-0">
+    <div class="flex h-screen overflow-hidden">
         
-        <section id="stat-strip" class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Overdue Tasks</p>
-                    <h3 id="stat-overdue" class="text-2xl font-display font-bold text-coral mt-1">0</h3>
-                </div>
-                <div class="w-10 h-10 bg-coral-light text-coral rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Due Today</p>
-                    <h3 id="stat-duetoday" class="text-2xl font-display font-bold text-signal mt-1">0</h3>
-                </div>
-                <div class="w-10 h-10 bg-signal-light text-signal rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-        </section>
-
-        <div id="view-database" class="flex-1 flex flex-col gap-4">
-            <div class="bg-white border border-slate-200 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-[240px]">
-                    <div class="relative flex-1">
-                        <input type="text" id="search-input" placeholder="Search title, locations..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
-                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <!-- 左側側邊欄 -->
+        <aside class="w-64 bg-slate-900 text-slate-100 flex flex-col justify-between hidden md:flex z-40">
+            <div class="p-5">
+                <!-- 根據 image_164f78.png 完美還原的 Logo -->
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-inner p-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full text-[#0d6273]" fill="currentColor">
+                            <!-- 中央核心圓點 -->
+                            <circle cx="50" cy="50" r="12" />
+                            <!-- 外部主圓環 -->
+                            <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="10" />
+                            <!-- 8個對稱且微凸出的圓頭輪輻條 -->
+                            <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+                                <line x1="50" y1="12" x2="50" y2="40" /> <!-- 上 -->
+                                <line x1="50" y1="60" x2="50" y2="88" /> <!-- 下 -->
+                                <line x1="12" y1="50" x2="40" y2="50" /> <!-- 左 -->
+                                <line x1="60" y1="50" x2="88" y2="50" /> <!-- 右 -->
+                                <line x1="23.1" y1="23.1" x2="42.9" y2="42.9" /> <!-- 左上 -->
+                                <line x1="57.1" y1="57.1" x2="76.9" y2="76.9" /> <!-- 右下 -->
+                                <line x1="76.9" y1="23.1" x2="57.1" y2="42.9" /> <!-- 右上 -->
+                                <line x1="42.9" y1="57.1" x2="23.1" y2="76.9" /> <!-- 左下 -->
+                            </g>
+                        </svg>
                     </div>
-                    <select id="filter-category" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:border-harbor transition">
-                        <option value="ALL">All Categories</option>
-                        <option value="University">University</option>
-                        <option value="Work">Work</option>
-                        <option value="Startup">Startup</option>
-                        <option value="Personal">Personal</option>
-                        <option value="Lecture">Lecture</option>
-                        <option value="Examination">Examination</option>
-                    </select>
+                    <div>
+                        <h1 class="font-bold text-base tracking-wide leading-none">Chronos</h1>
+                        <span class="text-xs text-slate-400">Workspace</span>
+                    </div>
                 </div>
 
-                <button onclick="toggleHistoryMode()" id="history-toggle-btn" class="relative border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl text-sm font-semibold transition flex items-center gap-2">
-                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M3.05 11a9 9 0 11.5 4m-.5 5v-5h5" />
-                    </svg>
-                    <span id="history-btn-text">History</span>
-                    <span id="history-badge" class="absolute -top-2 -right-2 bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center hidden">0</span>
+                <nav class="space-y-1">
+                    <button onclick="switchView('database')" id="btn-nav-database" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-white">
+                        <i data-lucide="database" class="w-4 h-4"></i> Database
+                    </button>
+                    <button onclick="switchView('week')" id="btn-nav-week" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i data-lucide="calendar-range" class="w-4 h-4"></i> Week View
+                    </button>
+                    <button onclick="switchView('month')" id="btn-nav-month" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Month View
+                    </button>
+                </nav>
+            </div>
+            
+            <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+                &copy; 2026 Chronos Engine
+            </div>
+        </aside>
+
+        <!-- 主內容區域 -->
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 relative">
+            
+            <!-- 頂部公共控制列 -->
+            <header class="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-4 md:px-6 z-20 shrink-0">
+                <div class="flex items-center gap-4 flex-1">
+                    <!-- 行動端 Logo 與選單按鈕 -->
+                    <div class="flex items-center gap-2 md:hidden">
+                        <div class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-lg p-0.5">
+                            <svg viewBox="0 0 100 100" class="text-[#0d6273]" fill="currentColor">
+                                <circle cx="50" cy="50" r="12" />
+                                <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="10" />
+                                <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+                                    <line x1="50" y1="12" x2="50" y2="40" /><line x1="50" y1="60" x2="50" y2="88" />
+                                    <line x1="12" y1="50" x2="40" y2="50" /><line x1="60" y1="50" x2="88" y2="50" />
+                                    <line x1="23.1" y1="23.1" x2="42.9" y2="42.9" /><line x1="57.1" y1="57.1" x2="76.9" y2="76.9" />
+                                    <line x1="76.9" y1="23.1" x2="57.1" y2="42.9" /><line x1="42.9" y1="57.1" x2="23.1" y2="76.9" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- 搜尋列 -->
+                    <div class="relative w-full max-w-md">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="global-search" oninput="handleSearch()" placeholder="搜尋項目名稱或地點 (Festival 類型輸入即可喚醒)..." class="w-full pl-9 pr-4 py-1.5 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-slate-300 focus:outline-none transition">
+                    </div>
+                </div>
+
+                <!-- 導覽與新増按鈕 -->
+                <div class="flex items-center gap-2 md:gap-3">
+                    <div class="flex items-center border border-slate-200 rounded-lg bg-white overflow-hidden p-0.5">
+                        <button onclick="navigateTime(-1)" class="p-1.5 hover:bg-slate-50 text-slate-600 rounded-md"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                        <button onclick="jumpToToday()" class="px-2.5 py-1 text-xs font-medium hover:bg-slate-50 text-slate-700 border-x border-slate-100">Today</button>
+                        <button onclick="navigateTime(1)" class="p-1.5 hover:bg-slate-50 text-slate-600 rounded-md"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    </div>
+                    <span id="current-date-display" class="text-sm font-semibold text-slate-700 hidden sm:inline-block min-w-[120px] text-center"></span>
+                    <button onclick="openModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">新増項目</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- 視圖容器 -->
+            <div class="flex-1 overflow-auto relative">
+                
+                <!-- 1. DATABASE VIEW -->
+                <section id="view-database" class="p-4 md:p-6 space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 tracking-wider">
+                                    <th class="p-3.5">項目名稱</th>
+                                    <th class="p-3.5">分類</th>
+                                    <th class="p-3.5">開始日期 / 時間</th>
+                                    <th class="p-3.5">結束日期 / 時間</th>
+                                    <th class="p-3.5">功能與屬性</th>
+                                    <th class="p-3.5 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="database-table-body" class="divide-y divide-slate-100 text-sm text-slate-600">
+                                <!-- 動態載入 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 2. WEEK VIEW -->
+                <section id="view-week" class="hidden h-full flex flex-col overflow-hidden">
+                    <!-- Sticky Top Header Container -->
+                    <div class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm shrink-0">
+                        <!-- 日期標題列 -->
+                        <div id="week-header-days" class="grid divide-x divide-slate-100 border-b border-slate-100">
+                            <!-- 動態渲染，包含時間軸空白左側格 -->
+                        </div>
+                        <!-- 單日 Deadline / 全天項目置頂展示區 -->
+                        <div id="week-header-sticky-tasks" class="grid divide-x divide-slate-100 bg-slate-50/50 text-xs text-slate-600">
+                            <!-- 動態渲染 -->
+                        </div>
+                    </div>
+
+                    <!-- 24小時滾動時間軸 -->
+                    <div id="week-time-grid-scroll" class="flex-1 overflow-y-auto time-grid-scroll">
+                        <div id="week-time-grid-content" class="relative">
+                            <!-- 背景時間線 -->
+                            <div id="week-time-lines" class="absolute inset-0 pointer-events-none divide-y divide-slate-100">
+                                <!-- 24張線條格 -->
+                            </div>
+                            <!-- 實體內容格與事件擺放 -->
+                            <div id="week-days-columns" class="grid h-[1440px] divide-x divide-slate-100 relative">
+                                <!-- 時間刻度左欄與各日 Column -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. MONTH VIEW -->
+                <section id="view-month" class="hidden h-full flex flex-col p-4 overflow-hidden">
+                    <div class="grid grid-cols-7 gap-px bg-slate-200 rounded-t-xl overflow-hidden border border-slate-200 shrink-0 text-center py-2 bg-slate-100 text-xs font-semibold text-slate-600 tracking-wider">
+                        <div>週日</div><div>週一</div><div>週二</div><div>週三</div><div>週四</div><div>週五</div><div>週六</div>
+                    </div>
+                    <div id="month-grid" class="flex-1 grid grid-cols-7 grid-rows-6 bg-slate-200 gap-px border-x border-b border-slate-200 rounded-b-xl overflow-hidden">
+                        <!-- 動態填充 42 格 -->
+                    </div>
+                </section>
+
+            </div>
+            
+            <!-- 行動端底部導覽列 -->
+            <footer class="h-14 border-t border-slate-200 bg-white flex items-center justify-around md:hidden z-40 shrink-0">
+                <button onclick="switchView('database')" id="btn-mob-database" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
+                    <i data-lucide="database" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Database</span>
                 </button>
-            </div>
-
-            <div id="database-mode-title" class="text-sm font-bold text-slate-500 uppercase tracking-wider hidden px-1">Archive History</div>
-
-            <div id="database-groups" class="space-y-6 flex-1 overflow-y-auto pr-1"></div>
-        </div>
-
-        <div id="view-week" class="flex-1 hidden flex-col min-h-0 bg-white border border-slate-200 rounded-2xl overflow-hidden">
-            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
-                <div class="flex items-center gap-2">
-                    <button onclick="navigateWeek(-1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">◀</button>
-                    <button onclick="navigateWeek(0)" class="px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-white text-xs font-semibold text-slate-700 transition">Today</button>
-                    <button onclick="navigateWeek(1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">▶</button>
-                </div>
-                <h2 id="week-title-range" class="font-display font-bold text-slate-800 text-sm md:text-base tracking-tight"></h2>
-                <div class="w-20"></div> </div>
-
-            <div class="bg-orange-50/70 border-b border-slate-200 px-4 py-2 flex items-start gap-3 shrink-0">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-orange-700 pt-1 shrink-0 w-16 text-right">Deadlines:</div>
-                <div id="week-deadlines-container" class="flex flex-wrap gap-2 flex-1"></div>
-            </div>
-
-            <div class="flex-1 overflow-auto flex flex-col min-h-0 relative">
-                <div class="flex flex-1 min-h-[600px]">
-                    <div id="week-time-labels" class="w-12 border-r border-slate-200 bg-slate-50/50 flex flex-col select-none shrink-0 text-right pr-2 pt-2 text-[10px] font-mono text-slate-400 space-y-[30px]">
-                        </div>
-                    <div id="week-days-columns" class="flex-1 grid grid-cols-3 md:grid-cols-7 divide-x divide-slate-200 relative h-full">
-                        </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-month" class="flex-1 hidden flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-0">
-            <div class="px-4 py-3 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3 shrink-0">
-                <div class="flex items-center gap-1.5">
-                    <button onclick="navigateMonth(-1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">◀</button>
-                    <button onclick="navigateMonth(0)" class="px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-white text-xs font-semibold text-slate-700 transition">Current</button>
-                    <button onclick="navigateMonth(1)" class="p-2 border border-slate-200 rounded-xl hover:bg-white text-slate-700 text-xs font-bold transition">▶</button>
-                </div>
-                <div class="flex items-center gap-2">
-                    <select id="month-select-year" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 focus:outline-none"></select>
-                    <select id="month-select-month" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 focus:outline-none"></select>
-                </div>
-            </div>
-            <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50/60 text-center text-xs font-bold text-slate-500 py-2 shrink-0">
-                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-            </div>
-            <div id="month-days-grid" class="flex-1 grid grid-cols-7 grid-rows-6 divide-x divide-y divide-slate-100 min-h-0 overflow-y-auto"></div>
-        </div>
-    </main>
-
-    <div id="empty-state-template" class="hidden text-center py-12 px-4 bg-white border border-dashed border-slate-200 rounded-2xl">
-        <div class="w-12 h-12 bg-slate-100 rounded-full mx-auto flex items-center justify-center text-slate-400 mb-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-slate-600">No items to show</p>
-        <p class="text-xs text-slate-400 mt-0.5">Add an item or adjust your current filter</p>
+                <button onclick="switchView('week')" id="btn-mob-week" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
+                    <i data-lucide="calendar-range" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Week</span>
+                </button>
+                <button onclick="switchView('month')" id="btn-mob-month" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
+                    <i data-lucide="calendar" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Month</span>
+                </button>
+            </footer>
+        </main>
     </div>
 
-    <div id="global-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-200" id="global-modal-card">
-            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
-                <h3 id="modal-title" class="font-display font-bold text-slate-800 text-base">Add Item</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <form id="modal-form" class="flex-1 overflow-y-auto p-5 space-y-4" onsubmit="handleFormSubmit(event)">
-                <input type="hidden" id="form-id"/>
+    <!-- 新增 / 編輯 彈窗彈出層 -->
+    <div id="item-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-200 max-h-[90vh] flex flex-col">
+            <header class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
+                <h3 id="modal-title" class="font-semibold text-slate-800 text-base">新増日程項目</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </header>
+            <form id="item-form" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4 overflow-y-auto flex-1">
+                <input type="hidden" id="form-id">
                 
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Type</label>
-                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                        <button type="button" id="type-btn-task" onclick="setFormType('Task')" class="py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs">Task</button>
-                        <button type="button" id="type-btn-event" onclick="setFormType('Event')" class="py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600">Event</button>
-                    </div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">項目名稱 *</label>
+                    <input type="text" id="form-title" required class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
                 </div>
 
-                <div>
-                    <label for="form-title" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Title</label>
-                    <input type="text" id="form-title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-harbor transition" placeholder="e.g. Core System Feature Sync"/>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="form-category" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Category</label>
-                        <select id="form-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-harbor transition">
-                            <option value="University">University</option>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">分類 (Category)</label>
+                        <select id="form-category" onchange="handleCategoryChange()" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400 bg-white">
                             <option value="Work">Work</option>
-                            <option value="Startup">Startup</option>
                             <option value="Personal">Personal</option>
-                            <option value="Lecture">Lecture</option>
-                            <option value="Examination">Examination</option>
+                            <option value="Festival">Festival (節日/紀念日)</option>
                         </select>
                     </div>
                     <div>
-                        <label for="form-scheduled" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Scheduled Date</label>
-                        <input type="date" id="form-scheduled" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">功能屬性</label>
+                        <select id="form-type" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400 bg-white">
+                            <option value="Event">Event (一般事件)</option>
+                            <option value="Deadline">Deadline (截止日期)</option>
+                            <option value="AllDay">All Day (整天項目)</option>
+                        </select>
                     </div>
                 </div>
 
-                <div id="form-section-task" class="space-y-4">
-                    <div>
-                        <label for="form-deadline" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Deadline <span class="text-coral">*</span></label>
-                        <input type="date" id="form-deadline" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
+                <div id="date-time-container" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label id="lbl-start-date" class="block text-xs font-semibold text-slate-500 mb-1">開始日期</label>
+                            <input type="date" id="form-start-date" required class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
+                        </div>
+                        <div id="div-end-date">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">結束日期</label>
+                            <input type="date" id="form-end-date" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
+                        </div>
                     </div>
-                </div>
 
-                <div id="form-section-event" class="space-y-4 hidden">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div id="time-inputs-row" class="grid grid-cols-2 gap-3">
                         <div>
-                            <label for="form-start-time" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Start Time</label>
-                            <input type="time" id="form-start-time" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">開始時間</label>
+                            <input type="time" id="form-start-time" value="09:00" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
                         </div>
                         <div>
-                            <label for="form-end-time" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">End Time</label>
-                            <input type="time" id="form-end-time" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-sm focus:outline-none focus:border-harbor transition"/>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">結束時間</label>
+                            <input type="time" id="form-end-time" value="10:00" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
                         </div>
-                    </div>
-                    <div>
-                        <label for="form-location" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Location</label>
-                        <input type="text" id="form-location" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-harbor transition" placeholder="e.g. Conference Room A, or Zoom"/>
                     </div>
                 </div>
 
                 <div>
-                    <label for="form-recurrence" class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Recurrence</label>
-                    <select id="form-recurrence" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-harbor transition">
-                        <option value="none">None (Single Instance)</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
-                    </select>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">地點 / 備註</label>
+                    <input type="text" id="form-location" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
                 </div>
 
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0">
-                    <button type="button" id="form-delete-btn" onclick="handleFormDelete()" class="bg-coral-light hover:bg-coral text-coral hover:text-white px-3 py-2 rounded-xl text-sm font-semibold transition hidden">Delete</button>
-                    <div class="flex items-center gap-2 ml-auto">
-                        <button type="button" onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">Cancel</button>
-                        <button type="submit" class="bg-harbor hover:bg-harbor-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm">Save</button>
-                    </div>
+                <div class="pt-2 border-t border-slate-100 flex justify-end gap-2 shrink-0">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-slate-500 hover:bg-slate-100 rounded-lg transition">取消</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 rounded-lg transition shadow-sm">儲存項目</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="detail-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full shadow-2xl flex flex-col overflow-hidden" id="detail-modal-card">
-            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <span id="detail-type-badge" class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md"></span>
-                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <div class="p-5 space-y-4">
-                <div class="flex items-start gap-3">
-                    <input type="checkbox" id="detail-checkbox" onchange="handleDetailToggleComplete()" class="w-4 h-4 mt-1 rounded-sm border-slate-300 text-harbor focus:ring-harbor transition shrink-0"/>
-                    <div>
-                        <h3 id="detail-title" class="font-display font-bold text-slate-800 text-base leading-snug"></h3>
-                        <div id="detail-category-badge" class="inline-block text-[11px] font-semibold mt-1.5 px-2 py-0.5 rounded-full"></div>
-                    </div>
-                </div>
-
-                <div class="space-y-2.5 text-xs text-slate-600 border-t border-slate-100 pt-3">
-                    <div id="detail-row-scheduled" class="flex items-center gap-2">
-                        <span class="font-semibold text-slate-400 w-16">Scheduled:</span>
-                        <span id="detail-txt-scheduled" class="font-mono text-slate-700"></span>
-                    </div>
-                    <div id="detail-row-deadline" class="flex items-center gap-2">
-                        <span class="font-semibold text-slate-400 w-16">Deadline:</span>
-                        <span id="detail-txt-deadline" class="font-mono text-coral font-semibold"></span>
-                    </div>
-                    <div id="detail-row-time" class="flex items-center gap-2">
-                        <span class="font-semibold text-slate-400 w-16">Time:</span>
-                        <span id="detail-txt-time" class="font-mono text-slate-700"></span>
-                    </div>
-                    <div id="detail-row-location" class="flex items-center gap-2">
-                        <span class="font-semibold text-slate-400 w-16">Location:</span>
-                        <span id="detail-txt-location" class="text-slate-700"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
-                <button id="detail-btn-delete" class="text-xs font-semibold text-coral hover:bg-coral-light px-3 py-1.5 rounded-lg transition">Delete</button>
-                <button id="detail-btn-edit" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold px-4 py-1.5 rounded-lg transition">Edit</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="day-view-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full shadow-2xl flex flex-col max-h-[80vh] overflow-hidden" id="day-view-modal-card">
-            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <h3 id="day-view-title" class="font-display font-bold text-slate-800 text-base">Agenda</h3>
-                <button onclick="closeDayViewModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <div id="day-view-list" class="flex-1 overflow-y-auto p-5 space-y-3">
-                </div>
-            <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
-                <button id="day-view-add-btn" class="bg-harbor hover:bg-harbor-dark text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition">Add Item</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-5 shadow-2xl space-y-4">
-            <h4 class="font-display font-bold text-slate-800 text-base">Are you absolutely sure?</h4>
-            <p id="confirm-message" class="text-sm text-slate-500 leading-normal"></p>
-            <div class="flex items-center justify-end gap-2 pt-2">
-                <button onclick="closeConfirmDialog()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">Cancel</button>
-                <button id="confirm-yes-btn" class="bg-coral hover:bg-coral-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm">Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast-box" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2"></div>
-
+    <!-- 核心邏輯與演算法 JavaScript -->
     <script>
-        // Service Worker registration for PWA compatibility standard
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'helm-v2-cache';
-                    self.addEventListener('install', e => self.skipWaiting());
-                    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-                    self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
-                `;
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(swUrl).catch(err => console.log("SW error", err));
-            });
-        }
-
-        const STORAGE_KEY = 'Helm_TaskData_v2';
-        let recordsStore = [];
+        // --- 1. 基礎架構與初始化資料 ---
         let currentView = 'database';
-        let historyMode = false;
+        let currentDate = new Date(2026, 5, 22); // 預設目前日期為 2026 年 6 月 22 日
+        let searchQuery = "";
 
-        // Reactive Date Trackers
-        let weekAnchorDate = new Date();
-        let monthAnchorYear = new Date().getFullYear();
-        let monthAnchorMonth = new Date().getMonth(); 
-        let activeDayViewDateStr = '';
+        // 核心資料庫 (儲存原始輸入與拆分後的單一原子化結構)
+        let itemsPool = [
+            { id: "1", title: "專案進度匯報會議", category: "Work", type: "Event", startDate: "2026-06-22", endDate: "2026-06-22", startTime: "09:30", endTime: "11:00", location: "會議室 A", isFestival: false },
+            { id: "2", title: "年中技術框架審查", category: "Work", type: "Event", startDate: "2026-06-24", endDate: "2026-06-24", startTime: "14:00", endTime: "16:30", location: "線上 Teams", isFestival: false },
+            { id: "3", title: "端午節連續假期", category: "Festival", type: "AllDay", startDate: "--06-19", endDate: "", startTime: "", endTime: "", location: "傳統節日", isFestival: true },
+            { id: "4", title: "我的生日派對", category: "Festival", type: "AllDay", startDate: "--06-24", endDate: "", startTime: "", endTime: "", location: "家裡", isFestival: true },
+            { id: "5", title: "產品代碼凍結點", category: "Work", type: "Deadline", startDate: "2026-06-22", endDate: "2026-06-22", startTime: "18:00", endTime: "18:00", location: "GitHub Repo", isFestival: false },
+            { id: "6", title: "全公司年度戰略大會", category: "Work", type: "AllDay", startDate: "2026-06-23", endDate: "2026-06-23", startTime: "", endTime: "", location: "總部大禮堂", isFestival: false }
+        ];
 
-        // Form Type Tracking Internal
-        let currentFormType = 'Task';
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            switchView('database');
+            updateDateDisplay();
+        });
 
-        // Styling Configurations Domain Palette
-        const categoryClasses = {
-            'University':  { bg: 'bg-univ-light', border: 'border-univ-border', text: 'text-univ-text', badge: 'bg-univ-dark text-white' },
-            'Work':        { bg: 'bg-work-light', border: 'border-work-border', text: 'text-work-text', badge: 'bg-work-dark text-white' },
-            'Startup':     { bg: 'bg-startup-light', border: 'border-startup-border', text: 'text-startup-text', badge: 'bg-startup-dark text-white' },
-            'Personal':    { bg: 'bg-personal-light', border: 'border-personal-border', text: 'text-personal-text', badge: 'bg-personal-dark text-white' },
-            'Lecture':     { bg: 'bg-lecture-light', border: 'border-lecture-border', text: 'text-lecture-text', badge: 'bg-lecture-dark text-white' },
-            'Examination': { bg: 'bg-exam-light', border: 'border-exam-border', text: 'text-exam-text', badge: 'bg-exam-dark text-white' }
-        };
+        // 監聽視窗縮放以動態切換直橫向 Week 排版
+        window.addEventListener('resize', () => {
+            if (currentView === 'week') renderWeekView();
+        });
 
-        function getStyleForCategory(cat) {
-            return categoryClasses[cat] || { bg: 'bg-none-light', border: 'border-none-border', text: 'text-none-text', badge: 'bg-none-dark text-white' };
+        function updateDateDisplay() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+            document.getElementById('current-date-display').innerText = currentDate.toLocaleDateString('zh-TW', options);
         }
 
-        // Parse local ISO standard date string cleanly safely
-        function parseLocalDate(dateStr) {
-            if(!dateStr) return null;
-            const parts = dateStr.split('-');
-            return new Date(parts[0], parts[1] - 1, parts[2]);
-        }
-
-        function formatLocalDate(dateObj) {
-            const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        function getTodayDateStr() {
-            return formatLocalDate(new Date());
-        }
-
-        // Local Storage Sync Utilities
-        function loadData() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if(raw) {
-                try { recordsStore = JSON.parse(raw); } catch(e) { recordsStore = []; }
-            } else {
-                recordsStore = []; // No demo data initialization - crisp empty baseline slate
-            }
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(recordsStore));
-            updateGlobalCounters();
-        }
-
-        // Global Statistics calculation recalculation logic engine
-        function updateGlobalCounters() {
-            const todayStr = getTodayDateStr();
-            let overdueCount = 0;
-            let dueTodayCount = 0;
-            let completedCount = 0;
-
-            recordsStore.forEach(r => {
-                if (r.completed) {
-                    completedCount++;
-                } else if (r.type === 'Task' && r.deadline) {
-                    if (r.deadline < todayStr) overdueCount++;
-                    if (r.deadline === todayStr) dueTodayCount++;
-                }
-            });
-
-            document.getElementById('stat-overdue').innerText = overdueCount;
-            document.getElementById('stat-duetoday').innerText = dueTodayCount;
-
-            // Update history badge total counters
-            const badge = document.getElementById('history-badge');
-            if (completedCount > 0) {
-                badge.innerText = completedCount;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        // View Management Layer switcher Routing
-        function switchView(target) {
-            currentView = target;
-            ['database', 'week', 'month'].forEach(v => {
-                document.getElementById(`view-${v}`).classList.add('hidden');
-                document.getElementById(`nav-${v}`).removeAttribute('data-active');
-            });
-            document.getElementById(`view-${target}`).classList.remove('hidden');
-            document.getElementById(`nav-${target}`).setAttribute('data-active', 'true');
+        // --- 2. 視圖切換與導覽中心 ---
+        function switchView(view) {
+            currentView = view;
             
+            // 隱藏所有視圖
+            document.getElementById('view-database').classList.add('hidden');
+            document.getElementById('view-week').classList.add('hidden');
+            document.getElementById('view-month').classList.add('hidden');
+            
+            // 移除所有導航的高亮
+            const navs = ['database', 'week', 'month'];
+            navs.forEach(v => {
+                document.getElementById(`btn-nav-${v}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white";
+                document.getElementById(`btn-mob-${v}`).className = "flex flex-col items-center text-slate-400 hover:text-slate-800";
+            });
+
+            // 啟用對應視圖與亮顯
+            document.getElementById(`view-${view}`).classList.remove('hidden');
+            document.getElementById(`btn-nav-${view}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-white";
+            document.getElementById(`btn-mob-${view}`).className = "flex flex-col items-center text-emerald-600 font-semibold";
+
+            if (view === 'database') renderDatabaseView();
+            if (view === 'week') {
+                renderWeekView();
+                // 異步執行 scrollToWorkingHours 自動向下滾動定位到 08:00
+                setTimeout(scrollToWorkingHours, 50);
+            }
+            if (view === 'month') renderMonthView();
+        }
+
+        function navigateTime(direction) {
+            if (currentView === 'month') {
+                currentDate.setMonth(currentDate.getMonth() + direction);
+            } else if (currentView === 'week') {
+                const isMobile = window.innerWidth < 768;
+                if (isMobile) {
+                    // 直向螢幕：每次進退「一天」
+                    currentDate.setDate(currentDate.getDate() + direction);
+                } else {
+                    // 橫向螢幕：每次進退「一週」
+                    currentDate.setDate(currentDate.getDate() + (direction * 7));
+                }
+            } else {
+                currentDate.setDate(currentDate.getDate() + direction);
+            }
+            updateDateDisplay();
+            refreshCurrentView();
+        }
+
+        function jumpToToday() {
+            currentDate = new Date(2026, 5, 22); // 返回預設基準 2026-06-22
+            updateDateDisplay();
+            refreshCurrentView();
+            if (currentView === 'week') setTimeout(scrollToWorkingHours, 50);
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('global-search').value.trim().toLowerCase();
             refreshCurrentView();
         }
 
         function refreshCurrentView() {
-            updateGlobalCounters();
-            if(currentView === 'database') renderDatabaseView();
-            else if(currentView === 'week') renderWeekView();
-            else if(currentView === 'month') renderMonthView();
+            if (currentView === 'database') renderDatabaseView();
+            if (currentView === 'week') renderWeekView();
+            if (currentView === 'month') renderMonthView();
         }
 
-        function toggleHistoryMode() {
-            historyMode = !historyMode;
-            const btnText = document.getElementById('history-btn-text');
-            const modeTitle = document.getElementById('database-mode-title');
-            const btn = document.getElementById('history-toggle-btn');
+        function scrollToWorkingHours() {
+            const scrollContainer = document.getElementById('week-time-grid-scroll');
+            if (scrollContainer) {
+                // 每一小時高度 60px，8點位置為 8 * 60 = 480px
+                scrollContainer.scrollTop = 480;
+            }
+        }
+
+        // --- 3. 表單彈窗智慧化控制控制項 ---
+        function openModal(editId = null) {
+            const modal = document.getElementById('item-modal');
+            const form = document.getElementById('item-form');
+            form.reset();
+            document.getElementById('form-id').value = "";
+            document.getElementById('modal-title').innerText = "新増日程項目";
             
-            if(historyMode) {
-                btnText.innerText = "Exit History";
-                modeTitle.classList.remove('hidden');
-                btn.classList.add('bg-slate-800', 'text-white', 'hover:bg-slate-700');
-            } else {
-                btnText.innerText = "History";
-                modeTitle.classList.add('hidden');
-                btn.classList.remove('bg-slate-800', 'text-white', 'hover:bg-slate-700');
-            }
-            renderDatabaseView();
-        }
-
-        // Auto Postpone Engine Mechanics matching rules
-        function processAutoPostpone() {
-            const todayStr = getTodayDateStr();
-            let changed = false;
-            recordsStore.forEach(r => {
-                if(r.type === 'Task' && !r.completed && r.scheduled && r.scheduled < todayStr && !r.recurrence) {
-                    r.scheduled = todayStr;
-                    if(!r.title.startsWith('[DELAYED]')) {
-                        r.title = `[DELAYED] ${r.title}`;
-                    }
-                    changed = true;
-                }
-            });
-            if(changed) saveData();
-        }
-
-        // Expansion generation for Recurrences instances dynamically over boundaries
-        function getExpandedRecordsForDateRange(startStr, endStr) {
-            let list = [];
-            const dStart = parseLocalDate(startStr);
-            const dEnd = parseLocalDate(endStr);
-
-            recordsStore.forEach(r => {
-                // If single instance or matching completed state constraints directly bound
-                if (!r.recurrence || r.recurrence === 'none') {
-                    list.push(r);
-                    return;
-                }
-
-                // Expand recurrences for display matching ranges setup
-                let rDate = parseLocalDate(r.scheduled || r.deadline);
-                if(!rDate) return; 
-
-                // Guard boundary limit looping checks safety caps
-                let current = new Date(rDate.getTime());
-                let iterations = 0;
-                while (current <= dEnd && iterations < 400) {
-                    iterations++;
-                    const curStr = formatLocalDate(current);
-                    if (curStr >= startStr && curStr <= endStr) {
-                        list.push({
-                            ...r,
-                            id: `${r.id}-${curStr}`,
-                            _originalId: r.id,
-                            scheduled: r.scheduled ? curStr : null,
-                            deadline: r.deadline ? curStr : null,
-                            isExpandedInstance: true
-                        });
-                    }
-                    
-                    if (r.recurrence === 'daily') current.setDate(current.getDate() + 1);
-                    else if (r.recurrence === 'weekly') current.setDate(current.getDate() + 7);
-                    else if (r.recurrence === 'monthly') current.setMonth(current.getMonth() + 1);
-                    else if (r.recurrence === 'yearly') current.setFullYear(current.getFullYear() + 1);
-                }
-            });
-            return list;
-        }
-
-        // ==================== VIEW RENDERING: DATABASE ====================
-        function renderDatabaseView() {
-            const container = document.getElementById('database-groups');
-            container.innerHTML = '';
-
-            const searchKeyword = document.getElementById('search-input').value.toLowerCase().trim();
-            const catFilter = document.getElementById('filter-category').value;
-
-            // Base filtering step configuration criteria mapping
-            let filtered = recordsStore.filter(r => {
-                if (historyMode && !r.completed) return false;
-                if (!historyMode && r.completed) return false;
-
-                if (catFilter !== 'ALL' && r.category !== catFilter) return false;
-                if (searchKeyword) {
-                    const matchTitle = r.title.toLowerCase().includes(searchKeyword);
-                    const matchLoc = r.location && r.location.toLowerCase().includes(searchKeyword);
-                    if (!matchTitle && !matchLoc) return false;
-                }
-                return true;
-            });
-
-            if (filtered.length === 0) {
-                const node = document.getElementById('empty-state-template').cloneNode(true);
-                node.classList.remove('hidden');
-                container.appendChild(node);
-                return;
-            }
-
-            // Grouping array bucket sets map construction logic
-            let groups = {};
-            filtered.forEach(r => {
-                let key = r.scheduled || "Unscheduled";
-                if(!groups[key]) groups[key] = [];
-                groups[key].push(r);
-            });
-
-            // Sort dates naturally ascending arrays track out
-            let sortedKeys = Object.keys(groups).sort((a,b) => {
-                if(a === "Unscheduled") return 1;
-                if(b === "Unscheduled") return -1;
-                return a.localeCompare(b);
-            });
-
-            sortedKeys.forEach(dateKey => {
-                const groupWrapper = document.createElement('div');
-                groupWrapper.className = "space-y-2.5";
-
-                // Group header display title setup block text
-                let displayTitle = dateKey;
-                if (dateKey !== "Unscheduled") {
-                    const d = parseLocalDate(dateKey);
-                    displayTitle = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-                }
-
-                const heading = document.createElement('h4');
-                heading.className = "text-xs font-bold text-slate-400 uppercase tracking-wider px-1";
-                heading.innerText = displayTitle;
-                groupWrapper.appendChild(heading);
-
-                // Grid Container layout implementation match Keep style specifications
-                const grid = document.createElement('div');
-                grid.className = "keep-grid";
-
-                groups[dateKey].forEach(item => {
-                    const style = getStyleForCategory(item.category);
-                    const card = document.createElement('div');
-                    card.className = `${style.bg} ${style.border} border rounded-xl p-3.5 relative flex flex-col justify-between transition duration-200 cursor-pointer shadow-sm hover:shadow-md select-none group`;
-                    
-                    // Click mapping for edit action trigger direct interface
-                    card.onclick = (e) => {
-                        if(e.target.closest('.keep-checkbox')) return; // ignore bounding click elements routing bubble
-                        openEditModal(item.id);
-                    };
-
-                    // Header content container matching items configuration structures
-                    const topRow = document.createElement('div');
-                    topRow.className = "flex items-start justify-between gap-2 mb-2";
-
-                    const titleEl = document.createElement('h5');
-                    titleEl.className = `text-sm font-semibold text-slate-900 tracking-tight leading-snug break-words pr-4 ${item.completed ? 'line-through opacity-40' : ''}`;
-                    titleEl.innerText = item.title;
-                    topRow.appendChild(titleEl);
-
-                    // Top-right directly interactive action checkbox bounding item definitions
-                    const checkWrapper = document.createElement('div');
-                    checkWrapper.className = "absolute top-3 right-3 keep-checkbox";
-
-                    const cb = document.createElement('input');
-                    cb.type = "checkbox";
-                    cb.checked = item.completed;
-                    cb.className = "w-4 h-4 rounded-sm border-slate-300 text-harbor focus:ring-harbor transition cursor-pointer";
-                    cb.onchange = () => {
-                        toggleCompleteRecord(item.id);
-                    };
-                    checkWrapper.appendChild(cb);
-                    topRow.appendChild(checkWrapper);
-                    card.appendChild(topRow);
-
-                    // Metadata footer layer stack layouts details specs blocks
-                    const footerRow = document.createElement('div');
-                    footerRow.className = "mt-auto space-y-1 flex flex-col";
-
-                    // Colorful Categorical Indicator strip or dot tags structures
-                    const catTag = document.createElement('span');
-                    catTag.className = `text-[10px] font-bold uppercase tracking-wider ${style.text}`;
-                    catTag.innerText = item.category;
-                    footerRow.appendChild(catTag);
-
-                    if (item.type === 'Task' && item.deadline) {
-                        const dl = document.createElement('div');
-                        dl.className = "text-[11px] font-mono font-medium text-slate-500 flex items-center gap-1 mt-1";
-                        dl.innerHTML = `<span class="text-coral font-bold">DL:</span> ${item.deadline}`;
-                        footerRow.appendChild(dl);
-                    } else if (item.type === 'Event' && item.startTime) {
-                        const evTime = document.createElement('div');
-                        evTime.className = "text-[11px] font-mono text-slate-500 mt-1";
-                        evTime.innerText = item.endTime ? `${item.startTime} - ${item.endTime}` : item.startTime;
-                        footerRow.appendChild(evTime);
-                    }
-
-                    if (item.recurrence && item.recurrence !== 'none') {
-                        const recurTag = document.createElement('div');
-                        recurTag.className = "text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5";
-                        recurTag.innerText = `↺ ${item.recurrence}`;
-                        footerRow.appendChild(recurTag);
-                    }
-
-                    card.appendChild(footerRow);
-                    grid.appendChild(card);
-                });
-
-                groupWrapper.appendChild(grid);
-                container.appendChild(groupWrapper);
-            });
-        }
-
-        // ==================== VIEW RENDERING: WEEK ====================
-        function renderWeekView() {
-            // Setup dynamic background hours parameters columns mapping matrices 
-            const labelsBar = document.getElementById('week-time-labels');
-            labelsBar.innerHTML = '';
-            for(let i=0; i<24; i++) {
-                const hr = document.createElement('div');
-                hr.innerText = `${String(i).padStart(2,'0')}:00`;
-                labelsBar.appendChild(hr);
-            }
-
-            // Calculate bounding week range arrays sets
-            const currentDayOfWeek = weekAnchorDate.getDay(); 
-            const dStart = new Date(weekAnchorDate.getTime());
-            dStart.setDate(weekAnchorDate.getDate() - currentDayOfWeek);
-            const dEnd = new Date(dStart.getTime());
-            dEnd.setDate(dStart.getDate() + 6);
-
-            const startStr = formatLocalDate(dStart);
-            const endStr = formatLocalDate(dEnd);
-
-            // Header labels calculation text display injection matching strings
-            document.getElementById('week-title-range').innerText = `${dStart.toLocaleDateString(undefined, {month:'short', day:'numeric'})} — ${dEnd.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'})}`;
-
-            // Fetch expanded recurrences dataset bounds
-            const expandedList = getExpandedRecordsForDateRange(startStr, endStr);
-
-            // Render Deadlines top display container space row lanes matching layout specs
-            const deadlineContainer = document.getElementById('week-deadlines-container');
-            deadlineContainer.innerHTML = '';
-
-            // Handle Mobile adaptive responsive column logic parameters constraints 
-            const isMobile = window.innerWidth < 768;
-            let displayDaysCount = isMobile ? 3 : 7;
+            // 重設欄位鎖定狀態
+            document.getElementById('form-category').disabled = false;
+            document.getElementById('form-type').disabled = false;
+            document.getElementById('div-end-date').style.display = 'block';
+            document.getElementById('time-inputs-row').style.display = 'grid';
+            document.getElementById('lbl-start-date').innerText = "開始日期";
             
-            // Map array columns tracks rendering layout builders 
-            const colsGrid = document.getElementById('week-days-columns');
-            colsGrid.className = `flex-1 grid grid-cols-${displayDaysCount} divide-x divide-slate-200 relative h-full`;
-            colsGrid.innerHTML = '';
+            // 初始化預設填入目前日期
+            const dateStr = formatDate(currentDate);
+            document.getElementById('form-start-date').value = dateStr;
+            document.getElementById('form-end-date').value = dateStr;
 
-            let daysToRender = [];
-            let baseDate = new Date(dStart.getTime());
-
-            if (isMobile) {
-                // Pin view alignment focus surrounding current selected offset anchors
-                baseDate = new Date(weekAnchorDate.getTime());
-                baseDate.setDate(baseDate.getDate() - 1); // center left anchor node offset bound block
-                for(let i=0; i<3; i++) {
-                    daysToRender.push(new Date(baseDate.getTime()));
-                    baseDate.setDate(baseDate.getDate() + 1);
-                }
-            } else {
-                for(let i=0; i<7; i++) {
-                    daysToRender.push(new Date(baseDate.getTime()));
-                    baseDate.setDate(baseDate.getDate() + 1);
-                }
-            }
-
-            // Generate Columns UI grids elements structures mapping matrixes configurations
-            daysToRender.forEach(dayObj => {
-                const curDayStr = formatLocalDate(dayObj);
-                const isToday = curDayStr === getTodayDateStr();
-
-                const col = document.createElement('div');
-                col.className = `flex flex-col h-full min-h-[600px] relative bg-amber-50/10 ${isToday ? 'bg-blue-50/20' : ''}`;
-
-                // Label Header Block cells components
-                const colHead = document.createElement('div');
-                colHead.className = `p-2 text-center border-b border-slate-200 select-none bg-slate-50/30 sticky top-0 z-10 ${isToday ? 'bg-blue-50/60' : ''}`;
-                
-                const weekdayLabel = document.createElement('p');
-                weekdayLabel.className = `text-[10px] font-bold uppercase tracking-wider ${isToday ? 'text-blue-600' : 'text-slate-400'}`;
-                weekdayLabel.innerText = dayObj.toLocaleDateString(undefined, { weekday: 'short' });
-                colHead.appendChild(weekdayLabel);
-
-                const dayNumLabel = document.createElement('p');
-                dayNumLabel.className = `text-sm font-display font-bold mt-0.5 ${isToday ? 'text-blue-600 bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center mx-auto shadow-xs' : 'text-slate-700'}`;
-                dayNumLabel.innerText = dayObj.getDate();
-                colHead.appendChild(dayNumLabel);
-                col.appendChild(colHead);
-
-                // Base Empty Grid Blocks background interactive lines clicker
-                const timeSlotsWrapper = document.createElement('div');
-                timeSlotsWrapper.className = "flex-1 relative divide-y divide-slate-100/60";
-                
-                // Clicking an empty slot triggers standard modal quick select setup template configurations values injection
-                timeSlotsWrapper.onclick = (e) => {
-                    if (e.target === timeSlotsWrapper) {
-                        openAddModal(curDayStr);
-                    }
-                };
-
-                for(let h=0; h<24; h++) {
-                    const line = document.createElement('div');
-                    line.className = "h-[46px] relative cursor-pointer hover:bg-slate-50/50 transition";
-                    line.onclick = (e) => {
-                        if(e.target === line) {
-                            const hrStr = String(h).padStart(2,'0') + ':00';
-                            openAddModal(curDayStr, hrStr);
-                        }
-                    };
-                    timeSlotsWrapper.appendChild(line);
-                }
-
-                // Filter items intersecting current targets array column specs bound configurations logic layout rules engine 
-                const dayItems = expandedList.filter(item => item.scheduled === curDayStr);
-
-                dayItems.forEach(item => {
-                    if (item.type === 'Event' && item.startTime) {
-                        const card = document.createElement('div');
-                        const style = getStyleForCategory(item.category);
-                        
-                        card.className = `${style.bg} ${style.border} border text-left p-1.5 rounded-lg shadow-xs absolute left-1 right-1 cursor-pointer hover:shadow-md select-none transition overflow-hidden text-ellipsis z-20 group`;
-                        card.onclick = () => openDetailModal(item);
-
-                        const titleNode = document.createElement('p');
-                        titleNode.className = `text-xs font-bold tracking-tight text-slate-900 leading-tight ${item.completed ? 'line-through opacity-40' : ''}`;
-                        titleNode.innerText = item.title;
-                        card.appendChild(titleNode);
-
-                        // Position mapping rules coordinate calculations transformations layout anchors boxes
-                        const startParts = item.startTime.split(':');
-                        const startMin = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
-                        let endMin = startMin + 60; // fallback standard default block sizes range duration block configuration values
-                        
-                        if (item.endTime) {
-                            const endParts = item.endTime.split(':');
-                            endMin = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
-                        }
-                        if (endMin <= startMin) endMin = startMin + 30; // safety wrap guard check standard values configs layout matching structures
-
-                        const topPos = 42 + Math.floor((startMin / 1440) * 1104); // ratio maps translation coordinates height calculations boundaries box
-                        const blockHeight = Math.max(24, Math.floor(((endMin - startMin) / 1440) * 1104));
-
-                        card.style.top = `${topPos}px`;
-                        card.style.height = `${blockHeight}px`;
-
-                        timeSlotsWrapper.appendChild(card);
-                    }
-                });
-
-                // Compute deadlines tracking intersecting specific day target mappings elements inside top bar matrix row layer strip 
-                const dayDeadlines = expandedList.filter(item => item.type === 'Task' && item.deadline === curDayStr);
-                dayDeadlines.forEach(item => {
-                    const style = getStyleForCategory(item.category);
-                    const dlChip = document.createElement('div');
-                    dlChip.className = `${style.bg} ${style.border} border text-slate-800 text-[11px] font-semibold px-2 py-0.5 rounded-md cursor-pointer hover:shadow-xs select-none transition ${item.completed ? 'opacity-40 line-through' : ''}`;
-                    dlChip.innerText = item.title;
-                    dlChip.onclick = () => openDetailModal(item);
-
-                    deadlineContainer.appendChild(dlChip);
-                });
-
-                col.appendChild(timeSlotsWrapper);
-                colsGrid.appendChild(col);
-            });
-        }
-
-        function navigateWeek(dir) {
-            if(dir === 0) weekAnchorDate = new Date();
-            else weekAnchorDate.setDate(weekAnchorDate.getDate() + dir * 7);
-            renderWeekView();
-        }
-
-        // ==================== VIEW RENDERING: MONTH ====================
-        function renderMonthView() {
-            // Synchronize drop-down menu selectors trackers coordinates index configurations alignment values
-            document.getElementById('month-select-year').value = monthAnchorYear;
-            document.getElementById('month-select-month').value = monthAnchorMonth;
-
-            const grid = document.getElementById('month-days-grid');
-            grid.innerHTML = '';
-
-            const firstDayOfMonth = new Date(monthAnchorYear, monthAnchorMonth, 1);
-            const startDayOfWeek = firstDayOfMonth.getDay(); 
-
-            // Backfill previous buffer pad blocks cells items matrices definitions offsets tracks records sets boundary limit allocations ranges
-            const totalSlots = 42; 
-            const matrixStartDate = new Date(firstDayOfMonth.getTime());
-            matrixStartDate.setDate(matrixStartDate.getDate() - startDayOfWeek);
-
-            const matrixEndDate = new Date(matrixStartDate.getTime());
-            matrixEndDate.setDate(matrixStartDate.getDate() + totalSlots - 1);
-
-            const expandedList = getExpandedRecordsForDateRange(formatLocalDate(matrixStartDate), formatLocalDate(matrixEndDate));
-            const todayStr = getTodayDateStr();
-
-            let cursorDate = new Date(matrixStartDate.getTime());
-
-            for (let i = 0; i < totalSlots; i++) {
-                const currentStr = formatLocalDate(cursorDate);
-                const loopDayNum = cursorDate.getDate();
-                const isCurrentMonth = cursorDate.getMonth() === monthAnchorMonth;
-                const isToday = currentStr === todayStr;
-
-                const cell = document.createElement('div');
-                cell.className = `p-1.5 flex flex-col min-h-[70px] bg-white transition relative cursor-pointer hover:bg-slate-50/60 ${!isCurrentMonth ? 'bg-slate-50/40 text-slate-300' : 'text-slate-800'} ${isToday ? 'bg-blue-50/20' : ''}`;
-                
-                // Clicking a cell opens the new Day View Popup Modal
-                const dayStrCaptured = currentStr;
-                cell.onclick = (e) => {
-                    if (e.target.closest('.month-item-node')) return; // ignore tracking layer bubble elements selections routing boundaries
-                    openDayViewModal(dayStrCaptured);
-                };
-
-                const numLabel = document.createElement('span');
-                numLabel.className = `text-xs font-mono font-bold tracking-tight select-none self-start px-1 py-0.5 ${isToday ? 'bg-blue-600 text-white rounded-md shadow-xs' : isCurrentMonth ? 'text-slate-700' : 'text-slate-300'}`;
-                numLabel.innerText = loopDayNum;
-                cell.appendChild(numLabel);
-
-                // Render matching embedded text lists items entries bars labels layout items
-                const cellItemsContainer = document.createElement('div');
-                cellItemsContainer.className = "space-y-1 mt-1.5 overflow-hidden flex-1";
-
-                const itemsOnDay = expandedList.filter(item => item.scheduled === currentStr || (item.type === 'Task' && item.deadline === currentStr));
-
-                itemsOnDay.forEach(item => {
-                    const style = getStyleForCategory(item.category);
-                    const itemBar = document.createElement('div');
-                    itemBar.className = `month-item-node text-[10px] font-medium rounded px-1.5 py-0.5 truncate select-none leading-tight transition ${style.bg} ${style.border} border text-slate-800 ${item.completed ? 'opacity-30 line-through' : ''}`;
+            if (editId) {
+                const item = itemsPool.find(i => i.id === editId);
+                if (item) {
+                    document.getElementById('modal-title').innerText = "編輯日程項目";
+                    document.getElementById('form-id').value = item.id;
+                    document.getElementById('form-title').value = item.title;
+                    document.getElementById('form-category').value = item.category;
+                    document.getElementById('form-type').value = item.type;
+                    document.getElementById('form-location').value = item.location || "";
                     
-                    // Prepend deadline specific micro elements layout markings visual signals flags
-                    if (item.type === 'Task' && item.deadline === currentStr) {
-                        itemBar.innerText = `⚠️ ${item.title}`;
+                    if (item.isFestival) {
+                        // 跨年重複節日格式轉換為當前年以供表單控制
+                        document.getElementById('form-start-date').value = `2026${item.startDate.substring(2)}`;
                     } else {
-                        itemBar.innerText = item.title;
+                        document.getElementById('form-start-date').value = item.startDate;
+                        document.getElementById('form-end-date').value = item.endDate;
                     }
-                    
-                    itemBar.onclick = (e) => {
-                        e.stopPropagation();
-                        openDetailModal(item);
-                    };
-
-                    cellItemsContainer.appendChild(itemBar);
-                });
-
-                cell.appendChild(cellItemsContainer);
-                grid.appendChild(cell);
-
-                cursorDate.setDate(cursorDate.getDate() + 1);
+                    document.getElementById('form-start-time').value = item.startTime || "09:00";
+                    document.getElementById('form-end-time').value = item.endTime || "10:00";
+                }
             }
-        }
 
-        function initMonthSelectors() {
-            const yearSel = document.getElementById('month-select-year');
-            const monthSel = document.getElementById('month-select-month');
-
-            yearSel.innerHTML = '';
-            for(let y=2024; y<=2032; y++) {
-                const op = document.createElement('option');
-                op.value = y; op.innerText = y; yearSel.appendChild(op);
-            }
-            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            monthSel.innerHTML = '';
-            monthNames.forEach((m, idx) => {
-                const op = document.createElement('option');
-                op.value = idx; op.innerText = m; monthSel.appendChild(op);
-            });
-
-            yearSel.onchange = () => { monthAnchorYear = parseInt(yearSel.value); renderMonthView(); };
-            monthSel.onchange = () => { monthAnchorMonth = parseInt(monthSel.value); renderMonthView(); };
-        }
-
-        function navigateMonth(dir) {
-            if (dir === 0) {
-                const now = new Date();
-                monthAnchorYear = now.getFullYear();
-                monthAnchorMonth = now.getMonth();
-            } else {
-                let d = new Date(monthAnchorYear, monthAnchorMonth + dir, 1);
-                monthAnchorYear = d.getFullYear();
-                monthAnchorMonth = d.getMonth();
-            }
-            renderMonthView();
-        }
-
-        // ==================== DIALOG FORM MANAGEMENT MODAL ACTIONS LAYER ====================
-        function openAddModal(defaultScheduledDateStr = '', defaultStartTimeStr = '') {
-            closeDetailModal();
-            closeDayViewModal();
+            handleCategoryChange();
             
-            document.getElementById('modal-title').innerText = "Add Item";
-            document.getElementById('form-id').value = '';
-            document.getElementById('modal-form').reset();
-            document.getElementById('form-delete-btn').classList.add('hidden');
-
-            // Map default configurations passed in vectors parameters configurations
-            document.getElementById('form-scheduled').value = defaultScheduledDateStr || getTodayDateStr();
-            document.getElementById('form-deadline').value = defaultScheduledDateStr || getTodayDateStr();
-            document.getElementById('form-start-time').value = defaultStartTimeStr || '';
-
-            setFormType('Task'); // Baseline default values configuration type standard rules
-            showModal();
-        }
-
-        function openEditModal(recordId) {
-            closeDetailModal();
-            closeDayViewModal();
-            
-            // Unpack index mapping lookup records objects definition bounds arrays
-            const item = recordsStore.find(r => r.id === recordId);
-            if(!item) return;
-
-            document.getElementById('modal-title').innerText = "Edit Item";
-            document.getElementById('form-id').value = item.id;
-            
-            document.getElementById('form-title').value = item.title;
-            document.getElementById('form-category').value = item.category;
-            document.getElementById('form-scheduled').value = item.scheduled || '';
-            document.getElementById('form-recurrence').value = item.recurrence || 'none';
-
-            setFormType(item.type);
-
-            if (item.type === 'Task') {
-                document.getElementById('form-deadline').value = item.deadline || '';
-            } else {
-                document.getElementById('form-start-time').value = item.startTime || '';
-                document.getElementById('form-end-time').value = item.endTime || '';
-                document.getElementById('form-location').value = item.location || '';
-            }
-
-            document.getElementById('form-delete-btn').classList.remove('hidden');
-            showModal();
-        }
-
-        function setFormType(type) {
-            currentFormType = type;
-            const btnTask = document.getElementById('type-btn-task');
-            const btnEvent = document.getElementById('type-btn-event');
-            const secTask = document.getElementById('form-section-task');
-            const secEvent = document.getElementById('form-section-event');
-
-            const dlInput = document.getElementById('form-deadline');
-
-            if (type === 'Task') {
-                btnTask.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs";
-                btnEvent.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600";
-                secTask.classList.remove('hidden');
-                secEvent.classList.add('hidden');
-                
-                dlInput.required = true; // Hard Core forced field native requirement configuration mapping 
-            } else {
-                btnEvent.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition bg-white text-ink shadow-xs";
-                btnTask.className = "py-1.5 text-xs font-semibold rounded-lg text-center transition text-slate-600";
-                secEvent.classList.remove('hidden');
-                secTask.classList.add('hidden');
-                
-                dlInput.required = false;
-                dlInput.value = '';
-            }
-        }
-
-        function showModal() {
-            const m = document.getElementById('global-modal');
-            m.classList.remove('hidden');
-            setTimeout(() => { document.getElementById('global-modal-card').classList.remove('scale-95'); }, 10);
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('.transform').classList.remove('scale-95');
+            }, 10);
+            lucide.createIcons();
         }
 
         function closeModal() {
-            document.getElementById('global-modal-card').classList.add('scale-95');
-            setTimeout(() => { document.getElementById('global-modal').classList.add('hidden'); }, 150);
+            const modal = document.getElementById('item-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
         }
 
-        // Handle submission processing pipeline data models validation rules verification checks
+        function handleCategoryChange() {
+            const category = document.getElementById('form-category').value;
+            const typeSelect = document.getElementById('form-type');
+            const lblStartDate = document.getElementById('lbl-start-date');
+            const divEndDate = document.getElementById('div-end-date');
+            const timeRow = document.getElementById('time-inputs-row');
+
+            if (category === 'Festival') {
+                // 自動變更邏輯與防呆鎖定
+                typeSelect.value = 'AllDay';
+                typeSelect.disabled = true; // 強制固定為 All Day Event
+                lblStartDate.innerText = "Date";
+                divEndDate.style.display = 'none'; // 隱藏 End Date
+                timeRow.style.display = 'none';    // 隱藏時間輸入
+            } else {
+                typeSelect.disabled = false;
+                lblStartDate.innerText = "開始日期";
+                
+                // 依據形態動態呈現對應時間排版
+                if (typeSelect.value === 'AllDay') {
+                    divEndDate.style.display = 'block';
+                    timeRow.style.display = 'none';
+                } else {
+                    divEndDate.style.display = 'block';
+                    timeRow.style.display = 'grid';
+                }
+            }
+        }
+        
+        // 綁定形態改變監聽器
+        document.getElementById('form-type').addEventListener('change', () => {
+            const type = document.getElementById('form-type').value;
+            const timeRow = document.getElementById('time-inputs-row');
+            if (type === 'AllDay') {
+                timeRow.style.display = 'none';
+            } else {
+                timeRow.style.display = 'grid';
+            }
+        });
+
+        // --- 4. 關鍵演算法：資料儲存拆分與跨年過濾處理中心 ---
         function handleFormSubmit(e) {
             e.preventDefault();
+            const id = document.getElementById('form-id').value;
+            const title = document.getElementById('form-title').value.trim();
+            const category = document.getElementById('form-category').value;
+            const type = document.getElementById('form-type').value;
+            const rawStart = document.getElementById('form-start-date').value;
+            const rawEnd = document.getElementById('form-end-date').value;
+            const startTime = document.getElementById('form-start-time').value;
+            const endTime = document.getElementById('form-end-time').value;
+            const location = document.getElementById('form-location').value.trim();
 
-            const fid = document.getElementById('form-id').value;
-            const titleVal = document.getElementById('form-title').value.trim();
-            const catVal = document.getElementById('form-category').value;
-            const schedVal = document.getElementById('form-scheduled').value;
-            const recurVal = document.getElementById('form-recurrence').value;
-            const dlVal = document.getElementById('form-deadline').value;
-
-            // Extra code verification defense validation rule parameters block constraint sets 
-            if (currentFormType === 'Task' && !dlVal) {
-                showToast("Deadline is strictly required for Tasks!");
-                return;
+            if (id) {
+                // 編輯模式：先移出原有舊資料項
+                itemsPool = itemsPool.filter(i => i.id !== id);
             }
 
-            if(fid) {
-                // Update operation matching elements tracking records identifiers
-                let item = recordsStore.find(r => r.id === fid);
-                if(item) {
-                    item.title = titleVal;
-                    item.category = catVal;
-                    item.scheduled = schedVal || null;
-                    item.recurrence = recurVal;
-                    item.type = currentFormType;
-
-                    if (currentFormType === 'Task') {
-                        item.deadline = dlVal;
-                        // wipe old event details mapping parameters configurations to clean properties tracking data sets 
-                        delete item.startTime; delete item.endTime; delete item.location;
-                    } else {
-                        item.startTime = document.getElementById('form-start-time').value || null;
-                        item.endTime = document.getElementById('form-end-time').value || null;
-                        item.location = document.getElementById('form-location').value.trim() || null;
-                        delete item.deadline;
-                    }
-                }
-                showToast("Item updated successfully");
-            } else {
-                // Creation factory pipeline construction injection properties setup arrays structures 
-                let newRecord = {
-                    id: 'rec-' + Date.now() + '-' + Math.floor(Math.random()*1000),
-                    title: titleVal,
-                    category: catVal,
-                    type: currentFormType,
-                    scheduled: schedVal || null,
-                    recurrence: recurVal,
-                    completed: false
+            if (category === 'Festival') {
+                // 不填寫年份、每年重複項目儲存機制：格式化為 --MM-DD
+                const mmdd = rawStart.substring(4); // 取得 -MM-DD 部分
+                const newFestivalItem = {
+                    id: id || Date.now().toString(),
+                    title: title,
+                    category: 'Festival',
+                    type: 'AllDay',
+                    startDate: `-${mmdd}`,
+                    endDate: '',
+                    startTime: '',
+                    endTime: '',
+                    location: location,
+                    isFestival: true
                 };
-
-                if (currentFormType === 'Task') {
-                    newRecord.deadline = dlVal;
-                } else {
-                    newRecord.startTime = document.getElementById('form-start-time').value || null;
-                    newRecord.endTime = document.getElementById('form-end-time').value || null;
-                    newRecord.location = document.getElementById('form-location').value.trim() || null;
+                itemsPool.push(newFestivalItem);
+            } else if (type === 'AllDay') {
+                // 關鍵優化需求 2：All Day 多天跨度在儲存時完全拆分為獨立項目
+                const start = new Date(rawStart);
+                const end = rawEnd ? new Date(rawEnd) : new Date(rawStart);
+                
+                let currentLoop = new Date(start);
+                let count = 0;
+                while (currentLoop <= end) {
+                    const singleDateStr = formatDate(currentLoop);
+                    itemsPool.push({
+                        id: (id && count === 0) ? id : `${Date.now()}-${count}`,
+                        title: title,
+                        category: category,
+                        type: 'AllDay',
+                        startDate: singleDateStr,
+                        endDate: singleDateStr, // 預設並鎖定為當天結束
+                        startTime: '',
+                        endTime: '',
+                        location: location,
+                        isFestival: false
+                    });
+                    currentLoop.setDate(currentLoop.getDate() + 1);
+                    count++;
                 }
-
-                recordsStore.push(newRecord);
-                showToast("New item created");
+            } else {
+                // 普通 Event 或 Deadline 儲存
+                itemsPool.push({
+                    id: id || Date.now().toString(),
+                    title: title,
+                    category: category,
+                    type: type,
+                    startDate: rawStart,
+                    endDate: rawEnd || rawStart,
+                    startTime: startTime,
+                    endTime: endTime,
+                    location: location,
+                    isFestival: false
+                });
             }
 
-            saveData();
             closeModal();
             refreshCurrentView();
         }
 
-        function handleFormDelete() {
-            const fid = document.getElementById('form-id').value;
-            if(!fid) return;
-            openConfirmDialog("Are you sure you want to permanently delete this item?", () => {
-                recordsStore = recordsStore.filter(r => r.id !== fid);
-                saveData();
-                closeModal();
-                refreshCurrentView();
-                showToast("Item deleted");
-            });
-        }
-
-        function toggleCompleteRecord(recordId) {
-            // strip out dynamic expansion string suffixes keys if incoming targets matching virtual entities references arrays
-            let trueId = recordId.split('-')[0];
-            if (recordId.startsWith('rec-')) {
-                const parts = recordId.split('-');
-                trueId = parts[0] + '-' + parts[1] + '-' + parts[2];
-            }
-
-            let item = recordsStore.find(r => r.id === trueId);
-            if(item) {
-                item.completed = !item.completed;
-                saveData();
-                showToast(item.completed ? "Item archived to History" : "Item restored to Database");
+        function deleteItem(id) {
+            if (confirm('確定要刪除此日程項目嗎？(若是拆分後的項目，將只刪除目前選中的單日項目)')) {
+                itemsPool = itemsPool.filter(i => i.id !== id);
                 refreshCurrentView();
             }
         }
 
-        // ==================== READONLY READ DETAIL MODAL POPUP LAYER INTERFACES ====================
-        let activeDetailTargetItem = null;
-
-        function openDetailModal(expandedItemObject) {
-            closeDayViewModal();
-            activeDetailTargetItem = expandedItemObject;
-
-            const m = document.getElementById('detail-modal');
-            const card = document.getElementById('detail-modal-card');
-
-            const style = getStyleForCategory(expandedItemObject.category);
-
-            // Setup type pill header container properties
-            const badgeType = document.getElementById('detail-type-badge');
-            badgeType.className = `text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md ${style.badge}`;
-            badgeType.innerText = expandedItemObject.type;
-
-            const titleEl = document.getElementById('detail-title');
-            titleEl.innerText = expandedItemObject.title;
-            if (expandedItemObject.completed) titleEl.classList.add('line-through', 'opacity-40');
-            else titleEl.classList.remove('line-through', 'opacity-40');
-
-            const catBadge = document.getElementById('detail-category-badge');
-            catBadge.className = `inline-block text-[11px] font-semibold mt-1.5 px-2 py-0.5 rounded-full ${style.bg} ${style.text}`;
-            catBadge.innerText = expandedItemObject.category;
-
-            // Mapping checkboxes configurations values
-            const cb = document.getElementById('detail-checkbox');
-            cb.checked = expandedItemObject.completed;
-
-            // Conditional parameters rows display indicators configuration management elements loops
-            document.getElementById('detail-txt-scheduled').innerText = expandedItemObject.scheduled || 'None';
-            
-            if (expandedItemObject.type === 'Task' && expandedItemObject.deadline) {
-                document.getElementById('detail-row-deadline').classList.remove('hidden');
-                document.getElementById('detail-txt-deadline').innerText = expandedItemObject.deadline;
-            } else {
-                document.getElementById('detail-row-deadline').classList.add('hidden');
+        // 輔助工具：將任何萬年曆 Festival 或一般事件解析轉換為某特定年份下的具體真實 Date
+        function resolveItemDatesForYear(item, year) {
+            if (item.isFestival) {
+                const mmdd = item.startDate.replace(/^-+/, ''); // 得到 MM-DD
+                return {
+                    startStr: `${year}-${mmdd}`,
+                    endStr: `${year}-${mmdd}`,
+                    isMatch: true
+                };
             }
-
-            if (expandedItemObject.type === 'Event' && expandedItemObject.startTime) {
-                document.getElementById('detail-row-time').classList.remove('hidden');
-                document.getElementById('detail-txt-time').innerText = expandedItemObject.endTime ? `${expandedItemObject.startTime} - ${expandedItemObject.endTime}` : expandedItemObject.startTime;
-            } else {
-                document.getElementById('detail-row-time').classList.add('hidden');
-            }
-
-            if (expandedItemObject.type === 'Event' && expandedItemObject.location) {
-                document.getElementById('detail-row-location').classList.remove('hidden');
-                document.getElementById('detail-txt-location').innerText = expandedItemObject.location;
-            } else {
-                document.getElementById('detail-row-location').classList.add('hidden');
-            }
-
-            // Bind contextual buttons handlers arrays mappings dynamically values
-            const origId = expandedItemObject._originalId || expandedItemObject.id;
-
-            document.getElementById('detail-btn-delete').onclick = () => {
-                openConfirmDialog("Delete this item permanently?", () => {
-                    recordsStore = recordsStore.filter(r => r.id !== origId);
-                    saveData();
-                    closeDetailModal();
-                    refreshCurrentView();
-                    showToast("Item deleted");
-                });
+            return {
+                startStr: item.startDate,
+                endStr: item.endDate,
+                isMatch: false
             };
-
-            document.getElementById('detail-btn-edit').onclick = () => {
-                openEditModal(origId);
-            };
-
-            m.classList.remove('hidden');
         }
 
-        function closeDetailModal() {
-            document.getElementById('detail-modal').classList.add('hidden');
-            activeDetailTargetItem = null;
-        }
+        // --- 5. 各視圖渲染模組 ---
 
-        function handleDetailToggleComplete() {
-            if(!activeDetailTargetItem) return;
-            const origId = activeDetailTargetItem._originalId || activeDetailTargetItem.id;
-            toggleCompleteRecord(origId);
-            closeDetailModal();
-        }
+        // A. DATABASE VIEW RENDER
+        function renderDatabaseView() {
+            const tbody = document.getElementById('database-table-body');
+            tbody.innerHTML = "";
 
-        // ==================== NEW FEATURE: DAY VIEW DIALOG MODAL INJECTION ====================
-        function openDayViewModal(dateStr) {
-            activeDayViewDateStr = dateStr;
-            const d = parseLocalDate(dateStr);
-            const titleFormatted = d.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
-            
-            document.getElementById('day-view-title').innerText = titleFormatted;
-            const listContainer = document.getElementById('day-view-list');
-            listContainer.innerHTML = '';
-
-            // Pull items belonging to range date matrix sets configurations arrays 
-            const expandedList = getExpandedRecordsForDateRange(dateStr, dateStr);
-            const filtered = expandedList.filter(item => item.scheduled === dateStr || (item.type === 'Task' && item.deadline === dateStr));
-
-            if(filtered.length === 0) {
-                const emptyMsg = document.createElement('p');
-                emptyMsg.className = "text-xs text-slate-400 text-center py-6 italic shadow-none";
-                emptyMsg.innerText = "No agenda items scheduled for this day.";
-                listContainer.appendChild(emptyMsg);
-            } else {
-                filtered.forEach(item => {
-                    const style = getStyleForCategory(item.category);
-                    const row = document.createElement('div');
-                    row.className = `${style.bg} ${style.border} border rounded-xl p-3 flex items-start justify-between gap-3 cursor-pointer hover:shadow-xs transition select-none`;
-                    
-                    row.onclick = () => {
-                        openDetailModal(item);
-                    };
-
-                    const textBlock = document.createElement('div');
-                    textBlock.className = "flex-1 min-w-0";
-
-                    const titleEl = document.createElement('p');
-                    titleEl.className = `text-xs font-bold text-slate-900 truncate tracking-tight ${item.completed ? 'line-through opacity-30' : ''}`;
-                    titleEl.innerText = item.title;
-                    textBlock.appendChild(titleEl);
-
-                    const metaEl = document.createElement('p');
-                    metaEl.className = "text-[10px] font-medium text-slate-500 mt-0.5 uppercase tracking-wider";
-                    if (item.type === 'Task' && item.deadline === dateStr) {
-                        metaEl.innerHTML = `<span class="text-coral font-bold">⚠️ Deadline</span>`;
-                    } else if (item.type === 'Event' && item.startTime) {
-                        metaEl.innerText = item.endTime ? `${item.startTime} - ${item.endTime}` : item.startTime;
-                    } else {
-                        metaEl.innerText = item.type;
-                    }
-                    textBlock.appendChild(metaEl);
-                    row.appendChild(textBlock);
-
-                    listContainer.appendChild(row);
-                });
-            }
-
-            document.getElementById('day-view-add-btn').onclick = () => {
-                openAddModal(dateStr);
-            };
-
-            document.getElementById('day-view-modal').classList.remove('hidden');
-        }
-
-        function closeDayViewModal() {
-            document.getElementById('day-view-modal').classList.add('hidden');
-            activeDayViewDateStr = '';
-        }
-
-        // ==================== SYSTEM UTILITIES DIALOGS ALERTS LAYER ====================
-        let activeConfirmCallback = null;
-
-        function openConfirmDialog(msg, onYes) {
-            document.getElementById('confirm-message').innerText = msg;
-            activeConfirmCallback = onYes;
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        }
-
-        function closeConfirmDialog() {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            activeConfirmCallback = null;
-        }
-
-        document.getElementById('confirm-yes-btn').onclick = () => {
-            if(activeConfirmCallback) activeConfirmCallback();
-            closeConfirmDialog();
-        };
-
-        function showToast(msg) {
-            const t = document.getElementById('toast-box');
-            t.innerText = msg;
-            t.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-0 opacity-100 transition-all duration-300";
-            setTimeout(() => {
-                t.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300";
-            }, 2500);
-        }
-
-        function initFilters() {
-            document.getElementById('search-input').addEventListener('input', () => {
-                if(currentView === 'database') renderDatabaseView();
-            });
-            document.getElementById('filter-category').addEventListener('change', () => {
-                if(currentView === 'database') renderDatabaseView();
-            });
-            window.addEventListener('resize', () => {
-                if(currentView === 'week') renderWeekView();
-            });
-        }
-
-        // ==================== BOOTSTRAP INIT INITIALIZATION EXECUTION ====================
-        window.onload = function() {
-            loadData();
-            processAutoPostpone();
-            initMonthSelectors();
-            initFilters();
-
-            switchView('database');
-
-            // Overlay modal backdrop dim click dismisses routing closures
-            document.getElementById('global-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'global-modal') closeModal();
-            });
-            document.getElementById('detail-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'detail-modal') closeDetailModal();
-            });
-            document.getElementById('day-view-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'day-view-modal') closeDayViewModal();
-            });
-            document.getElementById('confirm-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'confirm-modal') closeConfirmDialog();
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                    closeDetailModal();
-                    closeDayViewModal();
-                    closeConfirmDialog();
+            itemsPool.forEach(item => {
+                const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
+                
+                // 核心邏輯需求：Festival 平時在資料庫主列表「隱形」，只有當搜尋列被激活且匹配時才喚醒
+                if (item.isFestival && (!searchQuery || !isMatchSearch)) {
+                    return; 
                 }
+                if (searchQuery && !isMatchSearch) {
+                    return; // 沒匹配到搜尋的普通項目亦過濾掉
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition";
+                
+                let dateDisplayStart = item.startDate;
+                let dateDisplayEnd = item.endDate || "--";
+                if (item.isFestival) {
+                    dateDisplayStart = `每年 ${item.startDate.replace(/^-+/, '')}`;
+                    dateDisplayEnd = "無期限 (常駐項目)";
+                }
+
+                tr.innerHTML = `
+                    <td class="p-3.5 font-medium text-slate-800">${escapeHtml(item.title)}</td>
+                    <td class="p-3.5">
+                        <span class="px-2 py-0.5 text-xs font-medium rounded-full ${item.category === 'Work' ? 'bg-blue-50 text-blue-600' : item.category === 'Festival' ? 'bg-purple-50 text-purple-600' : 'bg-slate-100 text-slate-600'}">
+                            ${item.category}
+                        </span>
+                    </td>
+                    <td class="p-3.5 text-xs font-mono">${dateDisplayStart} ${item.startTime ? ' @ ' + item.startTime : ''}</td>
+                    <td class="p-3.5 text-xs font-mono">${dateDisplayEnd} ${item.endTime ? ' @ ' + item.endTime : ''}</td>
+                    <td class="p-3.5">
+                        <span class="px-2 py-0.5 text-xs font-medium rounded ${item.type === 'Deadline' ? 'bg-rose-50 text-rose-600 border border-rose-100' : item.type === 'AllDay' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-emerald-50 text-emerald-600'}">
+                            ${item.type}
+                        </span>
+                    </td>
+                    <td class="p-3.5 text-right space-x-1.5">
+                        <button onclick="openModal('${item.id}')" class="text-slate-400 hover:text-slate-700 transition inline-flex items-center"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button onclick="deleteItem('${item.id}')" class="text-slate-400 hover:text-rose-600 transition inline-flex items-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-        };
+            lucide.createIcons();
+        }
+
+        // B. WEEK VIEW RENDER
+        function renderWeekView() {
+            const isMobile = window.innerWidth < 768; 
+            const headerDays = document.getElementById('week-header-days');
+            const headerStickyTasks = document.getElementById('week-header-sticky-tasks');
+            const linesGrid = document.getElementById('week-time-lines');
+            const columnsGrid = document.getElementById('week-days-columns');
+
+            headerDays.innerHTML = "";
+            headerStickyTasks.innerHTML = "";
+            linesGrid.innerHTML = "";
+            columnsGrid.innerHTML = "";
+
+            // 1. 計算該畫面的目標顯示日期群組
+            let targetDates = [];
+            if (isMobile) {
+                // 核心優化需求 3：直向螢幕移動端 Today (即目前選中日) 永遠強制放在最左邊，只拉出隨後連續 3 天
+                for (let i = 0; i < 3; i++) {
+                    const d = new Date(currentDate);
+                    d.setDate(currentDate.getDate() + i);
+                    targetDates.push(d);
+                }
+            } else {
+                // 桌面端：維持標準週曆排版 (計算目前日期所在完整一週)
+                const currentDayOfWeek = currentDate.getDay(); // 0 是週日
+                const startOfWeek = new Date(currentDate);
+                startOfWeek.setDate(currentDate.getDate() - currentDayOfWeek);
+                for (let i = 0; i < 7; i++) {
+                    const d = new Date(startOfWeek);
+                    d.setDate(startOfWeek.getDate() + i);
+                    targetDates.push(d);
+                }
+            }
+
+            const totalCols = targetDates.length;
+            headerDays.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
+            headerStickyTasks.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
+            columnsGrid.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
+
+            // 2. 渲染左上角時間軸空白定位格與各日期頂部標題
+            const cornerEmpty = document.createElement('div');
+            cornerEmpty.className = "bg-slate-50 border-b border-slate-100";
+            headerDays.appendChild(cornerEmpty);
+
+            const taskCornerEmpty = document.createElement('div');
+            taskCornerEmpty.className = "bg-slate-50/50 flex items-center justify-center border-b border-slate-100 text-[10px] text-slate-400 font-medium font-mono";
+            taskCornerEmpty.innerText = "置頂";
+            headerStickyTasks.appendChild(taskCornerEmpty);
+
+            const weekDayNames = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+            const todayStamp = formatDate(new Date(2026, 5, 22)); // 系統預設今日
+
+            targetDates.forEach(date => {
+                const dateStr = formatDate(date);
+                const isToday = (dateStr === todayStamp);
+                
+                const dayHeader = document.createElement('div');
+                dayHeader.className = `p-2 text-center flex flex-col items-center justify-center ${isToday ? 'bg-emerald-50/60' : ''}`;
+                dayHeader.innerHTML = `
+                    <span class="text-xs font-medium ${isToday ? 'text-emerald-600' : 'text-slate-500'}">${weekDayNames[date.getDay()]}</span>
+                    <span class="text-base font-bold tracking-tight mt-0.5 ${isToday ? 'w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-sm' : 'text-slate-800'}">${date.getDate()}</span>
+                `;
+                headerDays.appendChild(dayHeader);
+
+                // 為每列初始化建立置頂容器格
+                const stickyTaskCell = document.createElement('div');
+                stickyTaskCell.id = `sticky-box-${dateStr}`;
+                stickyTaskCell.className = `p-1.5 space-y-1 min-h-[40px] border-b border-slate-100 flex flex-col justify-start ${isToday ? 'bg-emerald-50/30' : ''}`;
+                headerStickyTasks.appendChild(stickyTaskCell);
+            });
+
+            // 3. 繪製背景 24 小時橫線
+            for (let h = 0; h < 24; h++) {
+                const hourLine = document.createElement('div');
+                hourLine.className = "h-[60px] border-b border-slate-100 w-full";
+                linesGrid.appendChild(hourLine);
+            }
+
+            // 4. 建立時間軸最左側 24 小時制時間刻度欄
+            const timeCol = document.createElement('div');
+            timeCol.className = "bg-slate-50/80 font-mono text-[11px] text-slate-400 font-medium flex flex-col select-none relative pt-[30px]";
+            for (let h = 1; h < 24; h++) {
+                const label = document.createElement('div');
+                label.className = "absolute left-2 -translate-y-1/2";
+                label.style.top = `${h * 60}px`;
+                label.innerText = `${h.toString().padStart(2, '0')}:00`;
+                timeCol.appendChild(label);
+            }
+            columnsGrid.appendChild(timeCol);
+
+            // 5. 建立各日主要排程事件渲染 Column
+            targetDates.forEach(date => {
+                const dateStr = formatDate(date);
+                const isToday = (dateStr === todayStamp);
+                
+                const col = document.createElement('div');
+                col.className = "relative h-full w-full assign-col";
+                col.id = `week-col-${dateStr}`;
+                if (isToday) col.classList.add('bg-emerald-50/10');
+                columnsGrid.appendChild(col);
+            });
+
+            // 6. 分派事件到各個時間 Column 與置頂 Sticky Area
+            itemsPool.forEach(item => {
+                const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
+                if (searchQuery && !isMatchSearch) return;
+
+                targetDates.forEach(date => {
+                    const resolved = resolveItemDatesForYear(item, date.getFullYear());
+                    const targetStr = formatDate(date);
+
+                    if (resolved.startStr === targetStr) {
+                        // 核心優化需求 5：Deadline 與 AllDay 完美歸類至固定置頂 Sticky 區段
+                        if (item.type === 'AllDay') {
+                            const stickyBox = document.getElementById(`sticky-box-${targetStr}`);
+                            if (stickyBox) {
+                                const chip = document.createElement('div');
+                                chip.className = "px-2 py-1 text-xs bg-amber-50 text-amber-800 border border-amber-200 rounded font-medium shadow-2xs truncate cursor-pointer hover:brightness-95 transition";
+                                // 核心優化需求 2：不帶 📢 符號也不帶 (Until) 贅字
+                                chip.innerText = item.title;
+                                chip.onclick = () => openModal(item.id);
+                                stickyBox.appendChild(chip);
+                            }
+                        } else if (item.type === 'Deadline') {
+                            const stickyBox = document.getElementById(`sticky-box-${targetStr}`);
+                            if (stickyBox) {
+                                const chip = document.createElement('div');
+                                chip.className = "px-2 py-1 text-xs bg-rose-50 text-rose-800 border border-rose-200 rounded font-medium shadow-2xs truncate cursor-pointer hover:brightness-95 transition flex items-center gap-1";
+                                chip.innerHTML = `⚠️ <span class="truncate">${item.title}</span>`;
+                                chip.onclick = () => openModal(item.id);
+                                stickyBox.appendChild(chip);
+                            }
+                        } else {
+                            // 普通具有特定起訖時間的 Event 項目渲染至 24 小時軸
+                            const targetCol = document.getElementById(`week-col-${targetStr}`);
+                            if (targetCol) {
+                                const startMin = parseTimeToMinutes(item.startTime || "09:00");
+                                const endMin = parseTimeToMinutes(item.endTime || "10:00");
+                                const topPx = (startMin / 60) * 60;
+                                const heightPx = Math.max(((endMin - startMin) / 60) * 60, 25); // 防呆最小高度
+
+                                const card = document.createElement('div');
+                                card.className = `absolute left-1 right-1 p-2 rounded-lg text-xs border shadow-2xs flex flex-col justify-between overflow-hidden cursor-pointer hover:shadow-sm transition ${item.category === 'Work' ? 'bg-blue-50/95 border-blue-200 text-blue-800' : 'bg-slate-100/95 border-slate-300 text-slate-800'}`;
+                                card.style.top = `${topPx}px`;
+                                card.style.height = `${heightPx}px`;
+                                
+                                card.innerHTML = `
+                                    <div class="font-semibold truncate">${escapeHtml(item.title)}</div>
+                                    <div class="text-[10px] opacity-75 font-mono mt-0.5">${item.startTime}-${item.endTime}</div>
+                                `;
+                                card.onclick = () => openModal(item.id);
+                                targetCol.appendChild(card);
+                            }
+                        }
+                    }
+                });
+            });
+            lucide.createIcons();
+        }
+
+        // C. MONTH VIEW RENDER
+        function renderMonthView() {
+            const grid = document.getElementById('month-grid');
+            grid.innerHTML = "";
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // 獲取該月第一天是星期幾
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            // 獲取該月總天數
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            // 上個月總天數
+            const prevMonthTotalDays = new Date(year, month, 0).getDate();
+
+            let dayCounter = 1;
+            let nextMonthDayCounter = 1;
+
+            const todayStamp = formatDate(new Date(2026, 5, 22));
+
+            // 精準繪製月曆 42 格 (6 橫列 * 7 直欄)
+            for (let i = 0; i < 42; i++) {
+                const cell = document.createElement('div');
+                cell.className = "bg-white p-1.5 flex flex-col min-h-0 overflow-hidden relative group";
+                
+                let targetDateObj = null;
+
+                if (i < firstDayIndex) {
+                    // 填補上個月尾巴日期
+                    const d = prevMonthTotalDays - firstDayIndex + i + 1;
+                    cell.classList.add('bg-slate-50/60', 'text-slate-400');
+                    targetDateObj = new Date(year, month - 1, d);
+                } else if (dayCounter > totalDays) {
+                    // 填補下個月開頭日期
+                    cell.classList.add('bg-slate-50/60', 'text-slate-400');
+                    targetDateObj = new Date(year, month + 1, nextMonthDayCounter);
+                    nextMonthDayCounter++;
+                } else {
+                    // 當月核心日期
+                    targetDateObj = new Date(year, month, dayCounter);
+                    const currentStr = formatDate(targetDateObj);
+                    if (currentStr === todayStamp) {
+                        cell.classList.add('bg-emerald-50/40');
+                    }
+                    dayCounter++;
+                }
+
+                const cellDateStr = formatDate(targetDateObj);
+                
+                // 建立日期小數字顯示器
+                const numLabel = document.createElement('span');
+                numLabel.className = `text-xs font-bold font-mono mb-1 inline-block w-5 h-5 text-center leading-5 ${cellDateStr === todayStamp ? 'bg-emerald-600 text-white rounded-full' : 'text-slate-700'}`;
+                numLabel.innerText = targetDateObj.getDate();
+                cell.appendChild(numLabel);
+
+                // 收集當天所有匹配的日程項目
+                let dayItems = [];
+                itemsPool.forEach(item => {
+                    const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
+                    if (searchQuery && !isMatchSearch) return;
+
+                    const resolved = resolveItemDatesForYear(item, targetDateObj.getFullYear());
+                    if (resolved.startStr === cellDateStr) {
+                        dayItems.push(item);
+                    }
+                });
+
+                // 核心優化演算法需求 2：嚴格進行垂直加權排序排列
+                // 排序權重：AllDay（最前） -> 普通Event（按時間升序） -> Deadline（最後）
+                dayItems.sort((a, b) => {
+                    const typeWeight = { 'AllDay': 1, 'Event': 2, 'Deadline': 3 };
+                    const wa = typeWeight[a.type] || 2;
+                    const wb = typeWeight[b.type] || 2;
+                    
+                    if (wa !== wb) return wa - wb;
+                    
+                    // 如果同為普通 Event 則按開始時間升序排序
+                    if (a.type === 'Event' && b.type === 'Event') {
+                        return (a.startTime || "").localeCompare(b.startTime || "");
+                    }
+                    return 0;
+                });
+
+                // 渲染晶片到格子中
+                const chipsContainer = document.createElement('div');
+                chipsContainer.className = "flex-1 overflow-y-auto no-scrollbar space-y-1";
+                
+                dayItems.forEach(item => {
+                    const chip = document.createElement('div');
+                    chip.onclick = (e) => { e.stopPropagation(); openModal(item.id); };
+                    
+                    if (item.type === 'AllDay') {
+                        chip.className = "px-1.5 py-0.5 text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-100 rounded truncate cursor-pointer hover:brightness-95";
+                        chip.innerText = item.title; // 移除了📢與Until文字
+                    } else if (item.type === 'Deadline') {
+                        chip.className = "px-1.5 py-0.5 text-[10px] font-medium bg-rose-50 text-rose-800 border border-rose-100 rounded truncate cursor-pointer hover:brightness-95 flex items-center gap-0.5";
+                        chip.innerHTML = `⚠️ <span class="truncate">${item.title}</span>`;
+                    } else {
+                        chip.className = `px-1.5 py-0.5 text-[10px] font-medium rounded truncate cursor-pointer hover:brightness-95 border ${item.category === 'Work' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-100 text-slate-700 border-slate-200'}`;
+                        chip.innerText = `${item.startTime || ''} ${item.title}`;
+                    }
+                    chipsContainer.appendChild(chip);
+                });
+
+                cell.appendChild(chipsContainer);
+                grid.appendChild(cell);
+            }
+        }
+
+        // --- 6. 通用核心輔助函數群 ---
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function parseTimeToMinutes(timeStr) {
+            if (!timeStr) return 0;
+            const [h, m] = timeStr.split(':').map(Number);
+            return (h * 60) + m;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
     </script>
 </body>
 </html>
