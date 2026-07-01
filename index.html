@@ -1,916 +1,1596 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Calendar & Task Management System</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>實習管理平台 - 天環租務部</title>
+    
+    <!-- PWA Manifest (內嵌) -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuWunumZheWIuuWni+WPluWPsCIsCiAgInNob3J0X25hbWUiOiAi5a6a6ZmF566h55CGIiwKICAiZGVzY3JpcHRpb24iOiAi5a6a6ZmF5bel5L2c566h55CG5bmz5Y+wIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxYTNhNWMiLAogICJ0aGVtZV9jb2xvciI6ICIjMWEzYTVjIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInIHJ4PSc2MCcgZmlsbD0nIzFhM2E1YycvPjx0ZXh0IHg9JzI1NicgeT0nMzQwJyBmb250LXNpemU9JzI4MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZpbGw9J3doaXRlJz7ihpI8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
+
     <style>
-        /* 隱藏滾動條但保持功能 */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .time-grid-scroll { scroll-behavior: smooth; }
+        /* ===== 全局重置與基礎樣式 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* ===== 頂部導航欄 ===== */
+        .navbar {
+            background: linear-gradient(135deg, #1a3a5c, #2a5f8a);
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding-top: max(14px, env(safe-area-inset-top));
+        }
+
+        .navbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar .logo span {
+            font-weight: 300;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: rgba(255,255,255,0.12);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .nav-tab {
+            padding: 8px 18px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #1a3a5c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* ===== 主內容容器 ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px 16px 80px;
+        }
+
+        /* ===== 頁面切換 ===== */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== 頁面標題 ===== */
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a3a5c;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== 卡片組件 ===== */
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px 22px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            border: 1px solid #eaeef2;
+            transition: box-shadow 0.2s;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-title .badge {
+            background: #eef3f8;
+            color: #2a5f8a;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+
+        /* ===== 進度條 ===== */
+        .progress-wrapper {
+            margin: 6px 0 4px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2a7f4a, #4caf7a);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* ===== 待辦事項列表 ===== */
+        .todo-category {
+            margin-bottom: 22px;
+        }
+
+        .todo-category h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #eef3f8;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 12px;
+            margin-bottom: 2px;
+            border-radius: 8px;
+            transition: background 0.15s;
+            cursor: default;
+        }
+
+        .todo-item:hover {
+            background: #f7f9fb;
+        }
+
+        .todo-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #2a5f8a;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .todo-item .todo-text {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #333;
+            flex: 1;
+        }
+
+        .todo-item.done .todo-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-item .todo-tag {
+            font-size: 11px;
+            background: #eef3f8;
+            color: #2a5f8a;
+            padding: 2px 10px;
+            border-radius: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ===== 每日任務記錄 - 表單 ===== */
+        .daily-log-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+        }
+
+        .daily-log-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .daily-log-form label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .daily-log-form input,
+        .daily-log-form textarea,
+        .daily-log-form select {
+            width: 100%;
+            padding: 9px 13px;
+            border: 1.5px solid #dce2e8;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fafcfe;
+        }
+
+        .daily-log-form input:focus,
+        .daily-log-form textarea:focus,
+        .daily-log-form select:focus {
+            outline: none;
+            border-color: #2a5f8a;
+            box-shadow: 0 0 0 3px rgba(42, 95, 138, 0.12);
+        }
+
+        .daily-log-form textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* 🆕 今日任務 textarea 專用樣式 - 更高 */
+        #logTask {
+            min-height: 80px;
+            line-height: 1.6;
+        }
+
+        .daily-log-form .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .daily-log-form .file-upload-wrapper input[type="file"] {
+            padding: 6px;
+            border: 1.5px dashed #dce2e8;
+            border-radius: 10px;
+            background: #fafcfe;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .btn {
+            padding: 9px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #1a3a5c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2a5f8a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26, 58, 92, 0.25);
+        }
+
+        .btn-success {
+            background: #2a7f4a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3a9f5a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42, 127, 74, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #555;
+            border: 1.5px solid #dce2e8;
+        }
+
+        .btn-outline:hover {
+            background: #f7f9fb;
+            border-color: #bbb;
+        }
+
+        .btn-danger-outline {
+            background: transparent;
+            color: #c0392b;
+            border: 1.5px solid #f5d6d2;
+        }
+
+        .btn-danger-outline:hover {
+            background: #fef0ee;
+        }
+
+        .btn-edit {
+            background: transparent;
+            color: #2a5f8a;
+            border: 1.5px solid #d0dfeb;
+        }
+
+        .btn-edit:hover {
+            background: #eef3f8;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+        }
+
+        /* ===== 數據管理工具欄 ===== */
+        .data-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .data-actions .btn {
+            font-size: 13px;
+            padding: 7px 18px;
+        }
+
+        .btn-export {
+            background: #2a5f8a;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #1a4a6a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42, 95, 138, 0.25);
+        }
+
+        .btn-import {
+            background: #6c3a8a;
+            color: white;
+        }
+
+        .btn-import:hover {
+            background: #5a2a7a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(108, 58, 138, 0.25);
+        }
+
+        .btn-import-file {
+            background: #8a6c3a;
+            color: white;
+        }
+
+        .btn-import-file:hover {
+            background: #7a5a2a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(138, 108, 58, 0.25);
+        }
+
+        .import-status {
+            display: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 500;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .import-status.success {
+            display: block;
+            background: #e8f5e9;
+            color: #2a7f4a;
+        }
+
+        .import-status.error {
+            display: block;
+            background: #fef0ee;
+            color: #c0392b;
+        }
+
+        .import-status.info {
+            display: block;
+            background: #e3ecf5;
+            color: #1a3a5c;
+        }
+
+        #importFileInput {
+            display: none;
+        }
+
+        /* ===== 每日記錄列表 ===== */
+        .log-list {
+            margin-top: 8px;
+        }
+
+        .log-entry {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid #2a5f8a;
+            transition: background 0.15s;
+        }
+
+        .log-entry:hover {
+            background: #f2f6fa;
+        }
+
+        .log-entry .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .log-entry .log-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .log-entry .log-meta strong {
+            color: #1a3a5c;
+        }
+
+        .log-entry .log-task {
+            font-weight: 500;
+            color: #222;
+            font-size: 14px;
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-entry .log-observation {
+            font-size: 13.5px;
+            color: #444;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 6px;
+            border: 1px solid #eaeef2;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-entry .log-images {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .log-entry .log-images img {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eaeef2;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .log-entry .log-images img:hover {
+            transform: scale(1.05);
+        }
+
+        .log-entry .log-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .log-entry .log-actions button {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #e9ecef;
+            color: #555;
+            transition: background 0.15s;
+        }
+
+        .log-entry .log-actions .edit-btn:hover {
+            background: #d0dfeb;
+            color: #1a3a5c;
+        }
+
+        .log-entry .log-actions .delete-btn:hover {
+            background: #f5d6d2;
+            color: #c0392b;
+        }
+
+        /* 編輯模式 */
+        .log-entry.editing {
+            background: #fffde7;
+            border-left-color: #f9a825;
+        }
+
+        .log-entry .edit-form textarea,
+        .log-entry .edit-form input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce2e8;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-family: inherit;
+            margin-bottom: 6px;
+            background: white;
+        }
+
+        .log-entry .edit-form textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .log-entry .edit-form .edit-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .log-entry .edit-form .edit-actions button {
+            padding: 5px 16px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .log-entry .edit-form .edit-actions .save-edit {
+            background: #2a7f4a;
+            color: white;
+        }
+
+        .log-entry .edit-form .edit-actions .save-edit:hover {
+            background: #3a9f5a;
+        }
+
+        .log-entry .edit-form .edit-actions .cancel-edit {
+            background: #e9ecef;
+            color: #555;
+        }
+
+        .log-entry .edit-form .edit-actions .cancel-edit:hover {
+            background: #d5d8dd;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #aaa;
+            padding: 36px 16px;
+            font-size: 15px;
+        }
+
+        .empty-state .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* ===== 儲存提示 ===== */
+        #saveMessage {
+            display: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        #saveMessage.success {
+            display: block;
+            background: #e8f5e9;
+            color: #2a7f4a;
+        }
+
+        #saveMessage.error {
+            display: block;
+            background: #fef0ee;
+            color: #c0392b;
+        }
+
+        /* ===== 圖片預覽模態框 ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 95%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .modal .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 34px;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .modal .close-modal:hover {
+            opacity: 1;
+        }
+
+        /* ===== PWA 安裝提示 ===== */
+        .install-banner {
+            display: none;
+            background: #e3ecf5;
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 16px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            border: 1px solid #c5d8e8;
+        }
+
+        .install-banner.show {
+            display: flex;
+        }
+
+        .install-banner p {
+            font-size: 13px;
+            color: #1a3a5c;
+            margin: 0;
+        }
+
+        .install-banner .btn-install {
+            background: #1a3a5c;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .install-banner .btn-install:hover {
+            background: #2a5f8a;
+        }
+
+        .install-banner .btn-dismiss {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            color: #888;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 14px;
+            }
+
+            .navbar .logo {
+                font-size: 16px;
+            }
+
+            .nav-tabs {
+                width: 100%;
+            }
+
+            .nav-tab {
+                flex: 1;
+                text-align: center;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .daily-log-form {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 14px 16px;
+            }
+
+            .log-entry {
+                padding: 12px 14px;
+            }
+
+            .container {
+                padding: 12px 10px 60px;
+            }
+
+            .page-title {
+                font-size: 19px;
+            }
+
+            .data-actions .btn {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .nav-tab {
+                font-size: 11px;
+                padding: 5px 6px;
+            }
+
+            .btn {
+                padding: 7px 14px;
+                font-size: 12px;
+            }
+        }
+
+        /* ===== 滾動條美化 ===== */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eef3f8;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1d0dd;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0b4c5;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+<body>
 
-    <div class="flex h-screen overflow-hidden">
-        
-        <!-- 左側側邊欄 -->
-        <aside class="w-64 bg-slate-900 text-slate-100 flex flex-col justify-between hidden md:flex z-40">
-            <div class="p-5">
-                <!-- 根據 image_164f78.png 完美還原的 Logo -->
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-inner p-1">
-                        <svg viewBox="0 0 100 100" class="w-full h-full text-[#0d6273]" fill="currentColor">
-                            <!-- 中央核心圓點 -->
-                            <circle cx="50" cy="50" r="12" />
-                            <!-- 外部主圓環 -->
-                            <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="10" />
-                            <!-- 8個對稱且微凸出的圓頭輪輻條 -->
-                            <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
-                                <line x1="50" y1="12" x2="50" y2="40" /> <!-- 上 -->
-                                <line x1="50" y1="60" x2="50" y2="88" /> <!-- 下 -->
-                                <line x1="12" y1="50" x2="40" y2="50" /> <!-- 左 -->
-                                <line x1="60" y1="50" x2="88" y2="50" /> <!-- 右 -->
-                                <line x1="23.1" y1="23.1" x2="42.9" y2="42.9" /> <!-- 左上 -->
-                                <line x1="57.1" y1="57.1" x2="76.9" y2="76.9" /> <!-- 右下 -->
-                                <line x1="76.9" y1="23.1" x2="57.1" y2="42.9" /> <!-- 右上 -->
-                                <line x1="42.9" y1="57.1" x2="23.1" y2="76.9" /> <!-- 左下 -->
-                            </g>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-base tracking-wide leading-none">Chronos</h1>
-                        <span class="text-xs text-slate-400">Workspace</span>
-                    </div>
-                </div>
+    <!-- ===== 導航欄 ===== -->
+    <nav class="navbar">
+        <div class="logo">
+            🏢 實習管理
+            <span>· 天環租務部</span>
+        </div>
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-page="page-daily">📝 每日記錄</button>
+            <button class="nav-tab" data-page="page-todo">📋 待辦事項</button>
+        </div>
+    </nav>
 
-                <nav class="space-y-1">
-                    <button onclick="switchView('database')" id="btn-nav-database" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-white">
-                        <i data-lucide="database" class="w-4 h-4"></i> Database
-                    </button>
-                    <button onclick="switchView('week')" id="btn-nav-week" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i data-lucide="calendar-range" class="w-4 h-4"></i> Week View
-                    </button>
-                    <button onclick="switchView('month')" id="btn-nav-month" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i data-lucide="calendar" class="w-4 h-4"></i> Month View
-                    </button>
-                </nav>
+    <!-- ===== PWA 安裝提示 ===== -->
+    <div class="container" style="padding-bottom: 0;">
+        <div class="install-banner" id="installBanner">
+            <p>📲 將此應用安裝到主畫面，離線也可使用</p>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="btn-install" id="installBtn">安裝應用</button>
+                <button class="btn-dismiss" id="dismissInstall">✕</button>
             </div>
-            
-            <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
-                &copy; 2026 Chronos Engine
-            </div>
-        </aside>
-
-        <!-- 主內容區域 -->
-        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 relative">
-            
-            <!-- 頂部公共控制列 -->
-            <header class="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-4 md:px-6 z-20 shrink-0">
-                <div class="flex items-center gap-4 flex-1">
-                    <!-- 行動端 Logo 與選單按鈕 -->
-                    <div class="flex items-center gap-2 md:hidden">
-                        <div class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-lg p-0.5">
-                            <svg viewBox="0 0 100 100" class="text-[#0d6273]" fill="currentColor">
-                                <circle cx="50" cy="50" r="12" />
-                                <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="10" />
-                                <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
-                                    <line x1="50" y1="12" x2="50" y2="40" /><line x1="50" y1="60" x2="50" y2="88" />
-                                    <line x1="12" y1="50" x2="40" y2="50" /><line x1="60" y1="50" x2="88" y2="50" />
-                                    <line x1="23.1" y1="23.1" x2="42.9" y2="42.9" /><line x1="57.1" y1="57.1" x2="76.9" y2="76.9" />
-                                    <line x1="76.9" y1="23.1" x2="57.1" y2="42.9" /><line x1="42.9" y1="57.1" x2="23.1" y2="76.9" />
-                                </g>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- 搜尋列 -->
-                    <div class="relative w-full max-w-md">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="global-search" oninput="handleSearch()" placeholder="搜尋項目名稱或地點 (Festival 類型輸入即可喚醒)..." class="w-full pl-9 pr-4 py-1.5 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-slate-300 focus:outline-none transition">
-                    </div>
-                </div>
-
-                <!-- 導覽與新増按鈕 -->
-                <div class="flex items-center gap-2 md:gap-3">
-                    <div class="flex items-center border border-slate-200 rounded-lg bg-white overflow-hidden p-0.5">
-                        <button onclick="navigateTime(-1)" class="p-1.5 hover:bg-slate-50 text-slate-600 rounded-md"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                        <button onclick="jumpToToday()" class="px-2.5 py-1 text-xs font-medium hover:bg-slate-50 text-slate-700 border-x border-slate-100">Today</button>
-                        <button onclick="navigateTime(1)" class="p-1.5 hover:bg-slate-50 text-slate-600 rounded-md"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
-                    </div>
-                    <span id="current-date-display" class="text-sm font-semibold text-slate-700 hidden sm:inline-block min-w-[120px] text-center"></span>
-                    <button onclick="openModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition shadow-sm">
-                        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">新増項目</span>
-                    </button>
-                </div>
-            </header>
-
-            <!-- 視圖容器 -->
-            <div class="flex-1 overflow-auto relative">
-                
-                <!-- 1. DATABASE VIEW -->
-                <section id="view-database" class="p-4 md:p-6 space-y-4">
-                    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 tracking-wider">
-                                    <th class="p-3.5">項目名稱</th>
-                                    <th class="p-3.5">分類</th>
-                                    <th class="p-3.5">開始日期 / 時間</th>
-                                    <th class="p-3.5">結束日期 / 時間</th>
-                                    <th class="p-3.5">功能與屬性</th>
-                                    <th class="p-3.5 text-right">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="database-table-body" class="divide-y divide-slate-100 text-sm text-slate-600">
-                                <!-- 動態載入 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <!-- 2. WEEK VIEW -->
-                <section id="view-week" class="hidden h-full flex flex-col overflow-hidden">
-                    <!-- Sticky Top Header Container -->
-                    <div class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm shrink-0">
-                        <!-- 日期標題列 -->
-                        <div id="week-header-days" class="grid divide-x divide-slate-100 border-b border-slate-100">
-                            <!-- 動態渲染，包含時間軸空白左側格 -->
-                        </div>
-                        <!-- 單日 Deadline / 全天項目置頂展示區 -->
-                        <div id="week-header-sticky-tasks" class="grid divide-x divide-slate-100 bg-slate-50/50 text-xs text-slate-600">
-                            <!-- 動態渲染 -->
-                        </div>
-                    </div>
-
-                    <!-- 24小時滾動時間軸 -->
-                    <div id="week-time-grid-scroll" class="flex-1 overflow-y-auto time-grid-scroll">
-                        <div id="week-time-grid-content" class="relative">
-                            <!-- 背景時間線 -->
-                            <div id="week-time-lines" class="absolute inset-0 pointer-events-none divide-y divide-slate-100">
-                                <!-- 24張線條格 -->
-                            </div>
-                            <!-- 實體內容格與事件擺放 -->
-                            <div id="week-days-columns" class="grid h-[1440px] divide-x divide-slate-100 relative">
-                                <!-- 時間刻度左欄與各日 Column -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 3. MONTH VIEW -->
-                <section id="view-month" class="hidden h-full flex flex-col p-4 overflow-hidden">
-                    <div class="grid grid-cols-7 gap-px bg-slate-200 rounded-t-xl overflow-hidden border border-slate-200 shrink-0 text-center py-2 bg-slate-100 text-xs font-semibold text-slate-600 tracking-wider">
-                        <div>週日</div><div>週一</div><div>週二</div><div>週三</div><div>週四</div><div>週五</div><div>週六</div>
-                    </div>
-                    <div id="month-grid" class="flex-1 grid grid-cols-7 grid-rows-6 bg-slate-200 gap-px border-x border-b border-slate-200 rounded-b-xl overflow-hidden">
-                        <!-- 動態填充 42 格 -->
-                    </div>
-                </section>
-
-            </div>
-            
-            <!-- 行動端底部導覽列 -->
-            <footer class="h-14 border-t border-slate-200 bg-white flex items-center justify-around md:hidden z-40 shrink-0">
-                <button onclick="switchView('database')" id="btn-mob-database" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
-                    <i data-lucide="database" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Database</span>
-                </button>
-                <button onclick="switchView('week')" id="btn-mob-week" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
-                    <i data-lucide="calendar-range" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Week</span>
-                </button>
-                <button onclick="switchView('month')" id="btn-mob-month" class="flex flex-col items-center text-slate-400 hover:text-slate-800">
-                    <i data-lucide="calendar" class="w-5 h-5"></i><span class="text-[10px] mt-0.5 font-medium">Month</span>
-                </button>
-            </footer>
-        </main>
-    </div>
-
-    <!-- 新增 / 編輯 彈窗彈出層 -->
-    <div id="item-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-200 max-h-[90vh] flex flex-col">
-            <header class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
-                <h3 id="modal-title" class="font-semibold text-slate-800 text-base">新増日程項目</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </header>
-            <form id="item-form" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4 overflow-y-auto flex-1">
-                <input type="hidden" id="form-id">
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">項目名稱 *</label>
-                    <input type="text" id="form-title" required class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">分類 (Category)</label>
-                        <select id="form-category" onchange="handleCategoryChange()" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400 bg-white">
-                            <option value="Work">Work</option>
-                            <option value="Personal">Personal</option>
-                            <option value="Festival">Festival (節日/紀念日)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">功能屬性</label>
-                        <select id="form-type" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400 bg-white">
-                            <option value="Event">Event (一般事件)</option>
-                            <option value="Deadline">Deadline (截止日期)</option>
-                            <option value="AllDay">All Day (整天項目)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="date-time-container" class="space-y-3">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label id="lbl-start-date" class="block text-xs font-semibold text-slate-500 mb-1">開始日期</label>
-                            <input type="date" id="form-start-date" required class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                        </div>
-                        <div id="div-end-date">
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">結束日期</label>
-                            <input type="date" id="form-end-date" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                        </div>
-                    </div>
-
-                    <div id="time-inputs-row" class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">開始時間</label>
-                            <input type="time" id="form-start-time" value="09:00" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">結束時間</label>
-                            <input type="time" id="form-end-time" value="10:00" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">地點 / 備註</label>
-                    <input type="text" id="form-location" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400">
-                </div>
-
-                <div class="pt-2 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-slate-500 hover:bg-slate-100 rounded-lg transition">取消</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 rounded-lg transition shadow-sm">儲存項目</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <!-- 核心邏輯與演算法 JavaScript -->
-    <script>
-        // --- 1. 基礎架構與初始化資料 ---
-        let currentView = 'database';
-        let currentDate = new Date(2026, 5, 22); // 預設目前日期為 2026 年 6 月 22 日
-        let searchQuery = "";
+    <!-- ===== 主容器 ===== -->
+    <div class="container">
 
-        // 核心資料庫 (儲存原始輸入與拆分後的單一原子化結構)
-        let itemsPool = [
-            { id: "1", title: "專案進度匯報會議", category: "Work", type: "Event", startDate: "2026-06-22", endDate: "2026-06-22", startTime: "09:30", endTime: "11:00", location: "會議室 A", isFestival: false },
-            { id: "2", title: "年中技術框架審查", category: "Work", type: "Event", startDate: "2026-06-24", endDate: "2026-06-24", startTime: "14:00", endTime: "16:30", location: "線上 Teams", isFestival: false },
-            { id: "3", title: "端午節連續假期", category: "Festival", type: "AllDay", startDate: "--06-19", endDate: "", startTime: "", endTime: "", location: "傳統節日", isFestival: true },
-            { id: "4", title: "我的生日派對", category: "Festival", type: "AllDay", startDate: "--06-24", endDate: "", startTime: "", endTime: "", location: "家裡", isFestival: true },
-            { id: "5", title: "產品代碼凍結點", category: "Work", type: "Deadline", startDate: "2026-06-22", endDate: "2026-06-22", startTime: "18:00", endTime: "18:00", location: "GitHub Repo", isFestival: false },
-            { id: "6", title: "全公司年度戰略大會", category: "Work", type: "AllDay", startDate: "2026-06-23", endDate: "2026-06-23", startTime: "", endTime: "", location: "總部大禮堂", isFestival: false }
+        <!-- ========================================================= -->
+        <!-- 頁面一：每日記錄（默認主頁） -->
+        <!-- ========================================================= -->
+        <div class="page active" id="page-daily">
+            <h1 class="page-title">📝 每日任務記錄</h1>
+            <p class="page-subtitle">記錄每天的實習任務、觀察結果，並可上傳照片</p>
+
+            <!-- 儲存提示 -->
+            <div id="saveMessage"></div>
+
+            <!-- 數據匯出匯入工具欄 -->
+            <div class="card" style="background: #f7f9fb; border: 1px dashed #c5d8e8;">
+                <div class="card-title" style="margin-bottom: 8px;">
+                    💾 數據管理
+                    <span style="font-size: 12px; font-weight: 400; color: #888;">備份或遷移你的所有資料</span>
+                </div>
+                <div class="data-actions">
+                    <button class="btn btn-export" id="exportDataBtn">📤 匯出 JSON</button>
+                    <button class="btn btn-import-file" id="importDataBtn">📥 匯入 JSON</button>
+                    <input type="file" id="importFileInput" accept=".json">
+                    <span style="font-size: 12px; color: #888; margin-left: 4px;">⚠️ 匯入將覆蓋所有現有數據</span>
+                </div>
+                <div id="importStatus" class="import-status"></div>
+            </div>
+
+            <!-- 新增記錄表單 -->
+            <div class="card">
+                <div class="card-title">✏️ 新增今日記錄</div>
+                <form id="dailyLogForm" class="daily-log-form">
+                    <div>
+                        <label for="logDate">📅 日期</label>
+                        <input type="date" id="logDate" required>
+                    </div>
+                    <div>
+                        <label for="logCategory">📂 所屬分類</label>
+                        <select id="logCategory">
+                            <option value="1. 集團戰略與市場格局研究">1. 集團戰略與市場格局研究</option>
+                            <option value="2. 廣州核心商圈實地考察與數據化分析">2. 廣州核心商圈實地考察與數據化分析</option>
+                            <option value="3. 品牌趨勢與重點開發商鋪位策略研究">3. 品牌趨勢與重點開發商鋪位策略研究</option>
+                            <option value="4. 市場推廣活動與會員體系比較分析">4. 市場推廣活動與會員體系比較分析</option>
+                            <option value="5. 競爭情報整合與策略建議報告">5. 競爭情報整合與策略建議報告</option>
+                            <option value="6. 實習總結匯報與經驗傳承">6. 實習總結匯報與經驗傳承</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <label for="logTask">📌 今日任務 <span style="font-weight:400;color:#999;font-size:12px;">（可換行）</span></label>
+                        <textarea id="logTask" placeholder="例如：以顧客身份觀察天環的商鋪..." required></textarea>
+                    </div>
+                    <div class="full-width">
+                        <label for="logObservation">🔍 觀察結果 / 心得</label>
+                        <textarea id="logObservation" placeholder="記錄你的觀察、發現、數據或反思..."></textarea>
+                    </div>
+                    <div class="full-width">
+                        <label for="logNote">📎 備註</label>
+                        <input type="text" id="logNote" placeholder="額外備註或待辦提醒">
+                    </div>
+                    <div class="full-width">
+                        <label>🖼️ 上傳照片</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="logImages" accept="image/*" multiple>
+                            <span style="font-size: 12px; color: #888;">可選多張</span>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 儲存記錄</button>
+                        <button type="reset" class="btn btn-outline">清空</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 歷史記錄列表 -->
+            <div class="card">
+                <div class="card-title">
+                    📚 歷史記錄
+                    <span class="badge" id="logCount">0 筆</span>
+                    <span style="margin-left: auto; font-size: 12px; font-weight: 400; color: #888;">點擊 ✏️ 可編輯</span>
+                </div>
+                <div id="logListContainer">
+                    <div class="empty-state">
+                        <span class="icon">📭</span>
+                        還沒有記錄，開始新增你的第一筆實習日記吧！
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 12px;">
+                    <button class="btn btn-danger-outline" id="clearLogsBtn" style="font-size: 12px;">🗑️ 清除所有記錄</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- 頁面二：待辦事項 -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-todo">
+            <h1 class="page-title">📋 待辦事項看板</h1>
+            <p class="page-subtitle">追蹤你的實習進度，完成後勾選即可更新進度條</p>
+
+            <!-- 總進度條 -->
+            <div class="card">
+                <div class="card-title">
+                    🎯 整體實習進度
+                    <span class="badge" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-wrapper">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="mainProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 待辦事項分類列表 -->
+            <div class="card">
+                <div class="card-title">✅ 六個階段的任務清單</div>
+                <div id="todoList"></div>
+            </div>
+
+            <div style="text-align: right; margin-top: 4px;">
+                <button class="btn btn-danger-outline" id="resetTodosBtn" style="font-size: 12px;">🔄 重置所有待辦</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== 圖片預覽模態框 ===== -->
+    <div class="modal" id="imageModal">
+        <button class="close-modal" id="closeModalBtn">&times;</button>
+        <img id="modalImage" src="" alt="預覽圖片">
+    </div>
+
+    <script>
+        // ================================================================
+        //  0. Service Worker 註冊 (PWA 離線支援)
+        // ================================================================
+        try {
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    const CACHE_NAME = 'intern-platform-v1';
+                    const urlsToCache = ['.'];
+
+                    self.addEventListener('install', function(e) {
+                        e.waitUntil(
+                            caches.open(CACHE_NAME).then(function(cache) {
+                                return cache.addAll(urlsToCache);
+                            })
+                        );
+                    });
+
+                    self.addEventListener('fetch', function(e) {
+                        e.respondWith(
+                            caches.match(e.request).then(function(response) {
+                                return response || fetch(e.request);
+                            })
+                        );
+                    });
+
+                    self.addEventListener('activate', function(e) {
+                        e.waitUntil(
+                            caches.keys().then(function(cacheNames) {
+                                return Promise.all(
+                                    cacheNames.filter(function(name) {
+                                        return name !== CACHE_NAME;
+                                    }).map(function(name) {
+                                        return caches.delete(name);
+                                    })
+                                );
+                            })
+                        );
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl).then(function(reg) {
+                    console.log('✅ Service Worker 註冊成功');
+                }).catch(function(err) {
+                    console.log('⚠️ Service Worker 註冊失敗（不影響使用）:', err);
+                });
+            }
+        } catch (e) {
+            console.log('⚠️ Service Worker 初始化跳過:', e);
+        }
+
+        // ================================================================
+        //  1. 資料管理（使用 localStorage 持久化）
+        // ================================================================
+
+        const DEFAULT_TODOS = [
+            { id: 't1', category: '1. 集團戰略與市場格局研究', text: '系統性地瀏覽新鴻基地產的官網和各大平台，整理近期重點新聞。', done: false },
+            { id: 't2', category: '1. 集團戰略與市場格局研究', text: '標記新鴻基在國內的所有項目，並記錄關鍵資訊。', done: false },
+            { id: 't3', category: '1. 集團戰略與市場格局研究', text: '列出主要城市的商圈，標記核心競品項目。', done: false },
+            { id: 't4', category: '1. 集團戰略與市場格局研究', text: '建立競品清單，包括港資和國內龍頭。', done: false },
+            { id: 't5', category: '2. 廣州核心商圈實地考察與數據化分析', text: '規劃實地考察的路線，確保高效且全面。', done: false },
+            { id: 't6', category: '2. 廣州核心商圈實地考察與數據化分析', text: '設計考察表格，記錄五個維度的資訊。', done: false },
+            { id: 't7', category: '2. 廣州核心商圈實地考察與數據化分析', text: '匯總考察數據，分析商場的定位與差異化。', done: false },
+            { id: 't8', category: '3. 品牌趨勢與重點開發商鋪位策略研究', text: '建立品牌檔案卡，記錄各品牌的重要資訊。', done: false },
+            { id: 't9', category: '3. 品牌趨勢與重點開發商鋪位策略研究', text: '比較不同商場的重點項目，進行鋪位策略分析。', done: false },
+            { id: 't10', category: '3. 品牌趨勢與重點開發商鋪位策略研究', text: '製作矩陣表，分析品牌的重疊與缺口。', done: false },
+            { id: 't11', category: '4. 市場推廣活動與會員體系比較分析', text: '分析天環及競品的線上推廣渠道及其內容。', done: false },
+            { id: 't12', category: '4. 市場推廣活動與會員體系比較分析', text: '體驗商場的活動，記錄活動類型和參與情況。', done: false },
+            { id: 't13', category: '4. 市場推廣活動與會員體系比較分析', text: '註冊並分析天環及其他商場的會員體系。', done: false },
+            { id: 't14', category: '4. 市場推廣活動與會員體系比較分析', text: '收集並簡短評估競品中值得參考的案例。', done: false },
+            { id: 't15', category: '5. 競爭情報整合與策略建議報告', text: '撰寫報告大綱，包含主要研究成果。', done: false },
+            { id: 't16', category: '5. 競爭情報整合與策略建議報告', text: '將數據和觀察整理填入報告。', done: false },
+            { id: 't17', category: '5. 競爭情報整合與策略建議報告', text: '主動與上司交流，確認分析方向。', done: false },
+            { id: 't18', category: '6. 實習總結匯報與經驗傳承', text: '將報告整理成專業匯報材料。', done: false },
+            { id: 't19', category: '6. 實習總結匯報與經驗傳承', text: '反思個人成長及收穫，撰寫總結。', done: false },
+            { id: 't20', category: '6. 實習總結匯報與經驗傳承', text: '整理所有文件，做好知識傳承。', done: false },
+            { id: 't21', category: '6. 實習總結匯報與經驗傳承', text: '向團隊展示實習成果，進行總結匯報。', done: false },
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            switchView('database');
-            updateDateDisplay();
-        });
-
-        // 監聽視窗縮放以動態切換直橫向 Week 排版
-        window.addEventListener('resize', () => {
-            if (currentView === 'week') renderWeekView();
-        });
-
-        function updateDateDisplay() {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
-            document.getElementById('current-date-display').innerText = currentDate.toLocaleDateString('zh-TW', options);
+        function getTodos() {
+            const data = localStorage.getItem('internTodos');
+            if (data) {
+                try { return JSON.parse(data); } catch { return JSON.parse(JSON.stringify(DEFAULT_TODOS)); }
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_TODOS));
         }
 
-        // --- 2. 視圖切換與導覽中心 ---
-        function switchView(view) {
-            currentView = view;
-            
-            // 隱藏所有視圖
-            document.getElementById('view-database').classList.add('hidden');
-            document.getElementById('view-week').classList.add('hidden');
-            document.getElementById('view-month').classList.add('hidden');
-            
-            // 移除所有導航的高亮
-            const navs = ['database', 'week', 'month'];
-            navs.forEach(v => {
-                document.getElementById(`btn-nav-${v}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white";
-                document.getElementById(`btn-mob-${v}`).className = "flex flex-col items-center text-slate-400 hover:text-slate-800";
+        function saveTodos(todos) {
+            localStorage.setItem('internTodos', JSON.stringify(todos));
+        }
+
+        function getLogs() {
+            const data = localStorage.getItem('internDailyLogs');
+            if (data) {
+                try { return JSON.parse(data); } catch { return []; }
+            }
+            return [];
+        }
+
+        function saveLogs(logs) {
+            localStorage.setItem('internDailyLogs', JSON.stringify(logs));
+        }
+
+        // ================================================================
+        //  2. 待辦事項邏輯
+        // ================================================================
+
+        function renderTodos() {
+            const todos = getTodos();
+            const container = document.getElementById('todoList');
+            const categories = ['1. 集團戰略與市場格局研究', '2. 廣州核心商圈實地考察與數據化分析',
+                '3. 品牌趨勢與重點開發商鋪位策略研究', '4. 市場推廣活動與會員體系比較分析',
+                '5. 競爭情報整合與策略建議報告', '6. 實習總結匯報與經驗傳承'
+            ];
+
+            let html = '';
+            const total = todos.length;
+            const done = todos.filter(t => t.done).length;
+            const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+
+            document.getElementById('mainProgressBar').style.width = percent + '%';
+            document.getElementById('progressPercent').textContent = percent + '%';
+
+            categories.forEach(cat => {
+                const items = todos.filter(t => t.category === cat);
+                if (items.length === 0) return;
+                html += `<div class="todo-category"><h3>${cat}</h3>`;
+                items.forEach(item => {
+                    const doneClass = item.done ? 'done' : '';
+                    html += `
+                        <div class="todo-item ${doneClass}" data-id="${item.id}">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} data-id="${item.id}">
+                            <span class="todo-text">${item.text}</span>
+                            <span class="todo-tag">${item.done ? '✅ 已完成' : '待辦'}</span>
+                        </div>
+                    `;
+                });
+                html += '</div>';
             });
 
-            // 啟用對應視圖與亮顯
-            document.getElementById(`view-${view}`).classList.remove('hidden');
-            document.getElementById(`btn-nav-${view}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-white";
-            document.getElementById(`btn-mob-${view}`).className = "flex flex-col items-center text-emerald-600 font-semibold";
+            container.innerHTML = html;
 
-            if (view === 'database') renderDatabaseView();
-            if (view === 'week') {
-                renderWeekView();
-                // 異步執行 scrollToWorkingHours 自動向下滾動定位到 08:00
-                setTimeout(scrollToWorkingHours, 50);
-            }
-            if (view === 'month') renderMonthView();
-        }
-
-        function navigateTime(direction) {
-            if (currentView === 'month') {
-                currentDate.setMonth(currentDate.getMonth() + direction);
-            } else if (currentView === 'week') {
-                const isMobile = window.innerWidth < 768;
-                if (isMobile) {
-                    // 直向螢幕：每次進退「一天」
-                    currentDate.setDate(currentDate.getDate() + direction);
-                } else {
-                    // 橫向螢幕：每次進退「一週」
-                    currentDate.setDate(currentDate.getDate() + (direction * 7));
-                }
-            } else {
-                currentDate.setDate(currentDate.getDate() + direction);
-            }
-            updateDateDisplay();
-            refreshCurrentView();
-        }
-
-        function jumpToToday() {
-            currentDate = new Date(2026, 5, 22); // 返回預設基準 2026-06-22
-            updateDateDisplay();
-            refreshCurrentView();
-            if (currentView === 'week') setTimeout(scrollToWorkingHours, 50);
-        }
-
-        function handleSearch() {
-            searchQuery = document.getElementById('global-search').value.trim().toLowerCase();
-            refreshCurrentView();
-        }
-
-        function refreshCurrentView() {
-            if (currentView === 'database') renderDatabaseView();
-            if (currentView === 'week') renderWeekView();
-            if (currentView === 'month') renderMonthView();
-        }
-
-        function scrollToWorkingHours() {
-            const scrollContainer = document.getElementById('week-time-grid-scroll');
-            if (scrollContainer) {
-                // 每一小時高度 60px，8點位置為 8 * 60 = 480px
-                scrollContainer.scrollTop = 480;
-            }
-        }
-
-        // --- 3. 表單彈窗智慧化控制控制項 ---
-        function openModal(editId = null) {
-            const modal = document.getElementById('item-modal');
-            const form = document.getElementById('item-form');
-            form.reset();
-            document.getElementById('form-id').value = "";
-            document.getElementById('modal-title').innerText = "新増日程項目";
-            
-            // 重設欄位鎖定狀態
-            document.getElementById('form-category').disabled = false;
-            document.getElementById('form-type').disabled = false;
-            document.getElementById('div-end-date').style.display = 'block';
-            document.getElementById('time-inputs-row').style.display = 'grid';
-            document.getElementById('lbl-start-date').innerText = "開始日期";
-            
-            // 初始化預設填入目前日期
-            const dateStr = formatDate(currentDate);
-            document.getElementById('form-start-date').value = dateStr;
-            document.getElementById('form-end-date').value = dateStr;
-
-            if (editId) {
-                const item = itemsPool.find(i => i.id === editId);
-                if (item) {
-                    document.getElementById('modal-title').innerText = "編輯日程項目";
-                    document.getElementById('form-id').value = item.id;
-                    document.getElementById('form-title').value = item.title;
-                    document.getElementById('form-category').value = item.category;
-                    document.getElementById('form-type').value = item.type;
-                    document.getElementById('form-location').value = item.location || "";
-                    
-                    if (item.isFestival) {
-                        // 跨年重複節日格式轉換為當前年以供表單控制
-                        document.getElementById('form-start-date').value = `2026${item.startDate.substring(2)}`;
-                    } else {
-                        document.getElementById('form-start-date').value = item.startDate;
-                        document.getElementById('form-end-date').value = item.endDate;
+            container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const id = this.dataset.id;
+                    const todosData = getTodos();
+                    const item = todosData.find(t => t.id === id);
+                    if (item) {
+                        item.done = this.checked;
+                        saveTodos(todosData);
+                        renderTodos();
                     }
-                    document.getElementById('form-start-time').value = item.startTime || "09:00";
-                    document.getElementById('form-end-time').value = item.endTime || "10:00";
-                }
-            }
-
-            handleCategoryChange();
-            
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modal.querySelector('.transform').classList.remove('scale-95');
-            }, 10);
-            lucide.createIcons();
+                });
+            });
         }
 
-        function closeModal() {
-            const modal = document.getElementById('item-modal');
-            modal.classList.add('opacity-0');
-            modal.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
-
-        function handleCategoryChange() {
-            const category = document.getElementById('form-category').value;
-            const typeSelect = document.getElementById('form-type');
-            const lblStartDate = document.getElementById('lbl-start-date');
-            const divEndDate = document.getElementById('div-end-date');
-            const timeRow = document.getElementById('time-inputs-row');
-
-            if (category === 'Festival') {
-                // 自動變更邏輯與防呆鎖定
-                typeSelect.value = 'AllDay';
-                typeSelect.disabled = true; // 強制固定為 All Day Event
-                lblStartDate.innerText = "Date";
-                divEndDate.style.display = 'none'; // 隱藏 End Date
-                timeRow.style.display = 'none';    // 隱藏時間輸入
-            } else {
-                typeSelect.disabled = false;
-                lblStartDate.innerText = "開始日期";
-                
-                // 依據形態動態呈現對應時間排版
-                if (typeSelect.value === 'AllDay') {
-                    divEndDate.style.display = 'block';
-                    timeRow.style.display = 'none';
-                } else {
-                    divEndDate.style.display = 'block';
-                    timeRow.style.display = 'grid';
-                }
-            }
-        }
-        
-        // 綁定形態改變監聽器
-        document.getElementById('form-type').addEventListener('change', () => {
-            const type = document.getElementById('form-type').value;
-            const timeRow = document.getElementById('time-inputs-row');
-            if (type === 'AllDay') {
-                timeRow.style.display = 'none';
-            } else {
-                timeRow.style.display = 'grid';
+        document.getElementById('resetTodosBtn').addEventListener('click', function() {
+            if (confirm('確定要重置所有待辦事項為「未完成」嗎？')) {
+                saveTodos(JSON.parse(JSON.stringify(DEFAULT_TODOS)));
+                renderTodos();
             }
         });
 
-        // --- 4. 關鍵演算法：資料儲存拆分與跨年過濾處理中心 ---
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const id = document.getElementById('form-id').value;
-            const title = document.getElementById('form-title').value.trim();
-            const category = document.getElementById('form-category').value;
-            const type = document.getElementById('form-type').value;
-            const rawStart = document.getElementById('form-start-date').value;
-            const rawEnd = document.getElementById('form-end-date').value;
-            const startTime = document.getElementById('form-start-time').value;
-            const endTime = document.getElementById('form-end-time').value;
-            const location = document.getElementById('form-location').value.trim();
+        // ================================================================
+        //  3. 每日記錄邏輯（含編輯功能）
+        // ================================================================
 
-            if (id) {
-                // 編輯模式：先移出原有舊資料項
-                itemsPool = itemsPool.filter(i => i.id !== id);
-            }
+        let editingIndex = null;
 
-            if (category === 'Festival') {
-                // 不填寫年份、每年重複項目儲存機制：格式化為 --MM-DD
-                const mmdd = rawStart.substring(4); // 取得 -MM-DD 部分
-                const newFestivalItem = {
-                    id: id || Date.now().toString(),
-                    title: title,
-                    category: 'Festival',
-                    type: 'AllDay',
-                    startDate: `-${mmdd}`,
-                    endDate: '',
-                    startTime: '',
-                    endTime: '',
-                    location: location,
-                    isFestival: true
-                };
-                itemsPool.push(newFestivalItem);
-            } else if (type === 'AllDay') {
-                // 關鍵優化需求 2：All Day 多天跨度在儲存時完全拆分為獨立項目
-                const start = new Date(rawStart);
-                const end = rawEnd ? new Date(rawEnd) : new Date(rawStart);
-                
-                let currentLoop = new Date(start);
-                let count = 0;
-                while (currentLoop <= end) {
-                    const singleDateStr = formatDate(currentLoop);
-                    itemsPool.push({
-                        id: (id && count === 0) ? id : `${Date.now()}-${count}`,
-                        title: title,
-                        category: category,
-                        type: 'AllDay',
-                        startDate: singleDateStr,
-                        endDate: singleDateStr, // 預設並鎖定為當天結束
-                        startTime: '',
-                        endTime: '',
-                        location: location,
-                        isFestival: false
-                    });
-                    currentLoop.setDate(currentLoop.getDate() + 1);
-                    count++;
+        window.startEdit = function(index) {
+            editingIndex = index;
+            renderLogs();
+            setTimeout(function() {
+                const entry = document.querySelector('.log-entry[data-index="' + index + '"]');
+                if (entry) {
+                    entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            } else {
-                // 普通 Event 或 Deadline 儲存
-                itemsPool.push({
-                    id: id || Date.now().toString(),
-                    title: title,
-                    category: category,
-                    type: type,
-                    startDate: rawStart,
-                    endDate: rawEnd || rawStart,
-                    startTime: startTime,
-                    endTime: endTime,
-                    location: location,
-                    isFestival: false
-                });
+            }, 100);
+        };
+
+        window.saveEdit = function(index) {
+            const logs = getLogs();
+            if (index < 0 || index >= logs.length) return;
+
+            const date = document.getElementById('editDate').value;
+            const category = document.getElementById('editCategory').value;
+            const task = document.getElementById('editTask').value.trim();
+            const observation = document.getElementById('editObservation').value.trim();
+            const note = document.getElementById('editNote').value.trim();
+
+            if (!date || !task) {
+                showSaveMessage('請填寫日期和任務內容！', 'error');
+                return;
             }
 
-            closeModal();
-            refreshCurrentView();
-        }
-
-        function deleteItem(id) {
-            if (confirm('確定要刪除此日程項目嗎？(若是拆分後的項目，將只刪除目前選中的單日項目)')) {
-                itemsPool = itemsPool.filter(i => i.id !== id);
-                refreshCurrentView();
-            }
-        }
-
-        // 輔助工具：將任何萬年曆 Festival 或一般事件解析轉換為某特定年份下的具體真實 Date
-        function resolveItemDatesForYear(item, year) {
-            if (item.isFestival) {
-                const mmdd = item.startDate.replace(/^-+/, ''); // 得到 MM-DD
-                return {
-                    startStr: `${year}-${mmdd}`,
-                    endStr: `${year}-${mmdd}`,
-                    isMatch: true
-                };
-            }
-            return {
-                startStr: item.startDate,
-                endStr: item.endDate,
-                isMatch: false
+            logs[index] = {
+                ...logs[index],
+                date: date,
+                category: category,
+                task: task,
+                observation: observation,
+                note: note
             };
-        }
 
-        // --- 5. 各視圖渲染模組 ---
+            saveLogs(logs);
+            editingIndex = null;
+            renderLogs();
+            showSaveMessage('✅ 記錄已更新！', 'success');
+        };
 
-        // A. DATABASE VIEW RENDER
-        function renderDatabaseView() {
-            const tbody = document.getElementById('database-table-body');
-            tbody.innerHTML = "";
+        window.cancelEdit = function() {
+            editingIndex = null;
+            renderLogs();
+        };
 
-            itemsPool.forEach(item => {
-                const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
-                
-                // 核心邏輯需求：Festival 平時在資料庫主列表「隱形」，只有當搜尋列被激活且匹配時才喚醒
-                if (item.isFestival && (!searchQuery || !isMatchSearch)) {
-                    return; 
-                }
-                if (searchQuery && !isMatchSearch) {
-                    return; // 沒匹配到搜尋的普通項目亦過濾掉
-                }
+        window.deleteLog = function(index) {
+            if (confirm('確定要刪除這筆記錄嗎？')) {
+                const logs = getLogs();
+                logs.splice(index, 1);
+                saveLogs(logs);
+                if (editingIndex === index) editingIndex = null;
+                renderLogs();
+                showSaveMessage('已刪除記錄', 'error');
+            }
+        };
 
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/80 transition";
-                
-                let dateDisplayStart = item.startDate;
-                let dateDisplayEnd = item.endDate || "--";
-                if (item.isFestival) {
-                    dateDisplayStart = `每年 ${item.startDate.replace(/^-+/, '')}`;
-                    dateDisplayEnd = "無期限 (常駐項目)";
-                }
+        window.openImageModal = function(src) {
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = src;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
 
-                tr.innerHTML = `
-                    <td class="p-3.5 font-medium text-slate-800">${escapeHtml(item.title)}</td>
-                    <td class="p-3.5">
-                        <span class="px-2 py-0.5 text-xs font-medium rounded-full ${item.category === 'Work' ? 'bg-blue-50 text-blue-600' : item.category === 'Festival' ? 'bg-purple-50 text-purple-600' : 'bg-slate-100 text-slate-600'}">
-                            ${item.category}
-                        </span>
-                    </td>
-                    <td class="p-3.5 text-xs font-mono">${dateDisplayStart} ${item.startTime ? ' @ ' + item.startTime : ''}</td>
-                    <td class="p-3.5 text-xs font-mono">${dateDisplayEnd} ${item.endTime ? ' @ ' + item.endTime : ''}</td>
-                    <td class="p-3.5">
-                        <span class="px-2 py-0.5 text-xs font-medium rounded ${item.type === 'Deadline' ? 'bg-rose-50 text-rose-600 border border-rose-100' : item.type === 'AllDay' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-emerald-50 text-emerald-600'}">
-                            ${item.type}
-                        </span>
-                    </td>
-                    <td class="p-3.5 text-right space-x-1.5">
-                        <button onclick="openModal('${item.id}')" class="text-slate-400 hover:text-slate-700 transition inline-flex items-center"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                        <button onclick="deleteItem('${item.id}')" class="text-slate-400 hover:text-rose-600 transition inline-flex items-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </td>
+        function renderLogs() {
+            const logs = getLogs();
+            const container = document.getElementById('logListContainer');
+            const countEl = document.getElementById('logCount');
+
+            countEl.textContent = logs.length + ' 筆';
+
+            if (logs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="icon">📭</span>
+                        還沒有記錄，開始新增你的第一筆實習日記吧！
+                    </div>
                 `;
-                tbody.appendChild(tr);
-            });
-            lucide.createIcons();
-        }
-
-        // B. WEEK VIEW RENDER
-        function renderWeekView() {
-            const isMobile = window.innerWidth < 768; 
-            const headerDays = document.getElementById('week-header-days');
-            const headerStickyTasks = document.getElementById('week-header-sticky-tasks');
-            const linesGrid = document.getElementById('week-time-lines');
-            const columnsGrid = document.getElementById('week-days-columns');
-
-            headerDays.innerHTML = "";
-            headerStickyTasks.innerHTML = "";
-            linesGrid.innerHTML = "";
-            columnsGrid.innerHTML = "";
-
-            // 1. 計算該畫面的目標顯示日期群組
-            let targetDates = [];
-            if (isMobile) {
-                // 核心優化需求 3：直向螢幕移動端 Today (即目前選中日) 永遠強制放在最左邊，只拉出隨後連續 3 天
-                for (let i = 0; i < 3; i++) {
-                    const d = new Date(currentDate);
-                    d.setDate(currentDate.getDate() + i);
-                    targetDates.push(d);
-                }
-            } else {
-                // 桌面端：維持標準週曆排版 (計算目前日期所在完整一週)
-                const currentDayOfWeek = currentDate.getDay(); // 0 是週日
-                const startOfWeek = new Date(currentDate);
-                startOfWeek.setDate(currentDate.getDate() - currentDayOfWeek);
-                for (let i = 0; i < 7; i++) {
-                    const d = new Date(startOfWeek);
-                    d.setDate(startOfWeek.getDate() + i);
-                    targetDates.push(d);
-                }
+                return;
             }
 
-            const totalCols = targetDates.length;
-            headerDays.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
-            headerStickyTasks.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
-            columnsGrid.style.gridTemplateColumns = `minmax(60px, 60px) repeat(${totalCols}, minmax(0, 1fr))`;
+            let html = '<div class="log-list">';
+            for (let i = logs.length - 1; i >= 0; i--) {
+                const realIndex = i;
+                const log = logs[i];
+                const isEditing = (editingIndex === realIndex);
+                const imagesHtml = log.images && log.images.length > 0 ?
+                    log.images.map(img => `<img src="${img}" alt="上傳圖片" onclick="window.openImageModal('${img}')">`).join('') :
+                    '';
 
-            // 2. 渲染左上角時間軸空白定位格與各日期頂部標題
-            const cornerEmpty = document.createElement('div');
-            cornerEmpty.className = "bg-slate-50 border-b border-slate-100";
-            headerDays.appendChild(cornerEmpty);
+                html += `<div class="log-entry ${isEditing ? 'editing' : ''}" data-index="${realIndex}">`;
 
-            const taskCornerEmpty = document.createElement('div');
-            taskCornerEmpty.className = "bg-slate-50/50 flex items-center justify-center border-b border-slate-100 text-[10px] text-slate-400 font-medium font-mono";
-            taskCornerEmpty.innerText = "置頂";
-            headerStickyTasks.appendChild(taskCornerEmpty);
-
-            const weekDayNames = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
-            const todayStamp = formatDate(new Date(2026, 5, 22)); // 系統預設今日
-
-            targetDates.forEach(date => {
-                const dateStr = formatDate(date);
-                const isToday = (dateStr === todayStamp);
-                
-                const dayHeader = document.createElement('div');
-                dayHeader.className = `p-2 text-center flex flex-col items-center justify-center ${isToday ? 'bg-emerald-50/60' : ''}`;
-                dayHeader.innerHTML = `
-                    <span class="text-xs font-medium ${isToday ? 'text-emerald-600' : 'text-slate-500'}">${weekDayNames[date.getDay()]}</span>
-                    <span class="text-base font-bold tracking-tight mt-0.5 ${isToday ? 'w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-sm' : 'text-slate-800'}">${date.getDate()}</span>
-                `;
-                headerDays.appendChild(dayHeader);
-
-                // 為每列初始化建立置頂容器格
-                const stickyTaskCell = document.createElement('div');
-                stickyTaskCell.id = `sticky-box-${dateStr}`;
-                stickyTaskCell.className = `p-1.5 space-y-1 min-h-[40px] border-b border-slate-100 flex flex-col justify-start ${isToday ? 'bg-emerald-50/30' : ''}`;
-                headerStickyTasks.appendChild(stickyTaskCell);
-            });
-
-            // 3. 繪製背景 24 小時橫線
-            for (let h = 0; h < 24; h++) {
-                const hourLine = document.createElement('div');
-                hourLine.className = "h-[60px] border-b border-slate-100 w-full";
-                linesGrid.appendChild(hourLine);
-            }
-
-            // 4. 建立時間軸最左側 24 小時制時間刻度欄
-            const timeCol = document.createElement('div');
-            timeCol.className = "bg-slate-50/80 font-mono text-[11px] text-slate-400 font-medium flex flex-col select-none relative pt-[30px]";
-            for (let h = 1; h < 24; h++) {
-                const label = document.createElement('div');
-                label.className = "absolute left-2 -translate-y-1/2";
-                label.style.top = `${h * 60}px`;
-                label.innerText = `${h.toString().padStart(2, '0')}:00`;
-                timeCol.appendChild(label);
-            }
-            columnsGrid.appendChild(timeCol);
-
-            // 5. 建立各日主要排程事件渲染 Column
-            targetDates.forEach(date => {
-                const dateStr = formatDate(date);
-                const isToday = (dateStr === todayStamp);
-                
-                const col = document.createElement('div');
-                col.className = "relative h-full w-full assign-col";
-                col.id = `week-col-${dateStr}`;
-                if (isToday) col.classList.add('bg-emerald-50/10');
-                columnsGrid.appendChild(col);
-            });
-
-            // 6. 分派事件到各個時間 Column 與置頂 Sticky Area
-            itemsPool.forEach(item => {
-                const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
-                if (searchQuery && !isMatchSearch) return;
-
-                targetDates.forEach(date => {
-                    const resolved = resolveItemDatesForYear(item, date.getFullYear());
-                    const targetStr = formatDate(date);
-
-                    if (resolved.startStr === targetStr) {
-                        // 核心優化需求 5：Deadline 與 AllDay 完美歸類至固定置頂 Sticky 區段
-                        if (item.type === 'AllDay') {
-                            const stickyBox = document.getElementById(`sticky-box-${targetStr}`);
-                            if (stickyBox) {
-                                const chip = document.createElement('div');
-                                chip.className = "px-2 py-1 text-xs bg-amber-50 text-amber-800 border border-amber-200 rounded font-medium shadow-2xs truncate cursor-pointer hover:brightness-95 transition";
-                                // 核心優化需求 2：不帶 📢 符號也不帶 (Until) 贅字
-                                chip.innerText = item.title;
-                                chip.onclick = () => openModal(item.id);
-                                stickyBox.appendChild(chip);
-                            }
-                        } else if (item.type === 'Deadline') {
-                            const stickyBox = document.getElementById(`sticky-box-${targetStr}`);
-                            if (stickyBox) {
-                                const chip = document.createElement('div');
-                                chip.className = "px-2 py-1 text-xs bg-rose-50 text-rose-800 border border-rose-200 rounded font-medium shadow-2xs truncate cursor-pointer hover:brightness-95 transition flex items-center gap-1";
-                                chip.innerHTML = `⚠️ <span class="truncate">${item.title}</span>`;
-                                chip.onclick = () => openModal(item.id);
-                                stickyBox.appendChild(chip);
-                            }
-                        } else {
-                            // 普通具有特定起訖時間的 Event 項目渲染至 24 小時軸
-                            const targetCol = document.getElementById(`week-col-${targetStr}`);
-                            if (targetCol) {
-                                const startMin = parseTimeToMinutes(item.startTime || "09:00");
-                                const endMin = parseTimeToMinutes(item.endTime || "10:00");
-                                const topPx = (startMin / 60) * 60;
-                                const heightPx = Math.max(((endMin - startMin) / 60) * 60, 25); // 防呆最小高度
-
-                                const card = document.createElement('div');
-                                card.className = `absolute left-1 right-1 p-2 rounded-lg text-xs border shadow-2xs flex flex-col justify-between overflow-hidden cursor-pointer hover:shadow-sm transition ${item.category === 'Work' ? 'bg-blue-50/95 border-blue-200 text-blue-800' : 'bg-slate-100/95 border-slate-300 text-slate-800'}`;
-                                card.style.top = `${topPx}px`;
-                                card.style.height = `${heightPx}px`;
-                                
-                                card.innerHTML = `
-                                    <div class="font-semibold truncate">${escapeHtml(item.title)}</div>
-                                    <div class="text-[10px] opacity-75 font-mono mt-0.5">${item.startTime}-${item.endTime}</div>
-                                `;
-                                card.onclick = () => openModal(item.id);
-                                targetCol.appendChild(card);
-                            }
-                        }
-                    }
-                });
-            });
-            lucide.createIcons();
-        }
-
-        // C. MONTH VIEW RENDER
-        function renderMonthView() {
-            const grid = document.getElementById('month-grid');
-            grid.innerHTML = "";
-
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-
-            // 獲取該月第一天是星期幾
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            // 獲取該月總天數
-            const totalDays = new Date(year, month + 1, 0).getDate();
-            // 上個月總天數
-            const prevMonthTotalDays = new Date(year, month, 0).getDate();
-
-            let dayCounter = 1;
-            let nextMonthDayCounter = 1;
-
-            const todayStamp = formatDate(new Date(2026, 5, 22));
-
-            // 精準繪製月曆 42 格 (6 橫列 * 7 直欄)
-            for (let i = 0; i < 42; i++) {
-                const cell = document.createElement('div');
-                cell.className = "bg-white p-1.5 flex flex-col min-h-0 overflow-hidden relative group";
-                
-                let targetDateObj = null;
-
-                if (i < firstDayIndex) {
-                    // 填補上個月尾巴日期
-                    const d = prevMonthTotalDays - firstDayIndex + i + 1;
-                    cell.classList.add('bg-slate-50/60', 'text-slate-400');
-                    targetDateObj = new Date(year, month - 1, d);
-                } else if (dayCounter > totalDays) {
-                    // 填補下個月開頭日期
-                    cell.classList.add('bg-slate-50/60', 'text-slate-400');
-                    targetDateObj = new Date(year, month + 1, nextMonthDayCounter);
-                    nextMonthDayCounter++;
+                if (isEditing) {
+                    // 編輯模式
+                    html += `
+                        <div class="edit-form">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px;">
+                                <div>
+                                    <label style="font-size:12px; font-weight:600; color:#555;">日期</label>
+                                    <input type="date" id="editDate" value="${log.date}">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:600; color:#555;">分類</label>
+                                    <select id="editCategory">
+                                        <option value="1. 集團戰略與市場格局研究" ${log.category === '1. 集團戰略與市場格局研究' ? 'selected' : ''}>1. 集團戰略與市場格局研究</option>
+                                        <option value="2. 廣州核心商圈實地考察與數據化分析" ${log.category === '2. 廣州核心商圈實地考察與數據化分析' ? 'selected' : ''}>2. 廣州核心商圈實地考察與數據化分析</option>
+                                        <option value="3. 品牌趨勢與重點開發商鋪位策略研究" ${log.category === '3. 品牌趨勢與重點開發商鋪位策略研究' ? 'selected' : ''}>3. 品牌趨勢與重點開發商鋪位策略研究</option>
+                                        <option value="4. 市場推廣活動與會員體系比較分析" ${log.category === '4. 市場推廣活動與會員體系比較分析' ? 'selected' : ''}>4. 市場推廣活動與會員體系比較分析</option>
+                                        <option value="5. 競爭情報整合與策略建議報告" ${log.category === '5. 競爭情報整合與策略建議報告' ? 'selected' : ''}>5. 競爭情報整合與策略建議報告</option>
+                                        <option value="6. 實習總結匯報與經驗傳承" ${log.category === '6. 實習總結匯報與經驗傳承' ? 'selected' : ''}>6. 實習總結匯報與經驗傳承</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:600; color:#555;">任務</label>
+                                <textarea id="editTask" rows="2">${log.task.replace(/"/g, '&quot;')}</textarea>
+                            </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:600; color:#555;">觀察結果</label>
+                                <textarea id="editObservation" rows="2">${log.observation || ''}</textarea>
+                            </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:600; color:#555;">備註</label>
+                                <input type="text" id="editNote" value="${(log.note || '').replace(/"/g, '&quot;')}">
+                            </div>
+                            ${imagesHtml ? `<div class="log-images">${imagesHtml}</div>` : ''}
+                            <div class="edit-actions">
+                                <button class="save-edit" onclick="window.saveEdit(${realIndex})">💾 儲存修改</button>
+                                <button class="cancel-edit" onclick="window.cancelEdit()">取消</button>
+                            </div>
+                        </div>
+                    `;
                 } else {
-                    // 當月核心日期
-                    targetDateObj = new Date(year, month, dayCounter);
-                    const currentStr = formatDate(targetDateObj);
-                    if (currentStr === todayStamp) {
-                        cell.classList.add('bg-emerald-50/40');
-                    }
-                    dayCounter++;
+                    // 檢視模式
+                    html += `
+                        <div class="log-header">
+                            <div class="log-meta">
+                                <span><strong>📅</strong> ${log.date}</span>
+                                <span><strong>📂</strong> ${log.category}</span>
+                                ${log.note ? `<span><strong>📎</strong> ${log.note}</span>` : ''}
+                            </div>
+                            <div class="log-actions">
+                                <button class="edit-btn" onclick="window.startEdit(${realIndex})">✏️ 編輯</button>
+                                <button class="delete-btn" onclick="window.deleteLog(${realIndex})">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="log-task">${log.task}</div>
+                        ${log.observation ? `<div class="log-observation">${log.observation}</div>` : ''}
+                        ${imagesHtml ? `<div class="log-images">${imagesHtml}</div>` : ''}
+                    `;
                 }
 
-                const cellDateStr = formatDate(targetDateObj);
-                
-                // 建立日期小數字顯示器
-                const numLabel = document.createElement('span');
-                numLabel.className = `text-xs font-bold font-mono mb-1 inline-block w-5 h-5 text-center leading-5 ${cellDateStr === todayStamp ? 'bg-emerald-600 text-white rounded-full' : 'text-slate-700'}`;
-                numLabel.innerText = targetDateObj.getDate();
-                cell.appendChild(numLabel);
+                html += '</div>';
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
 
-                // 收集當天所有匹配的日程項目
-                let dayItems = [];
-                itemsPool.forEach(item => {
-                    const isMatchSearch = item.title.toLowerCase().includes(searchQuery) || (item.location && item.location.toLowerCase().includes(searchQuery));
-                    if (searchQuery && !isMatchSearch) return;
+        function showSaveMessage(text, type = 'success') {
+            const el = document.getElementById('saveMessage');
+            el.textContent = text;
+            el.className = type;
+            el.style.display = 'block';
+            setTimeout(() => {
+                el.style.display = 'none';
+                el.className = '';
+            }, 3000);
+        }
 
-                    const resolved = resolveItemDatesForYear(item, targetDateObj.getFullYear());
-                    if (resolved.startStr === cellDateStr) {
-                        dayItems.push(item);
-                    }
-                });
-
-                // 核心優化演算法需求 2：嚴格進行垂直加權排序排列
-                // 排序權重：AllDay（最前） -> 普通Event（按時間升序） -> Deadline（最後）
-                dayItems.sort((a, b) => {
-                    const typeWeight = { 'AllDay': 1, 'Event': 2, 'Deadline': 3 };
-                    const wa = typeWeight[a.type] || 2;
-                    const wb = typeWeight[b.type] || 2;
-                    
-                    if (wa !== wb) return wa - wb;
-                    
-                    // 如果同為普通 Event 則按開始時間升序排序
-                    if (a.type === 'Event' && b.type === 'Event') {
-                        return (a.startTime || "").localeCompare(b.startTime || "");
-                    }
-                    return 0;
-                });
-
-                // 渲染晶片到格子中
-                const chipsContainer = document.createElement('div');
-                chipsContainer.className = "flex-1 overflow-y-auto no-scrollbar space-y-1";
-                
-                dayItems.forEach(item => {
-                    const chip = document.createElement('div');
-                    chip.onclick = (e) => { e.stopPropagation(); openModal(item.id); };
-                    
-                    if (item.type === 'AllDay') {
-                        chip.className = "px-1.5 py-0.5 text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-100 rounded truncate cursor-pointer hover:brightness-95";
-                        chip.innerText = item.title; // 移除了📢與Until文字
-                    } else if (item.type === 'Deadline') {
-                        chip.className = "px-1.5 py-0.5 text-[10px] font-medium bg-rose-50 text-rose-800 border border-rose-100 rounded truncate cursor-pointer hover:brightness-95 flex items-center gap-0.5";
-                        chip.innerHTML = `⚠️ <span class="truncate">${item.title}</span>`;
-                    } else {
-                        chip.className = `px-1.5 py-0.5 text-[10px] font-medium rounded truncate cursor-pointer hover:brightness-95 border ${item.category === 'Work' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-100 text-slate-700 border-slate-200'}`;
-                        chip.innerText = `${item.startTime || ''} ${item.title}`;
-                    }
-                    chipsContainer.appendChild(chip);
-                });
-
-                cell.appendChild(chipsContainer);
-                grid.appendChild(cell);
+        function showImportStatus(message, type = 'info') {
+            const el = document.getElementById('importStatus');
+            el.textContent = message;
+            el.className = 'import-status ' + type;
+            el.style.display = 'block';
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    el.style.display = 'none';
+                    el.className = 'import-status';
+                }, 5000);
             }
         }
 
-        // --- 6. 通用核心輔助函數群 ---
-        function formatDate(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
+        // ================================================================
+        //  4. 表單提交
+        // ================================================================
+
+        document.getElementById('dailyLogForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const date = document.getElementById('logDate').value;
+            const category = document.getElementById('logCategory').value;
+            const task = document.getElementById('logTask').value.trim();
+            const observation = document.getElementById('logObservation').value.trim();
+            const note = document.getElementById('logNote').value.trim();
+
+            if (!date || !task) {
+                showSaveMessage('請填寫日期和今日任務！', 'error');
+                return;
+            }
+
+            const fileInput = document.getElementById('logImages');
+            const files = fileInput.files;
+            const imagePromises = [];
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!file.type.startsWith('image/')) continue;
+                const promise = new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) { resolve(e.target.result); };
+                    reader.readAsDataURL(file);
+                });
+                imagePromises.push(promise);
+            }
+
+            if (imagePromises.length === 0) {
+                saveLogEntry(date, category, task, observation, note, []);
+            } else {
+                Promise.all(imagePromises).then(images => {
+                    saveLogEntry(date, category, task, observation, note, images);
+                });
+            }
+        });
+
+        function saveLogEntry(date, category, task, observation, note, images) {
+            const logs = getLogs();
+            logs.push({
+                date: date,
+                category: category,
+                task: task,
+                observation: observation,
+                note: note,
+                images: images,
+                timestamp: Date.now()
+            });
+            saveLogs(logs);
+
+            document.getElementById('logTask').value = '';
+            document.getElementById('logObservation').value = '';
+            document.getElementById('logNote').value = '';
+            document.getElementById('logImages').value = '';
+
+            renderLogs();
+            showSaveMessage('✅ 記錄已成功儲存！', 'success');
         }
 
-        function parseTimeToMinutes(timeStr) {
-            if (!timeStr) return 0;
-            const [h, m] = timeStr.split(':').map(Number);
-            return (h * 60) + m;
-        }
+        document.getElementById('clearLogsBtn').addEventListener('click', function() {
+            if (confirm('確定要清除所有每日記錄嗎？此操作無法復原！')) {
+                saveLogs([]);
+                editingIndex = null;
+                renderLogs();
+                showSaveMessage('已清除所有記錄', 'error');
+            }
+        });
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
+        // ================================================================
+        //  5. 圖片預覽模態框控制
+        // ================================================================
+
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            document.getElementById('imageModal').classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('imageModal').classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ================================================================
+        //  6. 頁面切換
+        // ================================================================
+
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const pageId = this.dataset.page;
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+
+                if (pageId === 'page-daily') renderLogs();
+                if (pageId === 'page-todo') renderTodos();
+            });
+        });
+
+        // ================================================================
+        //  7. PWA 安裝
+        // ================================================================
+
+        let deferredPrompt = null;
+        const installBanner = document.getElementById('installBanner');
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.add('show');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function(choice) {
+                    if (choice.outcome === 'accepted') {
+                        console.log('✅ 使用者接受了安裝');
+                        installBanner.classList.remove('show');
+                    } else {
+                        console.log('❌ 使用者拒絕了安裝');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+
+        document.getElementById('dismissInstall').addEventListener('click', function() {
+            installBanner.classList.remove('show');
+        });
+
+        // ================================================================
+        //  8. 匯出/匯入 JSON 功能
+        // ================================================================
+
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            const data = {
+                version: '1.0',
+                exportedAt: new Date().toISOString(),
+                todos: getTodos(),
+                logs: getLogs()
+            };
+
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            const dateStr = new Date().toISOString().split('T')[0];
+            a.download = `實習數據備份_${dateStr}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showImportStatus('✅ 數據已成功匯出！', 'success');
+        });
+
+        document.getElementById('importDataBtn').addEventListener('click', function() {
+            document.getElementById('importFileInput').click();
+        });
+
+        document.getElementById('importFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+
+                    if (!data.todos || !data.logs) {
+                        throw new Error('無效的數據格式：缺少 todos 或 logs 欄位');
+                    }
+
+                    const currentLogCount = getLogs().length;
+                    const currentTodoCount = getTodos().length;
+                    const confirmMsg =
+                        `即將匯入數據：\n` +
+                        `📋 待辦事項：${data.todos.length} 筆（目前 ${currentTodoCount} 筆）\n` +
+                        `📝 每日記錄：${data.logs.length} 筆（目前 ${currentLogCount} 筆）\n\n` +
+                        `⚠️ 這將覆蓋所有現有數據，確定繼續嗎？`;
+
+                    if (!confirm(confirmMsg)) {
+                        showImportStatus('❌ 已取消匯入', 'error');
+                        document.getElementById('importFileInput').value = '';
+                        return;
+                    }
+
+                    saveTodos(data.todos);
+                    saveLogs(data.logs);
+
+                    renderTodos();
+                    renderLogs();
+
+                    showImportStatus(
+                        `✅ 匯入成功！\n` +
+                        `📋 待辦事項：${data.todos.length} 筆\n` +
+                        `📝 每日記錄：${data.logs.length} 筆\n` +
+                        `📅 備份時間：${data.exportedAt ? new Date(data.exportedAt).toLocaleString() : '未知'}`,
+                        'success'
+                    );
+
+                    document.getElementById('importFileInput').value = '';
+
+                } catch (error) {
+                    showImportStatus('❌ 匯入失敗：' + error.message, 'error');
+                    document.getElementById('importFileInput').value = '';
+                }
+            };
+
+            reader.onerror = function() {
+                showImportStatus('❌ 讀取檔案失敗，請重試', 'error');
+                document.getElementById('importFileInput').value = '';
+            };
+
+            reader.readAsText(file);
+        });
+
+        // ================================================================
+        //  9. 初始化
+        // ================================================================
+
+        document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+        renderTodos();
+        renderLogs();
+
+        console.log('🏢 實習管理平台已啟動！');
+        console.log('📊 數據儲存在 localStorage 中。');
+        console.log('📲 點擊「安裝應用」可將此平台安裝到主畫面。');
+        console.log('💾 使用「匯出 JSON」備份數據，「匯入 JSON」還原數據。');
     </script>
+
 </body>
 </html>
